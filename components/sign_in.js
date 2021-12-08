@@ -12,7 +12,7 @@ import {
   Button,
 } from 'native-base';
 
-const Landing = () => {
+const SignIn = () => {
   return (
     <VStack flex={1} bg="light.50">
       {/* TOP Area */}
@@ -125,4 +125,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Landing;
+export default SignIn;

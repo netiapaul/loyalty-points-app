@@ -15,15 +15,14 @@ import {
   Text,
   View,
 } from 'react-native';
-
+import {NativeBaseProvider} from 'native-base';
+import Landing from './components/landing';
 
 const App = () => {
   return (
-    <SafeAreaView bg="#fff">
-      <View>
-        <Text>I am Headed to greatness</Text>
-      </View>
-    </SafeAreaView>
+    <NativeBaseProvider>
+      <Landing />
+    </NativeBaseProvider>
   );
 };
 
