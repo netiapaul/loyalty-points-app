@@ -1,6 +1,7 @@
 import React from 'react';
 import {ImageBackground, StyleSheet} from 'react-native';
 import {
+  NativeBaseProvider,
   VStack,
   Center,
   Heading,
@@ -12,56 +13,57 @@ import {
   Button,
 } from 'native-base';
 
-const SignIn = () => {
+const SignIn = ({navigation}) => {
   return (
-    <VStack flex={1} bg="light.50">
-      {/* TOP Area */}
-      <ImageBackground
-        source={require('../assets/images/background.png')}
-        style={styles.image}>
-        <Center flex={1}>
-          <Image
-            source={require('../assets/images/medicosin.png')}
-            alt="Company Logo"
-            size="xl"
-          />
-          <Heading textAlign="center" color="#000">
-            Médecins Sans Frontières
-          </Heading>
-        </Center>
-      </ImageBackground>
-      {/* FORM Area */}
-      <Box bg="#fff" flex={1} style={styles.inputContainer}>
-        <Center flex={2}>
-          <Text mx="10" my="3" fontWeight="400">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat
-          </Text>
-        </Center>
+    <NativeBaseProvider>
+      <VStack flex={1} bg="light.50">
+        {/* TOP Area */}
+        <ImageBackground
+          source={require('../assets/images/background.png')}
+          style={styles.image}>
+          <Center flex={1}>
+            <Image
+              source={require('../assets/images/medicosin.png')}
+              alt="Company Logo"
+              size="xl"
+            />
+            <Heading textAlign="center" color="#000">
+              Médecins Sans Frontières
+            </Heading>
+          </Center>
+        </ImageBackground>
+        {/* FORM Area */}
+        <Box bg="#fff" flex={1} style={styles.inputContainer}>
+          <Center flex={2}>
+            <Text mx="10" my="3" fontWeight="400">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat
+            </Text>
+          </Center>
 
-        <HStack my="3" mx="10" flex={1} alignItems="center">
-          <Text style={styles.stackText}>Next</Text>
-          <Image
-            source={require('../assets/images/next.png')}
-            alt="next icon"
-            style={styles.next}
-            size="sm"
-            ml="3"
-          />
-        </HStack>
+          <HStack my="3" mx="10" flex={1} alignItems="center">
+            <Text style={styles.stackText}>Next</Text>
+            <Image
+              source={require('../assets/images/next.png')}
+              alt="next icon"
+              style={styles.next}
+              size="sm"
+              ml="3"
+            />
+          </HStack>
 
-        <Button
-          variant="outline"
-          style={styles.signInButton}
-          h="70"
-          mx="10"
-          onPress={() => console.error('hello world')}>
-          <Text>Default Small</Text>
-        </Button>
+          <Button
+            variant="outline"
+            style={styles.signInButton}
+            h="70"
+            mx="10"
+            onPress={() => console.error('hello world')}>
+            <Text>Default Small</Text>
+          </Button>
 
-        {/* <Pressable mx="10">
+          {/* <Pressable mx="10">
           {({isHovered, isFocused, isPressed}) => {
             return (
               <Box
@@ -83,18 +85,19 @@ const SignIn = () => {
           }}
         </Pressable> */}
 
-        <VStack flex={1} justifyContent="flex-end" my="2">
-          <Center>
-            <Text fontSize="xs" mx="10">
-              Powered by
-            </Text>
-            <Text fontSize="xs" fontWeight="bold" color="#5d3915" mx="10">
-              Corebase Solutions
-            </Text>
-          </Center>
-        </VStack>
-      </Box>
-    </VStack>
+          <VStack flex={1} justifyContent="flex-end" my="2">
+            <Center>
+              <Text fontSize="xs" mx="10">
+                Powered by
+              </Text>
+              <Text fontSize="xs" fontWeight="bold" color="#5d3915" mx="10">
+                Corebase Solutions
+              </Text>
+            </Center>
+          </VStack>
+        </Box>
+      </VStack>
+    </NativeBaseProvider>
   );
 };
 

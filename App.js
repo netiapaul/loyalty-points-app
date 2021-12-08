@@ -7,42 +7,39 @@
  */
 
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import {NativeBaseProvider} from 'native-base';
+// import {NativeBaseProvider} from 'native-base';
+import {NavigationContainer} from '@react-navigation/native';
 import Landing from './components/landing';
+import SignIn from './components/sign_in';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
-    <NativeBaseProvider>
-      <Landing />
-    </NativeBaseProvider>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: true,
+          shadowColor: '#52006A',
+          headerStyle: {
+            backgroundColor: '#fff',
+            elevation: 0,
+            shadowOpacity: 0,
+            borderBottomWidth: 0,
+          },
+          headerShadowVisible: false,
+          headerTintColor: '#000',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            color: '#000',
+          },
+        }}>
+        <Stack.Screen name="landing" component={Landing} />
+        <Stack.Screen name="signin" component={SignIn} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;
