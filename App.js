@@ -21,6 +21,8 @@ const App = () => {
       <Stack.Navigator
         screenOptions={{
           headerShown: true,
+          animationEnabled: true,
+          animationTypeForReplace: 'push',
           shadowColor: '#52006A',
           headerStyle: {
             backgroundColor: '#fff',
@@ -36,7 +38,13 @@ const App = () => {
           },
         }}>
         <Stack.Screen name="landing" component={Landing} />
-        <Stack.Screen name="signin" component={SignIn} />
+        <Stack.Screen
+          name="signIn"
+          component={SignIn}
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

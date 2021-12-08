@@ -1,5 +1,5 @@
-import React from 'react';
-import {ImageBackground, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {ImageBackground, StyleSheet, TextInput} from 'react-native';
 import {
   NativeBaseProvider,
   VStack,
@@ -10,10 +10,17 @@ import {
   Text,
   HStack,
   Pressable,
-  Button,
+  useToast,
 } from 'native-base';
 
 const SignIn = ({navigation}) => {
+  const toast = useToast();
+  const [input, setInput] = React.useState('');
+
+  const handleChange = text => {
+    return setInput(text);
+  };
+
   return (
     <NativeBaseProvider>
       <VStack flex={1} bg="light.50">
@@ -30,60 +37,78 @@ const SignIn = ({navigation}) => {
             <Heading textAlign="center" color="#000">
               Médecins Sans Frontières
             </Heading>
+            {input}
           </Center>
         </ImageBackground>
         {/* FORM Area */}
         <Box bg="#fff" flex={1} style={styles.inputContainer}>
-          <Center flex={2}>
-            <Text mx="10" my="3" fontWeight="400">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat
-            </Text>
-          </Center>
-
-          <HStack my="3" mx="10" flex={1} alignItems="center">
-            <Text style={styles.stackText}>Next</Text>
+          <HStack mt="5" flex={1} alignItems="center">
             <Image
-              source={require('../assets/images/next.png')}
+              onPress={() => navigation.navigate('landing')}
+              source={require('../assets/images/back.png')}
               alt="next icon"
               style={styles.next}
               size="sm"
-              ml="3"
+              ml="10"
             />
+            <Center>
+              <Text
+                fontSize="24"
+                style={{textAlign: 'center'}}
+                fontWeight="bold">
+                Sign In
+              </Text>
+            </Center>
           </HStack>
 
-          <Button
-            variant="outline"
-            style={styles.signInButton}
-            h="70"
-            mx="10"
-            onPress={() => console.error('hello world')}>
-            <Text>Default Small</Text>
-          </Button>
+          <Center>
+            <Text
+              mx="10"
+              fontSize="14"
+              my="5"
+              style={styles.promoCode}
+              fontWeight="400">
+              We will send you a
+              <Text fontWeight="bold"> One Time Password </Text>
+              to your personal mobile number.
+            </Text>
+          </Center>
 
-          {/* <Pressable mx="10">
-          {({isHovered, isFocused, isPressed}) => {
-            return (
-              <Box
-                bg={isPressed ? 'light.400' : '#5d3915'}
-                p="5"
-                rounded="8"
-                style={{
-                  transform: [
-                    {
-                      scale: isPressed ? 0.96 : 1,
-                    },
-                  ],
-                }}>
-                <Center>
-                  <Text color="#fff">Sign In</Text>
-                </Center>
-              </Box>
-            );
-          }}
-        </Pressable> */}
+          <TextInput
+            style={styles.input}
+            onChangeText={handleChange}
+            value={input}
+            placeholder="Enter Member ID"
+            placeholderTextColor="#a3a3a3"
+          />
+
+          <Pressable mx="10" onPress={() => console.warn(input)}>
+            {({isPressed}) => {
+              return (
+                <Box
+                  borderWidth="3"
+                  borderColor="#5d3915"
+                  bg={isPressed ? '#fff' : '#5d3915'}
+                  p="8"
+                  rounded="8"
+                  style={{
+                    transform: [
+                      {
+                        scale: isPressed ? 1 : 1,
+                      },
+                    ],
+                  }}>
+                  <Center>
+                    <Text
+                      fontWeight="bold"
+                      color={isPressed ? '#5d3915' : '#fff'}>
+                      Get OTP
+                    </Text>
+                  </Center>
+                </Box>
+              );
+            }}
+          </Pressable>
 
           <VStack flex={1} justifyContent="flex-end" my="2">
             <Center>
@@ -111,20 +136,28 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
   },
+  promoCode: {
+    textAlign: 'center',
+  },
   stackText: {
     fontWeight: 'bold',
     color: 'black',
   },
   next: {
-    width: 40,
+    width: 30,
     height: 20,
   },
-  signInButton: {
-    // backgroundColor: 'white',
-    borderWidth: 3,
-    borderColor: '#5d3915',
+  input: {
+    marginLeft: 40,
+    marginRight: 40,
+    marginTop: 10,
+    marginBottom: 10,
+    height: 60,
+    borderWidth: 1,
+    padding: 10,
     borderRadius: 10,
-    height: 75,
+    color: '#5d3915',
+    borderColor: '#737373',
   },
 });
 

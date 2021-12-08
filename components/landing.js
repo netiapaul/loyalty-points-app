@@ -54,7 +54,7 @@ const Landing = ({navigation}) => {
             />
           </HStack>
 
-          <Pressable mx="10">
+          <Pressable mx="10" onPress={() => navigation.navigate('signIn')}>
             {({isPressed}) => {
               return (
                 <Box
