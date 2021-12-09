@@ -9,8 +9,8 @@ import {
   Box,
   Text,
   HStack,
+  Stack,
   Pressable,
-  Button,
 } from 'native-base';
 
 const Dashboard = ({navigation}) => {
@@ -18,7 +18,7 @@ const Dashboard = ({navigation}) => {
     <NativeBaseProvider>
       <HStack
         bg="#fff"
-        p="5"
+        p="3"
         justifyContent="space-between"
         alignItems="center">
         <Text color="#5d3915" fontSize="20" fontWeight="bold">
@@ -40,83 +40,139 @@ const Dashboard = ({navigation}) => {
           Dashboard
         </Text> */}
       </HStack>
-
-      <VStack flex={1} bg="light.50">
-        {/* TOP Area */}
-
-        <HStack mx="5" bg="#fff">
-          <Text color="#000" fontSize="sm" fontWeight="bold">
-            Hi, John Tracy Doe
-          </Text>
-        </HStack>
-
+      {/* bg="light.50" */}
+      <VStack flex={1} bg="#fff">
         <ImageBackground
           source={require('../assets/images/background.png')}
+          flex={1}
           style={styles.image}>
-          <Center flex={1}>
-            <Image
-              source={require('../assets/images/medicosin.png')}
-              alt="Company Logo"
-              size="xl"
-            />
-            <Heading textAlign="center" color="#000">
-              Médecins Sans Frontières
-            </Heading>
-          </Center>
+          <HStack mx="5" my="3">
+            <Text
+              color="#000"
+              fontSize="sm"
+              style={styles.noBackGround}
+              fontWeight="bold">
+              Hi, John Tracy Doe
+            </Text>
+          </HStack>
+
+          {/* Points Card */}
+          <Box
+            // maxW="80"
+            mx="5"
+            mb="3"
+            rounded="lg"
+            overflow="hidden"
+            borderColor="coolGray.200"
+            borderWidth="1"
+            _web={{
+              shadow: 2,
+              borderWidth: 0,
+            }}
+            _light={{
+              backgroundColor: 'gray.50',
+            }}>
+            <Stack p="4" space={1}>
+              <Heading size="md">Loyalty Points</Heading>
+              <Text fontWeight="400">
+                Bengaluru (also called Bangalore) is the center of India's
+                high-tech industry. The city is also known for its parks and
+                nightlife.
+              </Text>
+              <HStack
+                alignItems="center"
+                space={4}
+                justifyContent="space-between">
+                <HStack alignItems="center">
+                  <Text
+                    color="coolGray.600"
+                    _dark={{
+                      color: 'warmGray.200',
+                    }}
+                    fontWeight="400">
+                    Last Updated: 1st Dec, 2021
+                  </Text>
+                </HStack>
+              </HStack>
+            </Stack>
+          </Box>
         </ImageBackground>
-        {/* FORM Area */}
-        <Box bg="#fff" flex={1} style={styles.inputContainer}>
-          <Center flex={2}>
-            <Text mx="10" my="3" fontWeight="400">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat
+        {/* Points Summary */}
+        <Box bg="#fff" my="3" justifyContent="center" alignItems="center">
+          <Center>
+            <Text fontSize="lg" mx="10">
+              Points Summary
             </Text>
           </Center>
 
-          <HStack my="3" mx="10" flex={1} alignItems="center">
-            <Text style={styles.stackText}>Next</Text>
-            <Image
-              source={require('../assets/images/next.png')}
-              alt="next icon"
-              style={styles.next}
-              size="sm"
-              ml="3"
-            />
+          <Center>
+            <HStack>
+              <VStack alignItems="center">
+                <Text fontSize="sm" mx="3" fontWeight="bold">
+                  Total Points
+                </Text>
+                <Text fontSize="sm">12,043</Text>
+              </VStack>
+
+              <VStack alignItems="center">
+                <Text fontSize="sm" mx="3" fontWeight="bold">
+                  Redeemed Points
+                </Text>
+                <Text fontSize="sm">56,324</Text>
+              </VStack>
+
+              <VStack alignItems="center">
+                <Text fontSize="sm" mx="3" fontWeight="bold">
+                  Points Earned
+                </Text>
+                <Text fontSize="sm">234,344</Text>
+              </VStack>
+            </HStack>
+          </Center>
+        </Box>
+
+        <Box bg="#fff" flex={2} justifyContent="center">
+          <HStack mx="5" bg="#fff">
+            <Text color="#5d3915" fontSize="sm" fontWeight="bold">
+              Activities
+            </Text>
           </HStack>
 
-          <Pressable mx="10" onPress={() => navigation.navigate('signIn')}>
-            {({isPressed}) => {
-              return (
-                <Box
-                  borderWidth="3"
-                  borderColor="#5d3915"
-                  bg={isPressed ? '#5d3915' : '#fff'}
-                  p="8"
-                  rounded="8"
-                  style={{
-                    transform: [
-                      {
-                        scale: isPressed ? 1 : 1,
-                      },
-                    ],
-                  }}>
-                  <Center>
-                    <Text color={isPressed ? '#fff' : '#5d3915'}>Sign In</Text>
-                  </Center>
-                </Box>
-              );
-            }}
-          </Pressable>
+          {/* Activity Items */}
 
-          <VStack flex={1} justifyContent="flex-end" mb="2">
-            <Center>
-              <Text fontSize="xs">Powered by</Text>
-              <Text fontSize="xs" fontWeight="bold" color="#5d3915">
-                Corebase Solutions
+          <VStack mx="5" my="5" bg="#fff">
+            <Box
+              rounded="sm"
+              borderColor="coolGray.200"
+              p="5"
+              my="2"
+              borderWidth="1">
+              <Text color="#5d3915" fontWeight="bold">
+                Activities
               </Text>
-            </Center>
+            </Box>
+
+            <Box
+              rounded="sm"
+              borderColor="coolGray.200"
+              p="5"
+              my="2"
+              borderWidth="1">
+              <Text color="#5d3915" fontWeight="bold">
+                Activities
+              </Text>
+            </Box>
+
+            <Box
+              rounded="sm"
+              borderColor="coolGray.200"
+              p="5"
+              my="2"
+              borderWidth="1">
+              <Text color="#5d3915" fontWeight="bold">
+                Activities
+              </Text>
+            </Box>
           </VStack>
         </Box>
       </VStack>
@@ -125,8 +181,11 @@ const Dashboard = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  noBackGround: {
+    opacity: 1,
+  },
   image: {
-    flex: 1,
+    // flex: 1,
     justifyContent: 'center',
   },
   companyLogo: {
