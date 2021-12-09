@@ -44,9 +44,8 @@ const Dashboard = ({navigation}) => {
       <VStack flex={1} bg="#fff">
         <ImageBackground
           source={require('../assets/images/background.png')}
-          flex={1}
           style={styles.image}>
-          <HStack mx="5" my="3">
+          <HStack mx="5" mb="3">
             <Text
               color="#000"
               fontSize="sm"
@@ -58,9 +57,11 @@ const Dashboard = ({navigation}) => {
 
           {/* Points Card */}
           <Box
+            flex={2}
             // maxW="80"
             mx="5"
             mb="3"
+            p="3"
             rounded="lg"
             overflow="hidden"
             borderColor="coolGray.200"
@@ -70,37 +71,54 @@ const Dashboard = ({navigation}) => {
               borderWidth: 0,
             }}
             _light={{
-              backgroundColor: 'gray.50',
+              backgroundColor: 'amber.900',
             }}>
-            <Stack p="4" space={1}>
-              <Heading size="md">Loyalty Points</Heading>
-              <Text fontWeight="400">
-                Bengaluru (also called Bangalore) is the center of India's
-                high-tech industry. The city is also known for its parks and
-                nightlife.
+            <Stack flex={1} space={1}>
+              <Heading size="md" color="#fafafa">
+                Loyalty Points
+              </Heading>
+            </Stack>
+
+            <HStack flex={1} space={1}>
+              <Image
+                source={require('../assets/images/medicosin.png')}
+                alt="company logo"
+                style={styles.companyLogo}
+                size="sm"
+              />
+
+              <Text size="2lg" color="#fafafa">
+                Loyalty Points
               </Text>
-              <HStack
-                alignItems="center"
-                space={4}
-                justifyContent="space-between">
-                <HStack alignItems="center">
-                  <Text
-                    color="coolGray.600"
-                    _dark={{
-                      color: 'warmGray.200',
-                    }}
-                    fontWeight="400">
-                    Last Updated: 1st Dec, 2021
-                  </Text>
-                </HStack>
-              </HStack>
+            </HStack>
+
+            <Stack flex={1} space={1}>
+              <Heading size="md" color="#fafafa">
+                Loyalty Points
+              </Heading>
+            </Stack>
+
+            <Stack flex={1} justifyContent="flex-end" space={1}>
+              <Text
+                color="light.50"
+                _dark={{
+                  color: 'light.100',
+                }}
+                fontWeight="400">
+                Last Updated: 1st Dec, 2021
+              </Text>
             </Stack>
           </Box>
         </ImageBackground>
         {/* Points Summary */}
-        <Box bg="#fff" my="3" justifyContent="center" alignItems="center">
+        <Box
+          bg="#000"
+          flex={2}
+          // p="5"
+          justifyContent="center"
+          alignItems="center">
           <Center>
-            <Text fontSize="lg" mx="10">
+            <Text fontSize="lg" color="#5d3915" mx="10">
               Points Summary
             </Text>
           </Center>
@@ -131,8 +149,8 @@ const Dashboard = ({navigation}) => {
           </Center>
         </Box>
 
-        <Box bg="#fff" flex={2} justifyContent="center">
-          <HStack mx="5" bg="#fff">
+        <Box bg="#000" p="5" justifyContent="center">
+          <HStack bg="#fff">
             <Text color="#5d3915" fontSize="sm" fontWeight="bold">
               Activities
             </Text>
@@ -140,18 +158,7 @@ const Dashboard = ({navigation}) => {
 
           {/* Activity Items */}
 
-          <VStack mx="5" my="5" bg="#fff">
-            <Box
-              rounded="sm"
-              borderColor="coolGray.200"
-              p="5"
-              my="2"
-              borderWidth="1">
-              <Text color="#5d3915" fontWeight="bold">
-                Activities
-              </Text>
-            </Box>
-
+          <VStack bg="#fff">
             <Box
               rounded="sm"
               borderColor="coolGray.200"
@@ -175,6 +182,16 @@ const Dashboard = ({navigation}) => {
             </Box>
           </VStack>
         </Box>
+        <VStack flex={1} justifyContent="flex-end" my="2">
+          <Center>
+            <Text fontSize="xs" mx="10">
+              Powered by
+            </Text>
+            <Text fontSize="xs" fontWeight="bold" color="#5d3915" mx="10">
+              Corebase Solutions
+            </Text>
+          </Center>
+        </VStack>
       </VStack>
     </NativeBaseProvider>
   );
@@ -185,7 +202,7 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
   image: {
-    // flex: 1,
+    flex: 4,
     justifyContent: 'center',
   },
   companyLogo: {

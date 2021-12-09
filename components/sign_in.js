@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {ImageBackground, StyleSheet, TextInput} from 'react-native';
+import {ImageBackground, StyleSheet, TextInput, Alert} from 'react-native';
 import {
   NativeBaseProvider,
   VStack,
@@ -42,7 +42,7 @@ const SignIn = ({navigation}) => {
         <Box bg="#fff" flex={1} style={styles.inputContainer}>
           <HStack mt="5" flex={1} alignItems="center">
             <Image
-              onPress={() => navigation.navigate('landing')}
+              onPress={() => Alert.alert('landing')}
               source={require('../assets/images/back.png')}
               alt="next icon"
               style={styles.next}
@@ -80,12 +80,12 @@ const SignIn = ({navigation}) => {
             placeholderTextColor="#a3a3a3"
           />
 
-          <Pressable mx="10" onPress={() => navigation.push('dashboard')}>
+          <Pressable mx="10" onPress={() => navigation.navigate('dashboard')}>
             {({isPressed}) => {
               return (
                 <Box
                   borderWidth="3"
-                  borderColor="#5d3915"
+                  borderColor={isPressed ? '#5d3915' : '#fff'}
                   bg={isPressed ? '#fff' : '#5d3915'}
                   p="8"
                   rounded="8"
