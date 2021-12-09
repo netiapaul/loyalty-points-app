@@ -12,6 +12,8 @@ target 'loyaltyApp' do
     :hermes_enabled => false
   )
 
+
+
   target 'loyaltyAppTests' do
     inherit! :complete
     # Pods for testing

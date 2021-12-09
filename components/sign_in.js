@@ -10,11 +10,9 @@ import {
   Text,
   HStack,
   Pressable,
-  useToast,
 } from 'native-base';
 
 const SignIn = ({navigation}) => {
-  const toast = useToast();
   const [input, setInput] = React.useState('');
 
   const handleChange = text => {
@@ -82,7 +80,7 @@ const SignIn = ({navigation}) => {
             placeholderTextColor="#a3a3a3"
           />
 
-          <Pressable mx="10" onPress={() => console.warn(input)}>
+          <Pressable mx="10" onPress={() => navigation.push('dashboard')}>
             {({isPressed}) => {
               return (
                 <Box

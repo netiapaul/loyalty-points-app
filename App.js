@@ -5,15 +5,27 @@
  * @format
  * @flow strict-local
  */
-
+import 'react-native-gesture-handler';
 import React from 'react';
-// import {NativeBaseProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import Landing from './components/landing';
 import SignIn from './components/sign_in';
+import Dashboard from './components/dashboard';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
+
+const config = {
+  animation: 'spring',
+  config: {
+    stiffness: 1000,
+    damping: 500,
+    mass: 3,
+    overshootClamping: true,
+    restDisplacementThreshold: 0.01,
+    restSpeedThreshold: 0.01,
+  },
+};
 
 const App = () => {
   return (
@@ -22,7 +34,6 @@ const App = () => {
         screenOptions={{
           headerShown: true,
           animationEnabled: true,
-          animationTypeForReplace: 'push',
           shadowColor: '#52006A',
           headerStyle: {
             backgroundColor: '#fff',
@@ -41,6 +52,13 @@ const App = () => {
         <Stack.Screen
           name="signIn"
           component={SignIn}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="dashboard"
+          component={Dashboard}
           options={{
             headerShown: false,
           }}
