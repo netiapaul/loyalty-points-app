@@ -87,9 +87,7 @@ const Dashboard = ({navigation}) => {
                 size="sm"
               />
 
-              <Text size="2lg" color="#fafafa">
-                Loyalty Points
-              </Text>
+              <Text color="#fafafa">Loyalty Points</Text>
             </HStack>
 
             <Stack flex={1} space={1}>
@@ -112,7 +110,7 @@ const Dashboard = ({navigation}) => {
         </ImageBackground>
         {/* Points Summary */}
         <Box
-          bg="#000"
+          bg="#fff"
           flex={2}
           // p="5"
           justifyContent="center"
@@ -149,7 +147,7 @@ const Dashboard = ({navigation}) => {
           </Center>
         </Box>
 
-        <Box bg="#000" p="5" justifyContent="center">
+        <Box bg="#fff" p="5" justifyContent="center">
           <HStack bg="#fff">
             <Text color="#5d3915" fontSize="sm" fontWeight="bold">
               Activities

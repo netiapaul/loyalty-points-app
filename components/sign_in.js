@@ -10,6 +10,7 @@ import {
   Text,
   HStack,
   Pressable,
+  Spacer,
 } from 'native-base';
 
 const SignIn = ({navigation}) => {
@@ -41,15 +42,16 @@ const SignIn = ({navigation}) => {
         {/* FORM Area */}
         <Box bg="#fff" flex={1} style={styles.inputContainer}>
           <HStack mt="5" flex={1} alignItems="center">
-            <Image
+            {/* <Image
               onPress={() => Alert.alert('landing')}
               source={require('../assets/images/back.png')}
               alt="next icon"
               style={styles.next}
               size="sm"
               ml="10"
-            />
-            <Center>
+            /> */}
+
+            <Center flex={1}>
               <Text
                 fontSize="24"
                 style={{textAlign: 'center'}}
