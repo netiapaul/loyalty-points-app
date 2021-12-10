@@ -47,7 +47,7 @@ function Home() {
           headerShown: false,
           tabBarLabel: 'Dashboard',
           tabBarIcon: () => (
-            <MaterialCommunityIcons name="home" color={'#5d3915'} size={26} />
+            <MaterialCommunityIcons name="home" color={'#c58c4f'} size={26} />
           ),
         }}
       />
@@ -60,7 +60,7 @@ function Home() {
           tabBarIcon: () => (
             <MaterialCommunityIcons
               name="account"
-              color={'#5d3915'}
+              color={'#c58c4f'}
               size={26}
             />
           ),

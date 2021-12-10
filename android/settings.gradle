@@ -3,5 +3,7 @@ apply from: file("../node_modules/@react-native-community/cli-platform-android/n
 include ':react-native-linear-gradient' // <--- This!
 project(':react-native-linear-gradient').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-linear-gradient/android') // <--- This!
 include ':app'
-include ':react-native-vector-icons'// <--- ICONS!
+include ':react-native-vector-icons' // <--- ICONS!
 project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android') // <--- ICONS!
+include ':react-native-splash-screen' // <--- Splash Screen!
+project(':react-native-splash-screen').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-splash-screen/android') // <--- Splash Screen!
