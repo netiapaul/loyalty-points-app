@@ -243,9 +243,7 @@ const Dashboard = ({navigation}) => {
               borderWidth="1"
               shadow={3}>
               <Link
-                onPress={() =>
-                  navigation.navigate('points', {screen: 'points'})
-                }>
+                onPress={() => navigation.navigate('sales', {screen: 'sales'})}>
                 <HStack>
                   <Image
                     source={require('../assets/images/picture.png')}

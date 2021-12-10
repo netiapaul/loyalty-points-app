@@ -34,7 +34,7 @@ const SignIn = ({navigation}) => {
               size="xl"
             />
             <Heading textAlign="center" color="#000">
-              Médecins Sans Frontières
+              John Tracy Doe
             </Heading>
             {input}
           </Center>

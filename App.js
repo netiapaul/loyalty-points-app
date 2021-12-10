@@ -12,24 +12,25 @@ import Landing from './components/landing';
 import SignIn from './components/sign_in';
 import Dashboard from './components/dashboard';
 import PointsTransaction from './components/points_transactions';
+import SalesTransaction from './components/sales_transactions';
 import Profile from './components/profile';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 // TABS icons
-function LogoTitle() {
+function DashboardIcon() {
   return (
     <>
       <Image
         style={{width: 30, height: 30}}
-        source={uri(
-          'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F449%2F897%2Foriginal%2Fhome-vector-icon.jpg&f=1&nofb=1',
-        )}
+        source={{
+          uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F449%2F897%2Foriginal%2Fhome-vector-icon.jpg&f=1&nofb=1',
+        }}
       />
-      <Text>Home Screen</Text>
     </>
   );
 }
@@ -44,6 +45,10 @@ function Home() {
         component={Dashboard}
         options={{
           headerShown: false,
+          tabBarLabel: 'Dashboard',
+          tabBarIcon: ({color}) => (
+            <Icon name="facebook" size={30} color="#200" solid />
+          ),
         }}
       />
       <Tab.Screen
@@ -51,6 +56,7 @@ function Home() {
         component={Profile}
         options={{
           headerShown: false,
+          tabBarLabel: 'profile',
         }}
       />
     </Tab.Navigator>
@@ -104,6 +110,13 @@ const App = () => {
           component={PointsTransaction}
           options={{
             title: 'Points Transactions',
+          }}
+        />
+        <Stack.Screen
+          name="sales"
+          component={SalesTransaction}
+          options={{
+            title: 'Sales Transactions',
           }}
         />
       </Stack.Navigator>
