@@ -22,7 +22,7 @@ const SignIn = ({navigation}) => {
 
   return (
     <NativeBaseProvider>
-      <VStack flex={1} bg="light.50">
+      <VStack flex={2} bg="light.50">
         {/* TOP Area */}
         <ImageBackground
           source={require('../assets/images/background.png')}
@@ -40,37 +40,22 @@ const SignIn = ({navigation}) => {
           </Center>
         </ImageBackground>
         {/* FORM Area */}
-        <Box bg="#fff" flex={1} style={styles.inputContainer}>
-          <HStack mt="5" flex={1} alignItems="center">
-            {/* <Image
-              onPress={() => Alert.alert('landing')}
-              source={require('../assets/images/back.png')}
-              alt="next icon"
-              style={styles.next}
-              size="sm"
-              ml="10"
-            /> */}
+        <Box bg="#fff" flex={3} style={styles.inputContainer}>
+          <Text
+            fontSize="24"
+            my={2}
+            style={{textAlign: 'center'}}
+            fontWeight="bold">
+            Profile
+          </Text>
 
-            <Center flex={1}>
-              <Text
-                fontSize="24"
-                style={{textAlign: 'center'}}
-                fontWeight="bold">
-                Sign In
-              </Text>
-            </Center>
-          </HStack>
-
-          <Center>
+          <Center mt={-2}>
             <Text
               mx="10"
               fontSize="14"
-              my="5"
               style={styles.promoCode}
               fontWeight="400">
-              We will send you a
-              <Text fontWeight="bold"> One Time Password </Text>
-              to your personal mobile number.
+              Edit your personal information below.
             </Text>
           </Center>
 
@@ -82,16 +67,41 @@ const SignIn = ({navigation}) => {
             placeholderTextColor="#a3a3a3"
           />
 
+          <TextInput
+            style={styles.input}
+            onChangeText={handleChange}
+            value={input}
+            placeholder="Enter Member ID"
+            placeholderTextColor="#a3a3a3"
+          />
+
+          <TextInput
+            style={styles.input}
+            onChangeText={handleChange}
+            value={input}
+            placeholder="Enter Member ID"
+            placeholderTextColor="#a3a3a3"
+          />
+
+          <TextInput
+            style={styles.input}
+            onChangeText={handleChange}
+            value={input}
+            placeholder="Enter Member ID"
+            placeholderTextColor="#a3a3a3"
+          />
+
           <Pressable
             mx="10"
-            onPress={() => navigation.navigate('dashboard', {screen: 'Home'})}>
+            mb={3}
+            onPress={() => Alert.alert('Update button works')}>
             {({isPressed}) => {
               return (
                 <Box
                   borderWidth="3"
                   borderColor={isPressed ? '#5d3915' : '#fff'}
                   bg={isPressed ? '#fff' : '#5d3915'}
-                  p="8"
+                  p="5"
                   rounded="8"
                   style={{
                     transform: [
@@ -104,7 +114,7 @@ const SignIn = ({navigation}) => {
                     <Text
                       fontWeight="bold"
                       color={isPressed ? '#5d3915' : '#fff'}>
-                      Get OTP
+                      Update
                     </Text>
                   </Center>
                 </Box>
@@ -112,7 +122,31 @@ const SignIn = ({navigation}) => {
             }}
           </Pressable>
 
-          <VStack flex={1} justifyContent="flex-end" my="2">
+          <Pressable mx="10" onPress={() => navigation.navigate('landing')}>
+            {({isPressed}) => {
+              return (
+                <Box
+                  borderWidth="3"
+                  borderColor="#5d3915"
+                  bg={isPressed ? '#5d3915' : '#fff'}
+                  p="5"
+                  rounded="8"
+                  style={{
+                    transform: [
+                      {
+                        scale: isPressed ? 1 : 1,
+                      },
+                    ],
+                  }}>
+                  <Center>
+                    <Text color={isPressed ? '#fff' : '#5d3915'}>Log Out</Text>
+                  </Center>
+                </Box>
+              );
+            }}
+          </Pressable>
+
+          {/* <VStack flex={1} justifyContent="flex-end" my="2">
             <Center>
               <Text fontSize="xs" mx="10">
                 Powered by
@@ -121,7 +155,7 @@ const SignIn = ({navigation}) => {
                 Corebase Solutions
               </Text>
             </Center>
-          </VStack>
+          </VStack> */}
         </Box>
       </VStack>
     </NativeBaseProvider>
