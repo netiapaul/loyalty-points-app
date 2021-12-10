@@ -16,7 +16,7 @@ import SalesTransaction from './components/sales_transactions';
 import Profile from './components/profile';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -46,8 +46,8 @@ function Home() {
         options={{
           headerShown: false,
           tabBarLabel: 'Dashboard',
-          tabBarIcon: ({color}) => (
-            <Icon name="facebook" size={30} color="#200" solid />
+          tabBarIcon: () => (
+            <MaterialCommunityIcons name="home" color={'#5d3915'} size={26} />
           ),
         }}
       />
@@ -57,6 +57,13 @@ function Home() {
         options={{
           headerShown: false,
           tabBarLabel: 'profile',
+          tabBarIcon: () => (
+            <MaterialCommunityIcons
+              name="account"
+              color={'#5d3915'}
+              size={26}
+            />
+          ),
         }}
       />
     </Tab.Navigator>
