@@ -220,6 +220,9 @@ const Dashboard = ({navigation}) => {
                     <Text color="#5d3915" ml={3} fontWeight="bold">
                       Points Transactions
                     </Text>
+                    <Text color="#5d3915" ml={-12} fontSize={10}>
+                      22/12/2021
+                    </Text>
                   </Center>
                 </HStack>
                 <Spacer />
@@ -254,6 +257,9 @@ const Dashboard = ({navigation}) => {
                   <Center>
                     <Text color="#5d3915" ml={3} fontWeight="bold">
                       Sales Transactions
+                    </Text>
+                    <Text color="#5d3915" ml={-12} fontSize={10}>
+                      22/12/2021
                     </Text>
                   </Center>
                 </HStack>

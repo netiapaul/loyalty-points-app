@@ -303,17 +303,17 @@ const PointsTransaction = ({navigation}) => {
                 </HStack>
               </Box>
             </VStack>
+            <VStack flex={1} justifyContent="flex-end" mt="2">
+              <Center>
+                <Text fontSize="xs" mx="10">
+                  Powered by
+                </Text>
+                <Text fontSize="xs" fontWeight="bold" color="#5d3915" mx="10">
+                  Corebase Solutions
+                </Text>
+              </Center>
+            </VStack>
           </Box>
-          {/* <VStack flex={1} justifyContent="flex-end" my="2">
-          <Center>
-            <Text fontSize="xs" mx="10">
-              Powered by
-            </Text>
-            <Text fontSize="xs" fontWeight="bold" color="#5d3915" mx="10">
-              Corebase Solutions
-            </Text>
-          </Center>
-        </VStack> */}
         </VStack>
       </ScrollView>
     </NativeBaseProvider>
