@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {ImageBackground, StyleSheet, Alert} from 'react-native';
 import {
   NativeBaseProvider,
@@ -22,6 +22,30 @@ const config = {
 };
 
 const Dashboard = ({navigation}) => {
+  const [user, setUser] = useState({});
+
+  const handleFetch = () => {
+    const request =
+      'http://102.37.102.247:5016/Customers/members?memberNum=PP000006';
+    const token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEb2N1bWVudENlbnRyYWwiLCJqdGkiOiI1NDMyYzkzNy1hMjQwLTQyZmItOGM4ZC0wYmZhZmJmMDgxYTAiLCJpYXQiOiIxMi8xNi8yMDIxIDc6NTQ6NDcgQU0iLCJleHAiOjE2Mzk3Mjc2ODcsImlkIjoiMSIsInVzZXJuYW1lIjoiQXBwU3VwZXJBZG1pbiIsIkNvbXBhbnlEZXRhaWxJZCI6IjEiLCJjbGllbnRDb2RlIjoiQ29yZVBoYW1hIiwiYnJhbmNoZXMiOiIyLDQsNiwxMSwxMiwxMywxNCwxNSwxNiwxNywxOCwxOSwyMCwyMSwyMiwyMywyNCwyNSwyNiwyNywyOCwyOSwzMCwzMSwzMiwzMywzNCwzNSwzNiwzNywzOCIsInJvbGUiOiJTdXBlckFkbWluIiwiaXNzIjoiQ29yZUJhc2VTb2x1dGlvbnNMaW1pdGVkIiwiYXVkIjoiRG9jdW1lbnRDZW50cmFsQ2xpZW50cyJ9.kjhV-SS6FmbN082hD_1Go6jVlrjNjAavjWjHjF_jukA';
+    fetch(request, {
+      method: 'GET',
+      headers: new Headers({
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }),
+    })
+      .then(response => response.json())
+      .then(response => setUser(response[0]))
+      // .then(response => console.warn(response[0]))
+      .catch(err => console.warn('please connect to available network'));
+  };
+
+  useEffect(() => {
+    handleFetch();
+  }, []);
   return (
     <NativeBaseProvider config={config}>
       <HStack
@@ -59,7 +83,7 @@ const Dashboard = ({navigation}) => {
               fontSize="sm"
               style={styles.noBackGround}
               fontWeight="bold">
-              Hi, John Tracy Doe
+              Hi, {user.membername}
             </Text>
           </HStack>
 
@@ -98,12 +122,12 @@ const Dashboard = ({navigation}) => {
             </Stack>
 
             <HStack flex={2} space={10}>
-              <Image
+              {/* <Image
                 source={require('../assets/images/medicosin.png')}
                 alt="company logo"
                 style={styles.companyLogo}
                 size="sm"
-              />
+              /> */}
 
               <VStack>
                 <Text
@@ -111,7 +135,7 @@ const Dashboard = ({navigation}) => {
                   fontSize="4xl"
                   flex={1}
                   fontWeight={'bold'}>
-                  12,434 pts
+                  {user.mempointsbal} pts
                 </Text>
 
                 <Text
@@ -166,21 +190,21 @@ const Dashboard = ({navigation}) => {
                 <Text fontSize="sm" mx="3" mb={1} fontWeight="bold">
                   Total Points
                 </Text>
-                <Text fontSize="sm">12,043</Text>
+                <Text fontSize="sm">{user.mempointsbal}</Text>
               </VStack>
 
               <VStack alignItems="center">
                 <Text fontSize="sm" mx="3" mb={1} fontWeight="bold">
                   Redeemed Points
                 </Text>
-                <Text fontSize="sm">56,324</Text>
+                <Text fontSize="sm">{user.mempointsredeem}</Text>
               </VStack>
 
               <VStack alignItems="center">
                 <Text fontSize="sm" mx="3" mb={1} fontWeight="bold">
-                  Points Earned
+                  Points Buy
                 </Text>
-                <Text fontSize="sm">234,344</Text>
+                <Text fontSize="sm">{user.mempointsbuy}</Text>
               </VStack>
             </HStack>
           </Center>

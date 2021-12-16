@@ -287,7 +287,7 @@ const PointsTransaction = ({navigation}) => {
                   />
                   <Center>
                     <Text color="#5d3915" ml={3} fontWeight="bold">
-                      Sales Transactions
+                      Points Transactions
                     </Text>
                   </Center>
 

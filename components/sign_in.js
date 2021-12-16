@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {ImageBackground, StyleSheet, TextInput, Alert} from 'react-native';
 import {
   NativeBaseProvider,
@@ -14,11 +14,38 @@ import {
 } from 'native-base';
 
 const SignIn = ({navigation}) => {
-  const [input, setInput] = React.useState('');
+  const [pin, setPin] = useState('');
+  const [idno, setIdno] = useState('');
 
-  const handleChange = text => {
-    return setInput(text);
+  const handleID = text => {
+    return setIdno(text);
   };
+
+  const handlePin = text => {
+    return setPin(text);
+  };
+
+  const handleFetch = () => {
+    const request =
+      'http://102.37.102.247:5016/Customers/members?memberNum=PP000007';
+    const token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEb2N1bWVudENlbnRyYWwiLCJqdGkiOiI1NDMyYzkzNy1hMjQwLTQyZmItOGM4ZC0wYmZhZmJmMDgxYTAiLCJpYXQiOiIxMi8xNi8yMDIxIDc6NTQ6NDcgQU0iLCJleHAiOjE2Mzk3Mjc2ODcsImlkIjoiMSIsInVzZXJuYW1lIjoiQXBwU3VwZXJBZG1pbiIsIkNvbXBhbnlEZXRhaWxJZCI6IjEiLCJjbGllbnRDb2RlIjoiQ29yZVBoYW1hIiwiYnJhbmNoZXMiOiIyLDQsNiwxMSwxMiwxMywxNCwxNSwxNiwxNywxOCwxOSwyMCwyMSwyMiwyMywyNCwyNSwyNiwyNywyOCwyOSwzMCwzMSwzMiwzMywzNCwzNSwzNiwzNywzOCIsInJvbGUiOiJTdXBlckFkbWluIiwiaXNzIjoiQ29yZUJhc2VTb2x1dGlvbnNMaW1pdGVkIiwiYXVkIjoiRG9jdW1lbnRDZW50cmFsQ2xpZW50cyJ9.kjhV-SS6FmbN082hD_1Go6jVlrjNjAavjWjHjF_jukA';
+    fetch(request, {
+      method: 'GET',
+      headers: new Headers({
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }),
+    })
+      .then(response => response.json())
+      .then(response => console.warn(response))
+      .catch(err => console.error(err));
+  };
+
+  useEffect(() => {
+    handleFetch();
+  });
 
   return (
     <NativeBaseProvider>
@@ -36,7 +63,6 @@ const SignIn = ({navigation}) => {
             <Heading textAlign="center" color="#000">
               Médecins Sans Frontières
             </Heading>
-            {input}
           </Center>
         </ImageBackground>
         {/* FORM Area */}
@@ -65,20 +91,29 @@ const SignIn = ({navigation}) => {
             <Text
               mx="10"
               fontSize="14"
-              my="5"
+              my="3"
               style={styles.promoCode}
               fontWeight="400">
-              We will send you a
-              <Text fontWeight="bold"> One Time Password </Text>
-              to your personal mobile number.
+              Enter your
+              <Text fontWeight="bold"> National ID Number </Text>&
+              <Text fontWeight="bold"> PIN Number </Text>
+              to proceed.
             </Text>
           </Center>
 
           <TextInput
             style={styles.input}
-            onChangeText={handleChange}
-            value={input}
-            placeholder="Enter Member ID"
+            onChangeText={handleID}
+            value={idno}
+            placeholder="Enter National ID"
+            placeholderTextColor="#a3a3a3"
+          />
+
+          <TextInput
+            style={styles.input}
+            onChangeText={handlePin}
+            value={pin}
+            placeholder="Enter PIN"
             placeholderTextColor="#a3a3a3"
           />
 
@@ -104,7 +139,7 @@ const SignIn = ({navigation}) => {
                     <Text
                       fontWeight="bold"
                       color={isPressed ? '#5d3915' : '#fff'}>
-                      Get OTP
+                      Sign In
                     </Text>
                   </Center>
                 </Box>

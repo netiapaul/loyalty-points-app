@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {ImageBackground, StyleSheet, TextInput, Alert} from 'react-native';
 import {
   NativeBaseProvider,
@@ -11,14 +11,39 @@ import {
   HStack,
   Pressable,
   Spacer,
+  Avatar,
 } from 'native-base';
 
 const SignIn = ({navigation}) => {
-  const [input, setInput] = React.useState('');
+  const [input, setInput] = useState('');
 
   const handleChange = text => {
     return setInput(text);
   };
+
+  const [user, setUser] = useState({});
+  const handleFetch = () => {
+    const request =
+      'http://102.37.102.247:5016/Customers/members?memberNum=PP000006';
+    const token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEb2N1bWVudENlbnRyYWwiLCJqdGkiOiI1NDMyYzkzNy1hMjQwLTQyZmItOGM4ZC0wYmZhZmJmMDgxYTAiLCJpYXQiOiIxMi8xNi8yMDIxIDc6NTQ6NDcgQU0iLCJleHAiOjE2Mzk3Mjc2ODcsImlkIjoiMSIsInVzZXJuYW1lIjoiQXBwU3VwZXJBZG1pbiIsIkNvbXBhbnlEZXRhaWxJZCI6IjEiLCJjbGllbnRDb2RlIjoiQ29yZVBoYW1hIiwiYnJhbmNoZXMiOiIyLDQsNiwxMSwxMiwxMywxNCwxNSwxNiwxNywxOCwxOSwyMCwyMSwyMiwyMywyNCwyNSwyNiwyNywyOCwyOSwzMCwzMSwzMiwzMywzNCwzNSwzNiwzNywzOCIsInJvbGUiOiJTdXBlckFkbWluIiwiaXNzIjoiQ29yZUJhc2VTb2x1dGlvbnNMaW1pdGVkIiwiYXVkIjoiRG9jdW1lbnRDZW50cmFsQ2xpZW50cyJ9.kjhV-SS6FmbN082hD_1Go6jVlrjNjAavjWjHjF_jukA';
+    fetch(request, {
+      method: 'GET',
+      headers: new Headers({
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }),
+    })
+      .then(response => response.json())
+      .then(response => setUser(response[0]))
+      // .then(response => console.warn(response[0]))
+      .catch(err => console.warn('please connect to available network'));
+  };
+
+  useEffect(() => {
+    handleFetch();
+  }, []);
 
   return (
     <NativeBaseProvider>
@@ -28,13 +53,17 @@ const SignIn = ({navigation}) => {
           source={require('../assets/images/background.png')}
           style={styles.image}>
           <Center flex={1}>
-            <Image
+            {/* <Avatar bg="green.500">SS</Avatar> */}
+            {/* <Image
               source={require('../assets/images/medicosin.png')}
               alt="Company Logo"
               size="xl"
-            />
+            /> */}
+            <Avatar bg="blueGray.600" size="xl">
+              SS
+            </Avatar>
             <Heading textAlign="center" color="#000">
-              John Tracy Doe
+              {user.membername}
             </Heading>
             {input}
           </Center>
@@ -171,6 +200,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
+    borderBottomColor: 'white',
   },
   promoCode: {
     textAlign: 'center',

@@ -71,7 +71,9 @@ const Landing = ({navigation}) => {
                     ],
                   }}>
                   <Center>
-                    <Text color={isPressed ? '#fff' : '#5d3915'}>Sign In</Text>
+                    <Text color={isPressed ? '#fff' : '#5d3915'}>
+                      Get Started
+                    </Text>
                   </Center>
                 </Box>
               );
