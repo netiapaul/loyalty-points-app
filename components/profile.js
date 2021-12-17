@@ -16,17 +16,17 @@ import {
 
 const SignIn = ({navigation}) => {
   const [input, setInput] = useState('');
-
   const handleChange = text => {
     return setInput(text);
   };
 
   const [user, setUser] = useState({});
+
   const handleFetch = () => {
     const request =
       'http://102.37.102.247:5016/Customers/members?memberNum=PP000006';
     const token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEb2N1bWVudENlbnRyYWwiLCJqdGkiOiI1NDMyYzkzNy1hMjQwLTQyZmItOGM4ZC0wYmZhZmJmMDgxYTAiLCJpYXQiOiIxMi8xNi8yMDIxIDc6NTQ6NDcgQU0iLCJleHAiOjE2Mzk3Mjc2ODcsImlkIjoiMSIsInVzZXJuYW1lIjoiQXBwU3VwZXJBZG1pbiIsIkNvbXBhbnlEZXRhaWxJZCI6IjEiLCJjbGllbnRDb2RlIjoiQ29yZVBoYW1hIiwiYnJhbmNoZXMiOiIyLDQsNiwxMSwxMiwxMywxNCwxNSwxNiwxNywxOCwxOSwyMCwyMSwyMiwyMywyNCwyNSwyNiwyNywyOCwyOSwzMCwzMSwzMiwzMywzNCwzNSwzNiwzNywzOCIsInJvbGUiOiJTdXBlckFkbWluIiwiaXNzIjoiQ29yZUJhc2VTb2x1dGlvbnNMaW1pdGVkIiwiYXVkIjoiRG9jdW1lbnRDZW50cmFsQ2xpZW50cyJ9.kjhV-SS6FmbN082hD_1Go6jVlrjNjAavjWjHjF_jukA';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEb2N1bWVudENlbnRyYWwiLCJqdGkiOiIzZGJmNDhiMC0zYzQ0LTRhOTEtOTlhNC1mNGUwMDg0MWMxODIiLCJpYXQiOiIxMi8xNy8yMDIxIDg6MzE6MTIgQU0iLCJleHAiOjE2Mzk4MTYyNzIsImlkIjoiMSIsInVzZXJuYW1lIjoiQXBwU3VwZXJBZG1pbiIsIkNvbXBhbnlEZXRhaWxJZCI6IjEiLCJjbGllbnRDb2RlIjoiQ29yZVBoYW1hIiwiYnJhbmNoZXMiOiIyLDQsNiwxMSwxMiwxMywxNCwxNSwxNiwxNywxOCwxOSwyMCwyMSwyMiwyMywyNCwyNSwyNiwyNywyOCwyOSwzMCwzMSwzMiwzMywzNCwzNSwzNiwzNywzOCIsInJvbGUiOiJTdXBlckFkbWluIiwiaXNzIjoiQ29yZUJhc2VTb2x1dGlvbnNMaW1pdGVkIiwiYXVkIjoiRG9jdW1lbnRDZW50cmFsQ2xpZW50cyJ9.xFYMbJmfh3oaf106HWPHWZvC0m5MS4g02AMvg76pRT0';
     fetch(request, {
       method: 'GET',
       headers: new Headers({
@@ -60,6 +60,8 @@ const SignIn = ({navigation}) => {
               size="xl"
             /> */}
             <Avatar bg="blueGray.600" size="xl">
+              {/* .match(/\b([A-Z])/g).join('') */}
+              {/* {user.membername} */}
               SS
             </Avatar>
             <Heading textAlign="center" color="#000">

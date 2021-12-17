@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ImageBackground, StyleSheet, Alert} from 'react-native';
+import {ImageBackground, StyleSheet} from 'react-native';
 import {
   NativeBaseProvider,
   VStack,
@@ -13,6 +13,11 @@ import {
   Link,
   Divider,
   Spacer,
+  Alert,
+  Button,
+  Collapse,
+  IconButton,
+  CloseIcon,
 } from 'native-base';
 
 const config = {
@@ -23,12 +28,13 @@ const config = {
 
 const Dashboard = ({navigation}) => {
   const [user, setUser] = useState({});
-
-  const handleFetch = () => {
+  const [show, setShow] = useState(true);
+  const [status, setStatus] = useState('');
+  const handleFetch = async () => {
     const request =
       'http://102.37.102.247:5016/Customers/members?memberNum=PP000006';
     const token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEb2N1bWVudENlbnRyYWwiLCJqdGkiOiI1NDMyYzkzNy1hMjQwLTQyZmItOGM4ZC0wYmZhZmJmMDgxYTAiLCJpYXQiOiIxMi8xNi8yMDIxIDc6NTQ6NDcgQU0iLCJleHAiOjE2Mzk3Mjc2ODcsImlkIjoiMSIsInVzZXJuYW1lIjoiQXBwU3VwZXJBZG1pbiIsIkNvbXBhbnlEZXRhaWxJZCI6IjEiLCJjbGllbnRDb2RlIjoiQ29yZVBoYW1hIiwiYnJhbmNoZXMiOiIyLDQsNiwxMSwxMiwxMywxNCwxNSwxNiwxNywxOCwxOSwyMCwyMSwyMiwyMywyNCwyNSwyNiwyNywyOCwyOSwzMCwzMSwzMiwzMywzNCwzNSwzNiwzNywzOCIsInJvbGUiOiJTdXBlckFkbWluIiwiaXNzIjoiQ29yZUJhc2VTb2x1dGlvbnNMaW1pdGVkIiwiYXVkIjoiRG9jdW1lbnRDZW50cmFsQ2xpZW50cyJ9.kjhV-SS6FmbN082hD_1Go6jVlrjNjAavjWjHjF_jukA';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEb2N1bWVudENlbnRyYWwiLCJqdGkiOiIzZGJmNDhiMC0zYzQ0LTRhOTEtOTlhNC1mNGUwMDg0MWMxODIiLCJpYXQiOiIxMi8xNy8yMDIxIDg6MzE6MTIgQU0iLCJleHAiOjE2Mzk4MTYyNzIsImlkIjoiMSIsInVzZXJuYW1lIjoiQXBwU3VwZXJBZG1pbiIsIkNvbXBhbnlEZXRhaWxJZCI6IjEiLCJjbGllbnRDb2RlIjoiQ29yZVBoYW1hIiwiYnJhbmNoZXMiOiIyLDQsNiwxMSwxMiwxMywxNCwxNSwxNiwxNywxOCwxOSwyMCwyMSwyMiwyMywyNCwyNSwyNiwyNywyOCwyOSwzMCwzMSwzMiwzMywzNCwzNSwzNiwzNywzOCIsInJvbGUiOiJTdXBlckFkbWluIiwiaXNzIjoiQ29yZUJhc2VTb2x1dGlvbnNMaW1pdGVkIiwiYXVkIjoiRG9jdW1lbnRDZW50cmFsQ2xpZW50cyJ9.xFYMbJmfh3oaf106HWPHWZvC0m5MS4g02AMvg76pRT0';
     fetch(request, {
       method: 'GET',
       headers: new Headers({
@@ -37,271 +43,306 @@ const Dashboard = ({navigation}) => {
         'Content-Type': 'application/json',
       }),
     })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          if (response.status == 404) {
+            setStatus('Error Fetching Data from server');
+            console.warn('Error Fetching Data from server');
+          } else if (response.status > 499) {
+            setStatus('Internal Server Error');
+            console.warn('Internal Server Error');
+          }
+        }
+        return response.json();
+      })
       .then(response => setUser(response[0]))
       // .then(response => console.warn(response[0]))
-      .catch(err => console.warn('please connect to available network'));
+      .catch(() => {
+        setStatus('please connect to available network'),
+          console.warn('please connect to available network');
+      });
   };
 
   useEffect(() => {
     handleFetch();
-  }, []);
+  }, [status]);
   return (
     <NativeBaseProvider config={config}>
-      <HStack
-        bg="#fff"
-        p="5"
-        justifyContent="space-between"
-        alignItems="center">
-        <Text color="#5d3915" fontSize="20" fontWeight="bold">
-          Dashboard
-        </Text>
-        {/*
-        <Image
-          source={require('../assets/images/medicosin.png')}
-          alt="company logo"
-          style={styles.companyLogo}
-          size="sm"
-        />
+      {/* <Collapse isOpen={show}> */}
+      {status ? (
+        <Alert w="100%" status="error">
+          <VStack space={2} flexShrink={1} w="100%">
+            <HStack
+              flexShrink={1}
+              space={1}
+              alignItems="center"
+              justifyContent="space-between">
+              <HStack space={2} flexShrink={1} alignItems="center">
+                <Alert.Icon />
+                <Text
+                  fontSize="md"
+                  fontWeight="medium"
+                  _dark={{
+                    color: 'coolGray.800',
+                  }}>
+                  {status}
+                </Text>
+              </HStack>
+              {/* <IconButton
+                  variant="unstyled"
+                  icon={<CloseIcon size="3" color="coolGray.600" />}
+                  onPress={() => setShow(false)}
+                /> */}
+            </HStack>
+          </VStack>
+        </Alert>
+      ) : null}
 
-         <Text
-          color="#5d3915"
-          fontSize="20"
-          fontWeight="bold"
-          onPress={() => Alert.alert('i am Headed to greatness')}>
-          Dashboard
-        </Text> */}
-      </HStack>
-      {/* bg="light.50" */}
-      <VStack flex={1} bg="#fff">
-        <ImageBackground
-          source={require('../assets/images/background.png')}
-          style={styles.image}>
-          <HStack mx="5" mb="3">
-            <Text
-              color="#000"
-              fontSize="sm"
-              style={styles.noBackGround}
-              fontWeight="bold">
-              Hi, {user.membername}
-            </Text>
-          </HStack>
+      {/* </Collapse> */}
 
-          {/* Points Card */}
-          <Box
-            flex={1}
-            // maxW="80"
-            mx="5"
-            mb="3"
-            p="3"
-            shadow={9}
-            bg={{
-              linearGradient: {
-                // colors: ['lightBlue.300', 'violet.800'],
-                colors: ['amber.500', 'amber.900'],
-                start: [0, 1],
-                end: [1, 0],
-              },
-            }}
-            rounded="lg"
-            overflow="hidden"
-            borderColor="coolGray.200"
-            // borderWidth="1"
-            _web={{
-              shadow: 2,
-              borderWidth: 0,
-            }}
-            // _light={{
-            //   backgroundColor: 'amber.900',
-            // }}
-          >
-            <Stack flex={1} space={1}>
-              <Heading size="md" color="#fafafa">
-                Loyalty Points
-              </Heading>
-            </Stack>
+      <>
+        <HStack
+          bg="#fff"
+          p="5"
+          justifyContent="space-between"
+          alignItems="center">
+          <Text color="#5d3915" fontSize="20" fontWeight="bold">
+            Dashboard
+          </Text>
+        </HStack>
 
-            <HStack flex={2} space={10}>
-              {/* <Image
+        {/* bg="light.50" */}
+        <VStack flex={1} bg="#fff">
+          <ImageBackground
+            source={require('../assets/images/background.png')}
+            style={styles.image}>
+            <HStack mx="5" mb="3">
+              <Text
+                color="#000"
+                fontSize="md"
+                style={styles.noBackGround}
+                fontWeight="bold">
+                Hi, {user.membername}.
+              </Text>
+            </HStack>
+
+            {/* Points Card */}
+            <Box
+              flex={1}
+              // maxW="80"
+              mx="5"
+              mb="3"
+              p="3"
+              shadow={9}
+              bg={{
+                linearGradient: {
+                  // colors: ['lightBlue.300', 'violet.800'],
+                  colors: ['amber.500', 'amber.900'],
+                  start: [0, 1],
+                  end: [1, 0],
+                },
+              }}
+              rounded="lg"
+              overflow="hidden"
+              borderColor="coolGray.200"
+              // borderWidth="1"
+              _web={{
+                shadow: 2,
+                borderWidth: 0,
+              }}
+              // _light={{
+              //   backgroundColor: 'amber.900',
+              // }}
+            >
+              <Stack flex={1} space={1}>
+                <Heading size="md" color="#fafafa">
+                  Loyalty Points
+                </Heading>
+              </Stack>
+
+              <HStack flex={2} space={10}>
+                {/* <Image
                 source={require('../assets/images/medicosin.png')}
                 alt="company logo"
                 style={styles.companyLogo}
                 size="sm"
               /> */}
 
-              <VStack>
-                <Text
-                  color="#fafafa"
-                  fontSize="4xl"
-                  flex={1}
-                  fontWeight={'bold'}>
-                  {user.mempointsbal} pts
-                </Text>
+                <VStack>
+                  <Text
+                    color="#fafafa"
+                    fontSize="4xl"
+                    flex={1}
+                    fontWeight={'bold'}>
+                    {user.mempointsbal} pts
+                  </Text>
 
-                <Text
-                  color="#fafafa"
-                  flex={1}
-                  textAlign={'center'}
-                  fontSize="xs">
-                  7,566 points remaining for your next reward
-                </Text>
-              </VStack>
-            </HStack>
+                  <Text
+                    color="#fafafa"
+                    flex={1}
+                    textAlign={'center'}
+                    fontSize="xs">
+                    7,566 points remaining for your next reward
+                  </Text>
+                </VStack>
+              </HStack>
 
-            {/* <Stack flex={1} space={1}>
+              {/* <Stack flex={1} space={1}>
               <Heading size="md" color="#fafafa">
                 Loyalty Points
               </Heading>
             </Stack> */}
-            <Divider mb={2} mt={-3} />
-            <Stack justifyContent="flex-end" space={1}>
+              <Divider mb={2} mt={-3} />
+              <Stack justifyContent="flex-end" space={1}>
+                <Text
+                  color="light.50"
+                  _dark={{
+                    color: 'light.100',
+                  }}
+                  fontWeight="400">
+                  Last Updated: 1st Dec, 2021
+                </Text>
+              </Stack>
+            </Box>
+          </ImageBackground>
+          {/* Points Summary */}
+          <Box
+            bg="#fff"
+            flex={2}
+            // p="5"
+            justifyContent="center"
+            alignItems="center">
+            <Center>
               <Text
-                color="light.50"
-                _dark={{
-                  color: 'light.100',
-                }}
-                fontWeight="400">
-                Last Updated: 1st Dec, 2021
+                fontSize="2xl"
+                fontWeight={'bold'}
+                color="#5d3915"
+                mb={3}
+                mx="10">
+                Points Summary
               </Text>
-            </Stack>
+            </Center>
+
+            <Center>
+              <HStack>
+                <VStack alignItems="center">
+                  <Text fontSize="sm" mx="3" mb={1} fontWeight="bold">
+                    Total Points
+                  </Text>
+                  <Text fontSize="sm">{user.mempointsbal}</Text>
+                </VStack>
+
+                <VStack alignItems="center">
+                  <Text fontSize="sm" mx="3" mb={1} fontWeight="bold">
+                    Redeemed Points
+                  </Text>
+                  <Text fontSize="sm">{user.mempointsredeem}</Text>
+                </VStack>
+
+                <VStack alignItems="center">
+                  <Text fontSize="sm" mx="3" mb={1} fontWeight="bold">
+                    Points Buy
+                  </Text>
+                  <Text fontSize="sm">{user.mempointsbuy}</Text>
+                </VStack>
+              </HStack>
+            </Center>
           </Box>
-        </ImageBackground>
-        {/* Points Summary */}
-        <Box
-          bg="#fff"
-          flex={2}
-          // p="5"
-          justifyContent="center"
-          alignItems="center">
-          <Center>
-            <Text
-              fontSize="2xl"
-              fontWeight={'bold'}
-              color="#5d3915"
-              mb={3}
-              mx="10">
-              Points Summary
-            </Text>
-          </Center>
 
-          <Center>
-            <HStack>
-              <VStack alignItems="center">
-                <Text fontSize="sm" mx="3" mb={1} fontWeight="bold">
-                  Total Points
-                </Text>
-                <Text fontSize="sm">{user.mempointsbal}</Text>
-              </VStack>
-
-              <VStack alignItems="center">
-                <Text fontSize="sm" mx="3" mb={1} fontWeight="bold">
-                  Redeemed Points
-                </Text>
-                <Text fontSize="sm">{user.mempointsredeem}</Text>
-              </VStack>
-
-              <VStack alignItems="center">
-                <Text fontSize="sm" mx="3" mb={1} fontWeight="bold">
-                  Points Buy
-                </Text>
-                <Text fontSize="sm">{user.mempointsbuy}</Text>
-              </VStack>
+          <Box bg="#fff" p="5" mt={-5} justifyContent="center">
+            <HStack bg="#fff">
+              <Text color="#5d3915" fontSize="md" mb={5} fontWeight={'bold'}>
+                Activities
+              </Text>
             </HStack>
-          </Center>
-        </Box>
 
-        <Box bg="#fff" p="5" mt={-5} justifyContent="center">
-          <HStack bg="#fff">
-            <Text color="#5d3915" fontSize="md" mb={5} fontWeight={'bold'}>
-              Activities
-            </Text>
-          </HStack>
+            {/* Activity Items */}
 
-          {/* Activity Items */}
-
-          <VStack bg="#fff">
-            <Box
-              p="5"
-              m="2"
-              bg="muted.50"
-              borderRadius="md"
-              borderColor="coolGray.200"
-              borderWidth="1"
-              onPress={() => Alert.alert('adsdd')}
-              shadow={3}>
-              <Link
-                onPress={() =>
-                  navigation.navigate('points', {screen: 'points'})
-                }>
-                <HStack>
-                  <Image
-                    source={require('../assets/images/picture.png')}
-                    alt="company logo"
-                    style={styles.transactionsImage}
-                    size="sm"
-                  />
+            <VStack bg="#fff">
+              <Box
+                p="5"
+                m="2"
+                bg="muted.50"
+                borderRadius="md"
+                borderColor="coolGray.200"
+                borderWidth="1"
+                onPress={() => Alert.alert('adsdd')}
+                shadow={3}>
+                <Link
+                  onPress={() =>
+                    navigation.navigate('points', {screen: 'points'})
+                  }>
+                  <HStack>
+                    <Image
+                      source={require('../assets/images/picture.png')}
+                      alt="company logo"
+                      style={styles.transactionsImage}
+                      size="sm"
+                    />
+                    <Center>
+                      <Text color="#5d3915" ml={3} fontWeight="bold">
+                        Points Transactions
+                      </Text>
+                      <Text color="#5d3915" ml={-12} fontSize={10}>
+                        22/12/2021
+                      </Text>
+                    </Center>
+                  </HStack>
+                  <Spacer />
                   <Center>
-                    <Text color="#5d3915" ml={3} fontWeight="bold">
-                      Points Transactions
-                    </Text>
-                    <Text color="#5d3915" ml={-12} fontSize={10}>
-                      22/12/2021
-                    </Text>
+                    <Image
+                      source={require('../assets/images/right-arrow.png')}
+                      alt="company logo"
+                      style={styles.rightArrow}
+                      size="sm"
+                    />
                   </Center>
-                </HStack>
-                <Spacer />
-                <Center>
-                  <Image
-                    source={require('../assets/images/right-arrow.png')}
-                    alt="company logo"
-                    style={styles.rightArrow}
-                    size="sm"
-                  />
-                </Center>
-              </Link>
-            </Box>
+                </Link>
+              </Box>
 
-            <Box
-              borderColor="coolGray.200"
-              p="5"
-              m="2"
-              bg="muted.50"
-              borderRadius="md"
-              borderWidth="1"
-              shadow={3}>
-              <Link
-                onPress={() => navigation.navigate('sales', {screen: 'sales'})}>
-                <HStack>
-                  <Image
-                    source={require('../assets/images/picture.png')}
-                    alt="company logo"
-                    style={styles.transactionsImage}
-                    size="sm"
-                  />
+              <Box
+                borderColor="coolGray.200"
+                p="5"
+                m="2"
+                bg="muted.50"
+                borderRadius="md"
+                borderWidth="1"
+                shadow={3}>
+                <Link
+                  onPress={() =>
+                    navigation.navigate('sales', {screen: 'sales'})
+                  }>
+                  <HStack>
+                    <Image
+                      source={require('../assets/images/picture.png')}
+                      alt="company logo"
+                      style={styles.transactionsImage}
+                      size="sm"
+                    />
+                    <Center>
+                      <Text color="#5d3915" ml={3} fontWeight="bold">
+                        Sales Transactions
+                      </Text>
+                      <Text color="#5d3915" ml={-12} fontSize={10}>
+                        22/12/2021
+                      </Text>
+                    </Center>
+                  </HStack>
+
+                  <Spacer />
                   <Center>
-                    <Text color="#5d3915" ml={3} fontWeight="bold">
-                      Sales Transactions
-                    </Text>
-                    <Text color="#5d3915" ml={-12} fontSize={10}>
-                      22/12/2021
-                    </Text>
+                    <Image
+                      source={require('../assets/images/right-arrow.png')}
+                      alt="company logo"
+                      style={styles.rightArrow}
+                      size="sm"
+                    />
                   </Center>
-                </HStack>
-
-                <Spacer />
-                <Center>
-                  <Image
-                    source={require('../assets/images/right-arrow.png')}
-                    alt="company logo"
-                    style={styles.rightArrow}
-                    size="sm"
-                  />
-                </Center>
-              </Link>
-            </Box>
-          </VStack>
-        </Box>
-        {/* <VStack flex={1} justifyContent="flex-end" my="2">
+                </Link>
+              </Box>
+            </VStack>
+          </Box>
+          {/* <VStack flex={1} justifyContent="flex-end" my="2">
           <Center>
             <Text fontSize="xs" mx="10">
               Powered by
@@ -311,7 +352,8 @@ const Dashboard = ({navigation}) => {
             </Text>
           </Center>
         </VStack> */}
-      </VStack>
+        </VStack>
+      </>
     </NativeBaseProvider>
   );
 };

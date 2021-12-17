@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {ImageBackground, StyleSheet, TextInput, Alert} from 'react-native';
+import {ImageBackground, StyleSheet, TextInput} from 'react-native';
 import {
   NativeBaseProvider,
   VStack,
@@ -11,11 +11,14 @@ import {
   HStack,
   Pressable,
   Spacer,
+  Alert,
 } from 'native-base';
 
 const SignIn = ({navigation}) => {
-  const [pin, setPin] = useState('');
-  const [idno, setIdno] = useState('');
+  const [pinNo, setPin] = useState('');
+  const [idNo, setIdno] = useState('');
+  const [data, setData] = useState({});
+  const [status, setStatus] = useState('');
 
   const handleID = text => {
     return setIdno(text);
@@ -26,29 +29,79 @@ const SignIn = ({navigation}) => {
   };
 
   const handleFetch = () => {
-    const request =
-      'http://102.37.102.247:5016/Customers/members?memberNum=PP000007';
-    const token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEb2N1bWVudENlbnRyYWwiLCJqdGkiOiI1NDMyYzkzNy1hMjQwLTQyZmItOGM4ZC0wYmZhZmJmMDgxYTAiLCJpYXQiOiIxMi8xNi8yMDIxIDc6NTQ6NDcgQU0iLCJleHAiOjE2Mzk3Mjc2ODcsImlkIjoiMSIsInVzZXJuYW1lIjoiQXBwU3VwZXJBZG1pbiIsIkNvbXBhbnlEZXRhaWxJZCI6IjEiLCJjbGllbnRDb2RlIjoiQ29yZVBoYW1hIiwiYnJhbmNoZXMiOiIyLDQsNiwxMSwxMiwxMywxNCwxNSwxNiwxNywxOCwxOSwyMCwyMSwyMiwyMywyNCwyNSwyNiwyNywyOCwyOSwzMCwzMSwzMiwzMywzNCwzNSwzNiwzNywzOCIsInJvbGUiOiJTdXBlckFkbWluIiwiaXNzIjoiQ29yZUJhc2VTb2x1dGlvbnNMaW1pdGVkIiwiYXVkIjoiRG9jdW1lbnRDZW50cmFsQ2xpZW50cyJ9.kjhV-SS6FmbN082hD_1Go6jVlrjNjAavjWjHjF_jukA';
+    const request = 'http://102.37.102.247:5016/CustomerPoints/CustomerLogin';
+
     fetch(request, {
-      method: 'GET',
+      method: 'POST',
       headers: new Headers({
-        Authorization: `Bearer ${token}`,
+        // Authorization: `Bearer ${data.token}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       }),
+      body: JSON.stringify({
+        idnumber: idNo,
+        pin: pinNo,
+      }),
     })
-      .then(response => response.json())
-      .then(response => console.warn(response))
-      .catch(err => console.error(err));
+      .then(response => {
+        if (!response.ok) {
+          if (response.status == 404) {
+            setStatus('Error Fetching Data from server');
+            console.warn('Error Fetching Data from server');
+          } else if (response.status > 499) {
+            setStatus('Internal Server Error');
+            console.warn('Internal Server Error');
+          }
+        } else {
+          setIdno('');
+          setPin('');
+          // navigation.navigate('dashboard', {screen: 'Home'});
+          return response.json();
+        }
+      })
+      .then(response => {
+        setData(response), console.warn(response);
+      })
+      .catch(() => {
+        setStatus('please connect to available network'),
+          console.warn('please connect to available network');
+      });
+    // console.warn('werwrwerrwr');
   };
 
-  useEffect(() => {
-    handleFetch();
-  });
+  useEffect(() => {}, [status]);
 
   return (
     <NativeBaseProvider>
+      {status ? (
+        <Alert w="100%" status="error">
+          <VStack space={2} flexShrink={1} w="100%">
+            <HStack
+              flexShrink={1}
+              space={1}
+              alignItems="center"
+              justifyContent="space-between">
+              <HStack space={2} flexShrink={1} alignItems="center">
+                <Alert.Icon />
+                <Text
+                  fontSize="md"
+                  fontWeight="medium"
+                  _dark={{
+                    color: 'coolGray.800',
+                  }}>
+                  {status}
+                </Text>
+              </HStack>
+              {/* <IconButton
+                  variant="unstyled"
+                  icon={<CloseIcon size="3" color="coolGray.600" />}
+                  onPress={() => setShow(false)}
+                /> */}
+            </HStack>
+          </VStack>
+        </Alert>
+      ) : null}
+
       <VStack flex={1} bg="light.50">
         {/* TOP Area */}
         <ImageBackground
@@ -91,7 +144,7 @@ const SignIn = ({navigation}) => {
             <Text
               mx="10"
               fontSize="14"
-              my="3"
+              // my="3"
               style={styles.promoCode}
               fontWeight="400">
               Enter your
@@ -104,7 +157,7 @@ const SignIn = ({navigation}) => {
           <TextInput
             style={styles.input}
             onChangeText={handleID}
-            value={idno}
+            value={idNo}
             placeholder="Enter National ID"
             placeholderTextColor="#a3a3a3"
           />
@@ -112,14 +165,15 @@ const SignIn = ({navigation}) => {
           <TextInput
             style={styles.input}
             onChangeText={handlePin}
-            value={pin}
+            value={pinNo}
             placeholder="Enter PIN"
             placeholderTextColor="#a3a3a3"
           />
 
           <Pressable
             mx="10"
-            onPress={() => navigation.navigate('dashboard', {screen: 'Home'})}>
+            // onPress={() => navigation.navigate('dashboard', {screen: 'Home'})}
+            onPress={handleFetch}>
             {({isPressed}) => {
               return (
                 <Box
