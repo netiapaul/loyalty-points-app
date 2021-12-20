@@ -19,6 +19,8 @@ import {
   IconButton,
   CloseIcon,
 } from 'native-base';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Keychain from 'react-native-keychain';
 
 const config = {
   dependencies: {
@@ -26,49 +28,62 @@ const config = {
   },
 };
 
-const Dashboard = ({navigation}) => {
+const Dashboard = ({route, navigation}) => {
   const [user, setUser] = useState({});
-  const [show, setShow] = useState(true);
   const [status, setStatus] = useState('');
-  const handleFetch = async () => {
-    const request =
-      'http://102.37.102.247:5016/Customers/members?memberNum=PP000006';
-    const token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEb2N1bWVudENlbnRyYWwiLCJqdGkiOiIzZGJmNDhiMC0zYzQ0LTRhOTEtOTlhNC1mNGUwMDg0MWMxODIiLCJpYXQiOiIxMi8xNy8yMDIxIDg6MzE6MTIgQU0iLCJleHAiOjE2Mzk4MTYyNzIsImlkIjoiMSIsInVzZXJuYW1lIjoiQXBwU3VwZXJBZG1pbiIsIkNvbXBhbnlEZXRhaWxJZCI6IjEiLCJjbGllbnRDb2RlIjoiQ29yZVBoYW1hIiwiYnJhbmNoZXMiOiIyLDQsNiwxMSwxMiwxMywxNCwxNSwxNiwxNywxOCwxOSwyMCwyMSwyMiwyMywyNCwyNSwyNiwyNywyOCwyOSwzMCwzMSwzMiwzMywzNCwzNSwzNiwzNywzOCIsInJvbGUiOiJTdXBlckFkbWluIiwiaXNzIjoiQ29yZUJhc2VTb2x1dGlvbnNMaW1pdGVkIiwiYXVkIjoiRG9jdW1lbnRDZW50cmFsQ2xpZW50cyJ9.xFYMbJmfh3oaf106HWPHWZvC0m5MS4g02AMvg76pRT0';
-    fetch(request, {
-      method: 'GET',
-      headers: new Headers({
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      }),
-    })
-      .then(response => {
-        if (!response.ok) {
-          if (response.status == 404) {
-            setStatus('Error Fetching Data from server');
-            console.warn('Error Fetching Data from server');
-          } else if (response.status > 499) {
-            setStatus('Internal Server Error');
-            console.warn('Internal Server Error');
-          }
-        }
-        return response.json();
+  const [asyncData, setAsyncData] = useState({});
+
+  async function GetUSerData() {
+    (async function getToken() {
+      try {
+        const value = await AsyncStorage.getItem('userData');
+        return setAsyncData(JSON.parse(value));
+      } catch (error) {
+        console.warn('Something went wrong on fetching', error);
+      }
+    })();
+    const response = await fetch(
+      `http://102.37.102.247:5016/Customers/members?memberNum=${asyncData.user.memberno}`,
+      {
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${asyncData.token}`,
+        },
+      },
+    );
+    if (!response.ok) {
+      setStatus('Error fetching Data from the server;');
+    } else {
+      return response.json(); // parses JSON response into native JavaScript objects
+    }
+  }
+  // ${asyncData.user.memberno}
+  const handleSubmit = () => {
+    GetUSerData()
+      .then(data => {
+        setUser(data[0]);
       })
-      .then(response => setUser(response[0]))
-      // .then(response => console.warn(response[0]))
-      .catch(() => {
-        setStatus('please connect to available network'),
-          console.warn('please connect to available network');
-      });
+      .catch(error => console.error(error));
   };
 
   useEffect(() => {
-    handleFetch();
-  }, [status]);
+    // getToken();
+    handleSubmit();
+    console.warn('user', user);
+    console.error('token render from dashboard', asyncData.token);
+    console.error('memberno  from dashboard', asyncData.user.memberno);
+    return () => {
+      setStatus('');
+    };
+  }, []);
+
   return (
     <NativeBaseProvider config={config}>
       {/* <Collapse isOpen={show}> */}
+      {/* <Text>{token._W}</Text> */}
+
       {status ? (
         <Alert w="100%" status="error">
           <VStack space={2} flexShrink={1} w="100%">
@@ -110,7 +125,6 @@ const Dashboard = ({navigation}) => {
             Dashboard
           </Text>
         </HStack>
-
         {/* bg="light.50" */}
         <VStack flex={1} bg="#fff">
           <ImageBackground

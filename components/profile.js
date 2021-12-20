@@ -14,6 +14,8 @@ import {
   Avatar,
 } from 'native-base';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const SignIn = ({navigation}) => {
   const [input, setInput] = useState('');
   const handleChange = text => {
@@ -26,7 +28,7 @@ const SignIn = ({navigation}) => {
     const request =
       'http://102.37.102.247:5016/Customers/members?memberNum=PP000006';
     const token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEb2N1bWVudENlbnRyYWwiLCJqdGkiOiIzZGJmNDhiMC0zYzQ0LTRhOTEtOTlhNC1mNGUwMDg0MWMxODIiLCJpYXQiOiIxMi8xNy8yMDIxIDg6MzE6MTIgQU0iLCJleHAiOjE2Mzk4MTYyNzIsImlkIjoiMSIsInVzZXJuYW1lIjoiQXBwU3VwZXJBZG1pbiIsIkNvbXBhbnlEZXRhaWxJZCI6IjEiLCJjbGllbnRDb2RlIjoiQ29yZVBoYW1hIiwiYnJhbmNoZXMiOiIyLDQsNiwxMSwxMiwxMywxNCwxNSwxNiwxNywxOCwxOSwyMCwyMSwyMiwyMywyNCwyNSwyNiwyNywyOCwyOSwzMCwzMSwzMiwzMywzNCwzNSwzNiwzNywzOCIsInJvbGUiOiJTdXBlckFkbWluIiwiaXNzIjoiQ29yZUJhc2VTb2x1dGlvbnNMaW1pdGVkIiwiYXVkIjoiRG9jdW1lbnRDZW50cmFsQ2xpZW50cyJ9.xFYMbJmfh3oaf106HWPHWZvC0m5MS4g02AMvg76pRT0';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEb2N1bWVudENlbnRyYWwiLCJqdGkiOiI1ZDU1MjNlMi0zZDg1LTQ2NjMtOTcxZC02M2Q0ODkxOWE4ZTQiLCJpYXQiOiIxMi8xOS8yMDIxIDY6MjQ6MjEgUE0iLCJleHAiOjE2NzE0NzQyNjEsImlkIjoiMiIsInVzZXJuYW1lIjoiMTIzNDU2Nzg5IiwiQ29tcGFueURldGFpbElkIjoiMSIsImNsaWVudENvZGUiOiJDb3JlUGhhbWEiLCJicmFuY2hlcyI6IjIiLCJyb2xlIjoiQ3VzdG9tZXIiLCJpc3MiOiJDb3JlQmFzZVNvbHV0aW9uc0xpbWl0ZWQiLCJhdWQiOiJEb2N1bWVudENlbnRyYWxDbGllbnRzIn0._eEuO3oZDnqKqwLFuvAsrEx-GUzwrlf2YmdZQlDn1nU';
     fetch(request, {
       method: 'GET',
       headers: new Headers({
@@ -39,6 +41,16 @@ const SignIn = ({navigation}) => {
       .then(response => setUser(response[0]))
       // .then(response => console.warn(response[0]))
       .catch(err => console.warn('please connect to available network'));
+  };
+
+  const clearAll = async () => {
+    try {
+      await AsyncStorage.clear();
+    } catch (e) {
+      console.error('Something went wrong on saving', error);
+    }
+    navigation.navigate('landing');
+    console.warn('Done.');
   };
 
   useEffect(() => {
@@ -153,7 +165,7 @@ const SignIn = ({navigation}) => {
             }}
           </Pressable>
 
-          <Pressable mx="10" onPress={() => navigation.navigate('landing')}>
+          <Pressable mx="10" onPress={clearAll}>
             {({isPressed}) => {
               return (
                 <Box

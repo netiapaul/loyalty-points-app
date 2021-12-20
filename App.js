@@ -45,9 +45,20 @@ function Home() {
         component={Dashboard}
         options={{
           headerShown: false,
-          tabBarLabel: 'Dashboard',
+          tabBarLabel: 'Home',
           tabBarIcon: () => (
             <MaterialCommunityIcons name="home" color={'#c58c4f'} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Transactions"
+        component={PointsTransaction}
+        options={{
+          headerShown: true,
+          tabBarLabel: 'Transactions',
+          tabBarIcon: () => (
+            <MaterialCommunityIcons name="bank" color={'#c58c4f'} size={26} />
           ),
         }}
       />

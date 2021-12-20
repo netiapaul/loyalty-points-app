@@ -13,12 +13,15 @@ import {
   Spacer,
   Alert,
 } from 'native-base';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Keychain from 'react-native-keychain';
 
 const SignIn = ({navigation}) => {
   const [pinNo, setPin] = useState('');
   const [idNo, setIdno] = useState('');
   const [data, setData] = useState({});
   const [status, setStatus] = useState('');
+  // const [token, setToken] = useState('');
 
   const handleID = text => {
     return setIdno(text);
@@ -28,48 +31,59 @@ const SignIn = ({navigation}) => {
     return setPin(text);
   };
 
-  const handleFetch = () => {
-    const request = 'http://102.37.102.247:5016/CustomerPoints/CustomerLogin';
+  async function postData() {
+    const response = await fetch(
+      'http://102.37.102.247:5016/CustomerPoints/CustomerLogin',
+      {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          // Authorization: `Bearer ${data.token}`,
+        },
+        body: JSON.stringify({
+          idnumber: idNo,
+          pin: pinNo,
+        }), // body data type must match "Content-Type" header
+      },
+    );
+    if (!response.ok) {
+      setStatus(
+        'Error fetching Data from the server,please check your details',
+      );
+    } else {
+      return response.json(); // parses JSON response into native JavaScript objects
+    }
+  }
 
-    fetch(request, {
-      method: 'POST',
-      headers: new Headers({
-        // Authorization: `Bearer ${data.token}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      }),
-      body: JSON.stringify({
-        idnumber: idNo,
-        pin: pinNo,
-      }),
-    })
-      .then(response => {
-        if (!response.ok) {
-          if (response.status == 404) {
-            setStatus('Error Fetching Data from server');
-            console.warn('Error Fetching Data from server');
-          } else if (response.status > 499) {
-            setStatus('Internal Server Error');
-            console.warn('Internal Server Error');
-          }
-        } else {
-          setIdno('');
-          setPin('');
-          // navigation.navigate('dashboard', {screen: 'Home'});
-          return response.json();
-        }
+  async function storeToken(data) {
+    try {
+      const jsonValue = JSON.stringify(data);
+      await AsyncStorage.setItem('userData', jsonValue);
+    } catch (error) {
+      console.error('Something went wrong on saving', error);
+    }
+  }
+
+  const handleSubmit = () => {
+    postData()
+      .then(data => {
+        setData(data);
+        storeToken(data);
+        console.error('from login', data);
+        return navigation.navigate('dashboard', {
+          screen: 'Home',
+        });
+        // setStatus(data.token); // JSON data parsed by `data.json()` call
       })
-      .then(response => {
-        setData(response), console.warn(response);
-      })
-      .catch(() => {
-        setStatus('please connect to available network'),
-          console.warn('please connect to available network');
-      });
-    // console.warn('werwrwerrwr');
+      .catch(error => console.error(error));
   };
 
-  useEffect(() => {}, [status]);
+  useEffect(() => {
+    return () => {
+      setStatus('');
+    };
+  }, [status]);
 
   return (
     <NativeBaseProvider>
@@ -118,6 +132,7 @@ const SignIn = ({navigation}) => {
             </Heading>
           </Center>
         </ImageBackground>
+        {/* <Text>{typeof token}</Text> */}
         {/* FORM Area */}
         <Box bg="#fff" flex={1} style={styles.inputContainer}>
           <HStack mt="5" flex={1} alignItems="center">
@@ -173,7 +188,7 @@ const SignIn = ({navigation}) => {
           <Pressable
             mx="10"
             // onPress={() => navigation.navigate('dashboard', {screen: 'Home'})}
-            onPress={handleFetch}>
+            onPress={handleSubmit}>
             {({isPressed}) => {
               return (
                 <Box
