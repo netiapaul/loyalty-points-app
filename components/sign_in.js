@@ -87,6 +87,8 @@ const SignIn = ({navigation}) => {
     })
       .then(response => {
         if (response.ok) {
+          setPin('');
+          setIdno('');
           return response.json();
         } else {
           // throw new Error(response.status);
@@ -204,14 +206,26 @@ const SignIn = ({navigation}) => {
             placeholderTextColor="#a3a3a3"
           />
 
-          <Button
-            mx="10"
-            p={4}
-            bg={'#5d3915'}
-            rounded="8"
-            onPress={handleFetch}>
-            Sign In
-          </Button>
+          {!idNo || !pinNo ? (
+            <Button
+              mx="10"
+              p={4}
+              bg={'#5d3915'}
+              rounded="8"
+              isDisabled
+              onPress={handleFetch}>
+              Sign In
+            </Button>
+          ) : (
+            <Button
+              mx="10"
+              p={4}
+              bg={'#5d3915'}
+              rounded="8"
+              onPress={handleFetch}>
+              Sign In
+            </Button>
+          )}
 
           {/* <Pressable
             mx="10"

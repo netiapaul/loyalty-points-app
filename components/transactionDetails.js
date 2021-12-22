@@ -1,19 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import {ImageBackground, StyleSheet, ScrollView} from 'react-native';
+import {StyleSheet, ScrollView} from 'react-native';
 import {
   NativeBaseProvider,
   VStack,
   Center,
-  Heading,
-  Image,
+  Alert,
   Box,
   Text,
   HStack,
-  Stack,
-  Pressable,
-  Divider,
   Spacer,
-  Avatar,
+  Divider,
 } from 'native-base';
 
 const config = {
@@ -23,16 +19,17 @@ const config = {
 };
 
 const SalesTransaction = ({route, navigation}) => {
-  const {token, memberNo, docNum, salesBCODE} = route.params;
+  const {token, memberNo, docNum, salesBCODE, branch} = route.params;
   const [users, setUser] = useState([]);
+  const [status, setstatus] = useState('');
 
   useEffect(() => {
     handleFetch();
 
     // console.warn('users', users);
-    // return () => {
-    //   cleanup
-    // }
+    return () => {
+      return setstatus('');
+    };
   }, []);
 
   const handleFetch = () => {
@@ -50,13 +47,42 @@ const SalesTransaction = ({route, navigation}) => {
       .then(response => {
         setUser(response);
       })
-      .catch(err => console.warn('please connect to available network'));
+      .catch(() => setstatus('please connect to a working network'));
   };
 
   return (
     <NativeBaseProvider config={config}>
-      <ScrollView>
-        <VStack>
+      {status ? (
+        <Alert w="100%" status="error">
+          <VStack space={2} flexShrink={1} w="100%">
+            <HStack
+              flexShrink={1}
+              space={1}
+              alignItems="center"
+              justifyContent="space-between">
+              <HStack space={2} flexShrink={1} alignItems="center">
+                <Alert.Icon />
+                <Text
+                  fontSize="md"
+                  fontWeight="medium"
+                  _dark={{
+                    color: 'coolGray.800',
+                  }}>
+                  {status}
+                </Text>
+              </HStack>
+              {/* <IconButton
+                  variant="unstyled"
+                  icon={<CloseIcon size="3" color="coolGray.600" />}
+                  onPress={() => setShow(false)}
+                /> */}
+            </HStack>
+          </VStack>
+        </Alert>
+      ) : null}
+
+      <Box p="2" flex={1} bg="#fff">
+        <ScrollView>
           {users.map((user, index) => {
             return (
               <Box
@@ -68,60 +94,91 @@ const SalesTransaction = ({route, navigation}) => {
                 borderColor="coolGray.200"
                 borderWidth="1"
                 shadow={3}>
-                <HStack>
-                  <VStack p={3}>
-                    <Center my={1}>
-                      <Text
-                        color="#5d3915"
-                        ml={3}
-                        fontWeight="bold"
-                        fontSize={15}>
-                        Item Bought: {user.itmname}
-                      </Text>
-                    </Center>
+                <VStack>
+                  <Center>
+                    <Text fontWeight="bold">{branch}</Text>
+                    <Divider my="2" />
+                  </Center>
+                  <HStack>
+                    <Text
+                      color="#5d3915"
+                      fontSize={15}
+                      my={1}
+                      fontWeight="bold">
+                      Item Bought:{' '}
+                    </Text>
+                    <Spacer />
+                    <Text color="#5d3915" fontSize={15} my={1}>
+                      {user.itmname}
+                    </Text>
+                  </HStack>
 
-                    <Center my={1}>
-                      <Text
-                        color="#5d3915"
-                        ml={3}
-                        fontWeight="bold"
-                        fontSize={15}>
-                        Total Item Cost: {user.totalCost} ksh
-                      </Text>
-                    </Center>
+                  <HStack>
+                    <Text
+                      color="#5d3915"
+                      fontSize={15}
+                      my={1}
+                      fontWeight="bold">
+                      Total Quantity:{' '}
+                    </Text>
+                    <Spacer />
+                    <Text color="#5d3915" fontSize={15} my={1}>
+                      {user.quantity}
+                    </Text>
+                  </HStack>
 
-                    <Center my={1}>
-                      <HStack>
-                        <Text color="success.600" ml={3} fontWeight="bold">
-                          Received: {user.mempointsbuy}
-                        </Text>
-                        <Text color="danger.600" ml={3} fontWeight="bold">
-                          Redeemed: {user.mempointsredeem}
-                        </Text>
-                      </HStack>
-                    </Center>
-                    <Center my={1}>
-                      <Text color="#5d3915" ml={3} fontSize={12}>
-                        Date: {user.saledate}
-                      </Text>
-                    </Center>
-                  </VStack>
-                </HStack>
+                  <HStack>
+                    <Text
+                      fontWeight="bold"
+                      color="#5d3915"
+                      fontSize={15}
+                      my={1}>
+                      Total Item Cost:{' '}
+                    </Text>
+                    <Spacer />
+                    <Text color="#5d3915" fontSize={15} my={1}>
+                      {user.totalCost} ksh
+                    </Text>
+                  </HStack>
+
+                  <HStack my={1}>
+                    <Text color="success.600" fontWeight="bold">
+                      Received: {user.mempointsbuy}
+                    </Text>
+                    <Spacer />
+                    <Text color="danger.600" ml={2} fontWeight="bold">
+                      Redeemed: {user.mempointsredeem}
+                    </Text>
+                  </HStack>
+
+                  <HStack>
+                    <Text
+                      color="#5d3915"
+                      fontSize={12}
+                      my={1}
+                      fontWeight="bold">
+                      Date:{' '}
+                    </Text>
+                    <Text color="#5d3915" fontSize={12} my={1}>
+                      {user.saledate}
+                    </Text>
+                  </HStack>
+                </VStack>
               </Box>
             );
           })}
+        </ScrollView>
+        <VStack justifyContent="flex-end">
+          <Center>
+            <Text fontSize="xs" mx="10">
+              Powered by
+            </Text>
+            <Text fontSize="xs" fontWeight="bold" color="#5d3915" mx="10">
+              Corebase Solutions
+            </Text>
+          </Center>
         </VStack>
-      </ScrollView>
-      <VStack flex={1} justifyContent="flex-end" mt="2">
-        <Center>
-          <Text fontSize="xs" mx="10">
-            Powered by
-          </Text>
-          <Text fontSize="xs" fontWeight="bold" color="#5d3915" mx="10">
-            Corebase Solutions
-          </Text>
-        </Center>
-      </VStack>
+      </Box>
     </NativeBaseProvider>
   );
 };
