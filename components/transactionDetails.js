@@ -59,39 +59,18 @@ const SalesTransaction = ({route, navigation}) => {
         <VStack>
           {users.map((user, index) => {
             return (
-              <Pressable
+              <Box
                 p="5"
                 m="2"
                 bg="muted.50"
                 key={index}
                 borderRadius="md"
                 borderColor="coolGray.200"
-                onPress={() => console.warn('pressed')}
                 borderWidth="1"
                 shadow={3}>
-                {/* <Link
-                  onPress={() =>
-                    navigation.navigate('transactiondetails', {
-                      memberNo: memberNo,
-                      docNum: user.DOCNUM,
-                      salesBCODE: user.SALESBCODE,
-                    })
-                  }> */}
                 <HStack>
-                  {/* <Image
-                        source={require('../assets/images/picture.png')}
-                        alt="company logo"
-                        style={styles.transactionsImage}
-                        size="sm"
-                      /> */}
-                  {/* <Center>
-                    <Avatar bg="blueGray.600" size="md">
-                      SS
-                    </Avatar>
-                  </Center> */}
-
-                  <VStack>
-                    <Center>
+                  <VStack p={3}>
+                    <Center my={1}>
                       <Text
                         color="#5d3915"
                         ml={3}
@@ -101,7 +80,17 @@ const SalesTransaction = ({route, navigation}) => {
                       </Text>
                     </Center>
 
-                    <Center my={2}>
+                    <Center my={1}>
+                      <Text
+                        color="#5d3915"
+                        ml={3}
+                        fontWeight="bold"
+                        fontSize={15}>
+                        Total Item Cost: {user.totalCost} ksh
+                      </Text>
+                    </Center>
+
+                    <Center my={1}>
                       <HStack>
                         <Text color="success.600" ml={3} fontWeight="bold">
                           Received: {user.mempointsbuy}
@@ -111,24 +100,14 @@ const SalesTransaction = ({route, navigation}) => {
                         </Text>
                       </HStack>
                     </Center>
-                    <Center>
+                    <Center my={1}>
                       <Text color="#5d3915" ml={3} fontSize={12}>
                         Date: {user.saledate}
                       </Text>
                     </Center>
                   </VStack>
-                  <Spacer />
-                  {/* <Center>
-                          <Image
-                            source={require('../assets/images/right-arrow.png')}
-                            alt="company logo"
-                            style={styles.rightArrow}
-                            size="sm"
-                          />
-                        </Center> */}
                 </HStack>
-                {/* </Link> */}
-              </Pressable>
+              </Box>
             );
           })}
         </VStack>
