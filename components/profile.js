@@ -15,6 +15,7 @@ import {
 } from 'native-base';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Keychain from 'react-native-keychain';
 
 const SignIn = ({navigation}) => {
   const [input, setInput] = useState('');
@@ -45,6 +46,7 @@ const SignIn = ({navigation}) => {
 
   const clearAll = async () => {
     try {
+      await Keychain.resetGenericPassword();
       await AsyncStorage.clear();
     } catch (e) {
       console.error('Something went wrong on saving', error);

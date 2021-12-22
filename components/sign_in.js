@@ -12,6 +12,7 @@ import {
   Pressable,
   Spacer,
   Alert,
+  Button,
 } from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Keychain from 'react-native-keychain';
@@ -21,7 +22,6 @@ const SignIn = ({navigation}) => {
   const [idNo, setIdno] = useState('');
   const [data, setData] = useState({});
   const [status, setStatus] = useState('');
-  // const [token, setToken] = useState('');
 
   const handleID = text => {
     return setIdno(text);
@@ -31,59 +31,78 @@ const SignIn = ({navigation}) => {
     return setPin(text);
   };
 
-  async function postData() {
-    const response = await fetch(
-      'http://102.37.102.247:5016/CustomerPoints/CustomerLogin',
-      {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          // Authorization: `Bearer ${data.token}`,
-        },
-        body: JSON.stringify({
-          idnumber: idNo,
-          pin: pinNo,
-        }), // body data type must match "Content-Type" header
+  // async function postData() {
+  //   const response = await fetch(
+  //     'http://102.37.102.247:5016/CustomerPoints/CustomerLogin',
+  //     {
+  //       method: 'POST', // *GET, POST, PUT, DELETE, etc.
+  //       headers: {
+  //         Accept: 'application/json',
+  //         'Content-Type': 'application/json',
+  //         // Authorization: `Bearer ${data.token}`,
+  //       },
+  //       body: JSON.stringify({
+  //         idnumber: idNo,
+  //         pin: pinNo,
+  //       }), // body data type must match "Content-Type" header
+  //     },
+  //   );
+  //   if (!response.ok) {
+  //     setStatus('please confirm if your details are correct');
+  //   } else {
+  //     return response.json(); // parses JSON response into native JavaScript objects
+  //   }
+  // }
+
+  // async function storeToken(data) {
+  //   try {
+  //     const username = data.user.memberno;
+  //     const password = data.token;
+  //     await Keychain.setGenericPassword(username, password);
+  //     const jsonValue = JSON.stringify(data);
+  //     await AsyncStorage.setItem('userData', jsonValue);
+  //   } catch (error) {
+  //     console.error('Something went wrong on saving', error);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   console.warn(status);
+  //   return () => {
+  //     setStatus('');
+  //   };
+  // }, []);
+
+  const handleFetch = () => {
+    fetch('http://102.37.102.247:5016/CustomerPoints/CustomerLogin', {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
-    );
-    if (!response.ok) {
-      setStatus(
-        'Error fetching Data from the server,please check your details',
-      );
-    } else {
-      return response.json(); // parses JSON response into native JavaScript objects
-    }
-  }
-
-  async function storeToken(data) {
-    try {
-      const jsonValue = JSON.stringify(data);
-      await AsyncStorage.setItem('userData', jsonValue);
-    } catch (error) {
-      console.error('Something went wrong on saving', error);
-    }
-  }
-
-  const handleSubmit = () => {
-    postData()
-      .then(data => {
-        setData(data);
-        storeToken(data);
-        console.error('from login', data);
-        return navigation.navigate('dashboard', {
-          screen: 'Home',
-        });
-        // setStatus(data.token); // JSON data parsed by `data.json()` call
+      body: JSON.stringify({
+        idnumber: idNo,
+        pin: pinNo,
+      }),
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          // throw new Error(response.status);
+          return setStatus(response.statusText);
+        }
       })
-      .catch(error => console.error(error));
+      .then(response => {
+        setData(response);
+        console.error(data);
+        return navigation.navigate('different', {
+          token: response.token,
+          memberNo: response.user.memberno,
+        });
+      })
+      .catch(() => setStatus('connect to a network or confirm your details'));
   };
-
-  useEffect(() => {
-    return () => {
-      setStatus('');
-    };
-  }, [status]);
 
   return (
     <NativeBaseProvider>
@@ -185,10 +204,18 @@ const SignIn = ({navigation}) => {
             placeholderTextColor="#a3a3a3"
           />
 
-          <Pressable
+          <Button
             mx="10"
-            // onPress={() => navigation.navigate('dashboard', {screen: 'Home'})}
-            onPress={handleSubmit}>
+            p={4}
+            bg={'#5d3915'}
+            rounded="8"
+            onPress={handleFetch}>
+            Sign In
+          </Button>
+
+          {/* <Pressable
+            mx="10"
+            onPress={handleFetch}>
             {({isPressed}) => {
               return (
                 <Box
@@ -214,7 +241,7 @@ const SignIn = ({navigation}) => {
                 </Box>
               );
             }}
-          </Pressable>
+          </Pressable> */}
 
           <VStack flex={1} justifyContent="flex-end" my="2">
             <Center>

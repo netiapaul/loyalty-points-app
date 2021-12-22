@@ -6,34 +6,22 @@
  * @flow strict-local
  */
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import Landing from './components/landing';
 import SignIn from './components/sign_in';
 import Dashboard from './components/dashboard';
-import PointsTransaction from './components/points_transactions';
-import SalesTransaction from './components/sales_transactions';
+import Transactions from './components/transactions';
+import TransactionDetails from './components/transactionDetails';
 import Profile from './components/profile';
+import Different from './components/home';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
-// TABS icons
-function DashboardIcon() {
-  return (
-    <>
-      <Image
-        style={{width: 30, height: 30}}
-        source={{
-          uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F449%2F897%2Foriginal%2Fhome-vector-icon.jpg&f=1&nofb=1',
-        }}
-      />
-    </>
-  );
-}
 
 // Initial Routes
 
@@ -52,10 +40,10 @@ function Home() {
         }}
       />
       <Tab.Screen
-        name="Transactions"
-        component={PointsTransaction}
+        name="transactions"
+        component={Transactions}
         options={{
-          headerShown: true,
+          headerShown: false,
           tabBarLabel: 'Transactions',
           tabBarIcon: () => (
             <MaterialCommunityIcons name="bank" color={'#c58c4f'} size={26} />
@@ -82,6 +70,20 @@ function Home() {
 }
 
 const App = () => {
+  // const [value, setValue] = useState('');
+  // useEffect(() => {
+  //   (async function getToken() {
+  //     try {
+  //       const value = await AsyncStorage.getItem('userData');
+  //       return setValue(JSON.parse(value).token);
+  //     } catch (error) {
+  //       console.warn('Something went wrong on fetching', error);
+  //     }
+  //   })();
+  //   return () => {
+  //     setValue('');
+  //   };
+  // }, []);
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -103,20 +105,6 @@ const App = () => {
           },
         }}>
         <Stack.Screen
-          name="dashboard"
-          component={Home}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="landing"
-          component={Landing}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
           name="signIn"
           component={SignIn}
           options={{
@@ -124,19 +112,84 @@ const App = () => {
           }}
         />
         <Stack.Screen
-          name="points"
-          component={PointsTransaction}
+          name="different"
+          component={Different}
           options={{
-            title: 'Points Transactions',
+            headerShown: false,
+          }}
+        />
+        {/* <Stack.Screen
+          name="dashboard"
+          component={Home}
+          options={{
+            headerShown: false,
+          }}
+        /> */}
+
+        <Stack.Screen
+          name="transactions"
+          component={Transactions}
+          options={{
+            title: 'Transactions',
           }}
         />
         <Stack.Screen
-          name="sales"
-          component={SalesTransaction}
+          name="transactiondetails"
+          component={TransactionDetails}
           options={{
-            title: 'Sales Transactions',
+            title: 'Transaction Details',
           }}
         />
+
+        <Stack.Screen
+          name="landing"
+          component={Landing}
+          options={{
+            headerShown: false,
+          }}
+        />
+        {/* {value ? (
+          <>
+            <Stack.Screen
+              name="dashboard"
+              component={Home}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="points"
+              component={PointsTransaction}
+              options={{
+                title: 'Points Transactions',
+              }}
+            />
+            <Stack.Screen
+              name="sales"
+              component={TransactionDetails}
+              options={{
+                title: 'Sales Transactions',
+              }}
+            />
+          </>
+        ) : (
+          <>
+            <Stack.Screen
+              name="signIn"
+              component={SignIn}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="landing"
+              component={Landing}
+              options={{
+                headerShown: false,
+              }}
+            />
+          </>
+        )} */}
       </Stack.Navigator>
     </NavigationContainer>
   );
