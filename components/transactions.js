@@ -117,7 +117,9 @@ const Transactions = ({route, navigation}) => {
                       </HStack>
 
                       <Text color="#5d3915" ml={3} fontSize={12}>
-                        Date: {user.SALEDATE}
+                        {/* Date: {new Date(user.SALEDATE + 'Z').toUTCString()} */}
+                        Date: {new Date(user.SALEDATE).toDateString()}
+                        {/* Date: {user.SALEDATE} */}
                       </Text>
                     </VStack>
                     <Spacer />

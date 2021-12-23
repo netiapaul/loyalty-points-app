@@ -10,9 +10,11 @@ import {
   Text,
   HStack,
   Pressable,
+  FormControl,
   Spacer,
   Alert,
   Button,
+  Input,
 } from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Keychain from 'react-native-keychain';
@@ -22,6 +24,9 @@ const SignIn = ({navigation}) => {
   const [idNo, setIdno] = useState('');
   const [data, setData] = useState({});
   const [status, setStatus] = useState('');
+  const [show, setShow] = useState(false);
+
+  const handleClick = () => setShow(!show);
 
   const handleID = text => {
     return setIdno(text);
@@ -30,29 +35,6 @@ const SignIn = ({navigation}) => {
   const handlePin = text => {
     return setPin(text);
   };
-
-  // async function postData() {
-  //   const response = await fetch(
-  //     'http://102.37.102.247:5016/CustomerPoints/CustomerLogin',
-  //     {
-  //       method: 'POST', // *GET, POST, PUT, DELETE, etc.
-  //       headers: {
-  //         Accept: 'application/json',
-  //         'Content-Type': 'application/json',
-  //         // Authorization: `Bearer ${data.token}`,
-  //       },
-  //       body: JSON.stringify({
-  //         idnumber: idNo,
-  //         pin: pinNo,
-  //       }), // body data type must match "Content-Type" header
-  //     },
-  //   );
-  //   if (!response.ok) {
-  //     setStatus('please confirm if your details are correct');
-  //   } else {
-  //     return response.json(); // parses JSON response into native JavaScript objects
-  //   }
-  // }
 
   // async function storeToken(data) {
   //   try {
@@ -66,44 +48,45 @@ const SignIn = ({navigation}) => {
   //   }
   // }
 
-  // useEffect(() => {
-  //   console.warn(status);
-  //   return () => {
-  //     setStatus('');
-  //   };
-  // }, []);
+  useEffect(() => {
+    console.warn(status);
+    return () => {
+      setStatus('');
+    };
+  }, []);
 
   const handleFetch = () => {
-    fetch('http://102.37.102.247:5016/CustomerPoints/CustomerLogin', {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        idnumber: idNo,
-        pin: pinNo,
-      }),
-    })
-      .then(response => {
-        if (response.ok) {
-          setPin('');
-          setIdno('');
-          return response.json();
-        } else {
-          // throw new Error(response.status);
-          return setStatus(response.statusText);
-        }
+    try {
+      fetch('http://102.37.102.247:5016/CustomerPoints/CustomerLogin', {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          idnumber: idNo,
+          pin: pinNo,
+        }),
       })
-      .then(response => {
-        setData(response);
-        console.error(data);
-        return navigation.navigate('different', {
-          token: response.token,
-          memberNo: response.user.memberno,
-        });
-      })
-      .catch(() => setStatus('connect to a network or confirm your details'));
+        .then(async function (response) {
+          if (!response.ok) {
+            setStatus('request failed');
+          } else {
+            const data = await response.json();
+            setData(data);
+            console.error(data);
+            return navigation.navigate('different', {
+              token: data.token,
+              memberNo: data.user.memberno,
+            });
+          }
+        })
+        .catch(() =>
+          setStatus('Network request failed connect to the internet'),
+        );
+    } catch (error) {
+      console.warn(error);
+    }
   };
 
   return (
@@ -137,26 +120,30 @@ const SignIn = ({navigation}) => {
         </Alert>
       ) : null}
 
-      <VStack flex={1} bg="light.50">
+      <VStack flex={1} bg="#fff">
         {/* TOP Area */}
         <ImageBackground
           source={require('../assets/images/background.png')}
           style={styles.image}>
-          <Center flex={1}>
-            <Image
+          <Center>
+            {/* <Image
               source={require('../assets/images/medicosin.png')}
               alt="Company Logo"
               size="xl"
+            /> */}
+            <Image
+              source={require('../assets/images/pcico.png')}
+              alt="Company Logo"
+              size="md"
             />
-            <Heading textAlign="center" color="#000">
-              Médecins Sans Frontières
+            <Heading size={'2xl'} textAlign="center" color="#5d3915">
+              phAMAcore
             </Heading>
           </Center>
         </ImageBackground>
-        {/* <Text>{typeof token}</Text> */}
         {/* FORM Area */}
         <Box bg="#fff" flex={1} style={styles.inputContainer}>
-          <HStack mt="5" flex={1} alignItems="center">
+          <HStack my={5} justifyContent={'center'}>
             {/* <Image
               onPress={() => Alert.alert('landing')}
               source={require('../assets/images/back.png')}
@@ -166,14 +153,9 @@ const SignIn = ({navigation}) => {
               ml="10"
             /> */}
 
-            <Center flex={1}>
-              <Text
-                fontSize="24"
-                style={{textAlign: 'center'}}
-                fontWeight="bold">
-                Sign In
-              </Text>
-            </Center>
+            <Text fontSize="24" style={{textAlign: 'center'}} fontWeight="bold">
+              Sign In
+            </Text>
           </HStack>
 
           <Center>
@@ -190,74 +172,94 @@ const SignIn = ({navigation}) => {
             </Text>
           </Center>
 
-          <TextInput
+          <FormControl>
+            {/* <TextInput
             style={styles.input}
             onChangeText={handleID}
             value={idNo}
             placeholder="Enter National ID"
             placeholderTextColor="#a3a3a3"
-          />
+          /> */}
+            {/* <FormControl.Label>Password</FormControl.Label> */}
+            <Input
+              type="text"
+              mx="auto"
+              mt={5}
+              onChangeText={handleID}
+              value={idNo}
+              placeholder="Enter National ID"
+              w={{
+                base: '75%',
+                md: '25%',
+              }}
+            />
 
-          <TextInput
+            {/* <FormControl.Label>Password</FormControl.Label> */}
+
+            <Input
+              mx="auto"
+              mt={2}
+              onChangeText={handlePin}
+              value={pinNo}
+              type={show ? 'text' : 'password'}
+              w={{
+                base: '75%',
+                md: '25%',
+              }}
+              InputRightElement={
+                <Button
+                  size="xs"
+                  bg={'#5d3915'}
+                  rounded="none"
+                  w="1/6"
+                  h="full"
+                  onPress={handleClick}>
+                  {show ? 'Hide' : 'Show'}
+                </Button>
+              }
+              placeholder="Enter PIN"
+            />
+            {/* <TextInput
             style={styles.input}
             onChangeText={handlePin}
             value={pinNo}
             placeholder="Enter PIN"
             placeholderTextColor="#a3a3a3"
-          />
+          /> */}
 
-          {!idNo || !pinNo ? (
-            <Button
-              mx="10"
-              p={4}
-              bg={'#5d3915'}
-              rounded="8"
-              isDisabled
-              onPress={handleFetch}>
-              Sign In
-            </Button>
-          ) : (
-            <Button
-              mx="10"
-              p={4}
-              bg={'#5d3915'}
-              rounded="8"
-              onPress={handleFetch}>
-              Sign In
-            </Button>
-          )}
+            {!idNo || !pinNo ? (
+              <Button
+                mx="auto"
+                mt={5}
+                w={{
+                  base: '75%',
+                  md: '25%',
+                }}
+                p={4}
+                bg={'#5d3915'}
+                rounded="5"
+                isDisabled
+                onPress={handleFetch}>
+                Sign In
+              </Button>
+            ) : (
+              <Button
+                mx="auto"
+                mt={5}
+                w={{
+                  base: '75%',
+                  md: '25%',
+                }}
+                p={4}
+                bg={'#5d3915'}
+                rounded="5"
+                onPress={handleFetch}>
+                Sign In
+              </Button>
+            )}
+          </FormControl>
 
-          {/* <Pressable
-            mx="10"
-            onPress={handleFetch}>
-            {({isPressed}) => {
-              return (
-                <Box
-                  borderWidth="3"
-                  borderColor={isPressed ? '#5d3915' : '#fff'}
-                  bg={isPressed ? '#fff' : '#5d3915'}
-                  p="8"
-                  rounded="8"
-                  style={{
-                    transform: [
-                      {
-                        scale: isPressed ? 1 : 1,
-                      },
-                    ],
-                  }}>
-                  <Center>
-                    <Text
-                      fontWeight="bold"
-                      color={isPressed ? '#5d3915' : '#fff'}>
-                      Sign In
-                    </Text>
-                  </Center>
-                </Box>
-              );
-            }}
-          </Pressable> */}
-
-          <VStack flex={1} justifyContent="flex-end" my="2">
+          <VStack flex={1} justifyContent="flex-end">
             <Center>
               <Text fontSize="xs" mx="10">
                 Powered by
@@ -282,6 +284,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
+    borderBottomColor: '#fff',
   },
   promoCode: {
     textAlign: 'center',

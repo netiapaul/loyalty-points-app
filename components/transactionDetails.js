@@ -22,10 +22,11 @@ const SalesTransaction = ({route, navigation}) => {
   const {token, memberNo, docNum, salesBCODE, branch} = route.params;
   const [users, setUser] = useState([]);
   const [status, setstatus] = useState('');
+  const [branchName, setBranchName] = useState('');
 
   useEffect(() => {
     handleFetch();
-
+    setBranchName(branch);
     // console.warn('users', users);
     return () => {
       return setstatus('');
@@ -96,7 +97,8 @@ const SalesTransaction = ({route, navigation}) => {
                 shadow={3}>
                 <VStack>
                   <Center>
-                    <Text fontWeight="bold">{branch}</Text>
+                    {/* <Text fontWeight="bold">{branch}</Text> */}
+                    <Text fontWeight="bold">{branchName}</Text>
                     <Divider my="2" />
                   </Center>
                   <HStack>
@@ -107,7 +109,7 @@ const SalesTransaction = ({route, navigation}) => {
                       fontWeight="bold">
                       Item Bought:{' '}
                     </Text>
-                    <Spacer />
+
                     <Text color="#5d3915" fontSize={15} my={1}>
                       {user.itmname}
                     </Text>
@@ -121,7 +123,7 @@ const SalesTransaction = ({route, navigation}) => {
                       fontWeight="bold">
                       Total Quantity:{' '}
                     </Text>
-                    <Spacer />
+
                     <Text color="#5d3915" fontSize={15} my={1}>
                       {user.quantity}
                     </Text>
@@ -135,7 +137,7 @@ const SalesTransaction = ({route, navigation}) => {
                       my={1}>
                       Total Item Cost:{' '}
                     </Text>
-                    <Spacer />
+
                     <Text color="#5d3915" fontSize={15} my={1}>
                       {user.totalCost} ksh
                     </Text>
@@ -151,16 +153,17 @@ const SalesTransaction = ({route, navigation}) => {
                     </Text>
                   </HStack>
 
-                  <HStack>
+                  <HStack my={1}>
                     <Text
-                      color="#5d3915"
-                      fontSize={12}
-                      my={1}
+                      // color="#5d3915"
+                      color={'muted.500'}
+                      fontSize={11}
                       fontWeight="bold">
                       Date:{' '}
                     </Text>
-                    <Text color="#5d3915" fontSize={12} my={1}>
-                      {user.saledate}
+                    <Text color={'muted.500'} fontSize={12}>
+                      {/* {new Date(user.saledate + 'Z').toUTCString()} */}
+                      {new Date(user.saledate).toDateString()}
                     </Text>
                   </HStack>
                 </VStack>

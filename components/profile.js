@@ -12,24 +12,33 @@ import {
   Pressable,
   Spacer,
   Avatar,
+  Button,
+  FormControl,
+  Input,
 } from 'native-base';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Keychain from 'react-native-keychain';
 
-const SignIn = ({navigation}) => {
-  const [input, setInput] = useState('');
-  const handleChange = text => {
-    return setInput(text);
+const SignIn = ({route, navigation}) => {
+  const {token, memberNo} = route.params;
+  const [user, setUser] = useState({});
+  // const [input, setInput] = useState('');
+  const [name, setName] = useState('');
+  const [idNo, setIdno] = useState('');
+
+  const handleID = text => {
+    return setIdno(text);
   };
 
-  const [user, setUser] = useState({});
+  useEffect(() => {
+    handleFetch();
+    console.warn('profile', user);
+  }, []);
 
   const handleFetch = () => {
-    const request =
-      'http://102.37.102.247:5016/Customers/members?memberNum=PP000006';
-    const token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEb2N1bWVudENlbnRyYWwiLCJqdGkiOiI1ZDU1MjNlMi0zZDg1LTQ2NjMtOTcxZC02M2Q0ODkxOWE4ZTQiLCJpYXQiOiIxMi8xOS8yMDIxIDY6MjQ6MjEgUE0iLCJleHAiOjE2NzE0NzQyNjEsImlkIjoiMiIsInVzZXJuYW1lIjoiMTIzNDU2Nzg5IiwiQ29tcGFueURldGFpbElkIjoiMSIsImNsaWVudENvZGUiOiJDb3JlUGhhbWEiLCJicmFuY2hlcyI6IjIiLCJyb2xlIjoiQ3VzdG9tZXIiLCJpc3MiOiJDb3JlQmFzZVNvbHV0aW9uc0xpbWl0ZWQiLCJhdWQiOiJEb2N1bWVudENlbnRyYWxDbGllbnRzIn0._eEuO3oZDnqKqwLFuvAsrEx-GUzwrlf2YmdZQlDn1nU';
+    const request = `http://102.37.102.247:5016/Customers/members?memberNum=${memberNo}`;
+
     fetch(request, {
       method: 'GET',
       headers: new Headers({
@@ -39,9 +48,10 @@ const SignIn = ({navigation}) => {
       }),
     })
       .then(response => response.json())
-      .then(response => setUser(response[0]))
-      // .then(response => console.warn(response[0]))
-      .catch(err => console.warn('please connect to available network'));
+      .then(response => {
+        setUser(response[0]), setName(response[0].membername);
+      })
+      .catch(() => console.warn('please connect to available network'));
   };
 
   const clearAll = async () => {
@@ -49,52 +59,34 @@ const SignIn = ({navigation}) => {
       await Keychain.resetGenericPassword();
       await AsyncStorage.clear();
     } catch (e) {
-      console.error('Something went wrong on saving', error);
+      console.error('Something went wrong on fetching', e);
     }
     navigation.navigate('landing');
     console.warn('Done.');
   };
 
-  useEffect(() => {
-    handleFetch();
-  }, []);
-
   return (
     <NativeBaseProvider>
-      <VStack flex={2} bg="light.50">
+      <VStack flex={1} bg="light.50">
         {/* TOP Area */}
         <ImageBackground
           source={require('../assets/images/background.png')}
           style={styles.image}>
-          <Center flex={1}>
-            {/* <Avatar bg="green.500">SS</Avatar> */}
-            {/* <Image
-              source={require('../assets/images/medicosin.png')}
-              alt="Company Logo"
-              size="xl"
-            /> */}
-            <Avatar bg="blueGray.600" size="xl">
-              {/* .match(/\b([A-Z])/g).join('') */}
-              {/* {user.membername} */}
-              SS
+          <Center>
+            <Avatar bg="blueGray.600" size="md">
+              {name ? name.match(/\b([A-Z])/g).join('') : null}
             </Avatar>
             <Heading textAlign="center" color="#000">
               {user.membername}
             </Heading>
-            {input}
           </Center>
         </ImageBackground>
         {/* FORM Area */}
         <Box bg="#fff" flex={3} style={styles.inputContainer}>
-          <Text
-            fontSize="24"
-            my={2}
-            style={{textAlign: 'center'}}
-            fontWeight="bold">
-            Profile
-          </Text>
-
-          <Center mt={-2}>
+          <Center mt={2}>
+            <Text fontSize="24" style={{textAlign: 'center'}} fontWeight="bold">
+              Profile
+            </Text>
             <Text
               mx="10"
               fontSize="14"
@@ -104,94 +96,74 @@ const SignIn = ({navigation}) => {
             </Text>
           </Center>
 
-          <TextInput
-            style={styles.input}
-            onChangeText={handleChange}
-            value={input}
-            placeholder="Enter Member ID"
-            placeholderTextColor="#a3a3a3"
-          />
+          <FormControl isRequired>
+            <Input
+              type="text"
+              mx="auto"
+              mt={5}
+              onChangeText={handleID}
+              value={idNo}
+              placeholder="Enter National ID"
+              w={{
+                base: '75%',
+                md: '25%',
+              }}
+            />
+            <Input
+              type="text"
+              mx="auto"
+              mt={5}
+              onChangeText={handleID}
+              value={idNo}
+              placeholder="Enter National ID"
+              w={{
+                base: '75%',
+                md: '25%',
+              }}
+            />
+            <Input
+              type="text"
+              mx="auto"
+              mt={5}
+              onChangeText={handleID}
+              value={idNo}
+              placeholder="Enter National ID"
+              w={{
+                base: '75%',
+                md: '25%',
+              }}
+            />
+            <Button
+              mx="auto"
+              mt={5}
+              w={{
+                base: '75%',
+                md: '25%',
+              }}
+              p={4}
+              bg={'#5d3915'}
+              rounded="5">
+              Sign In
+            </Button>
 
-          <TextInput
-            style={styles.input}
-            onChangeText={handleChange}
-            value={input}
-            placeholder="Enter Member ID"
-            placeholderTextColor="#a3a3a3"
-          />
+            <Button
+              mx="auto"
+              mt={5}
+              variant={'outline'}
+              w={{
+                base: '75%',
+                md: '25%',
+              }}
+              p={4}
+              // bg={'#5d3915'}
+              colorScheme="danger.600"
+              rounded="5"
+              onPress={clearAll}>
+              Log Out
+            </Button>
+          </FormControl>
 
-          <TextInput
-            style={styles.input}
-            onChangeText={handleChange}
-            value={input}
-            placeholder="Enter Member ID"
-            placeholderTextColor="#a3a3a3"
-          />
-
-          <TextInput
-            style={styles.input}
-            onChangeText={handleChange}
-            value={input}
-            placeholder="Enter Member ID"
-            placeholderTextColor="#a3a3a3"
-          />
-
-          <Pressable
-            mx="10"
-            mb={3}
-            onPress={() => Alert.alert('Update button works')}>
-            {({isPressed}) => {
-              return (
-                <Box
-                  borderWidth="3"
-                  borderColor={isPressed ? '#5d3915' : '#fff'}
-                  bg={isPressed ? '#fff' : '#5d3915'}
-                  p="5"
-                  rounded="8"
-                  style={{
-                    transform: [
-                      {
-                        scale: isPressed ? 1 : 1,
-                      },
-                    ],
-                  }}>
-                  <Center>
-                    <Text
-                      fontWeight="bold"
-                      color={isPressed ? '#5d3915' : '#fff'}>
-                      Update
-                    </Text>
-                  </Center>
-                </Box>
-              );
-            }}
-          </Pressable>
-
-          <Pressable mx="10" onPress={clearAll}>
-            {({isPressed}) => {
-              return (
-                <Box
-                  borderWidth="3"
-                  borderColor="#5d3915"
-                  bg={isPressed ? '#5d3915' : '#fff'}
-                  p="5"
-                  rounded="8"
-                  style={{
-                    transform: [
-                      {
-                        scale: isPressed ? 1 : 1,
-                      },
-                    ],
-                  }}>
-                  <Center>
-                    <Text color={isPressed ? '#fff' : '#5d3915'}>Log Out</Text>
-                  </Center>
-                </Box>
-              );
-            }}
-          </Pressable>
-
-          {/* <VStack flex={1} justifyContent="flex-end" my="2">
+          <VStack flex={1} justifyContent="flex-end" my="2">
             <Center>
               <Text fontSize="xs" mx="10">
                 Powered by
@@ -200,7 +172,7 @@ const SignIn = ({navigation}) => {
                 Corebase Solutions
               </Text>
             </Center>
-          </VStack> */}
+          </VStack>
         </Box>
       </VStack>
     </NativeBaseProvider>

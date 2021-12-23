@@ -148,6 +148,13 @@ const App = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="profile"
+          component={Profile}
+          options={{
+            headerShown: false,
+          }}
+        />
         {/* {value ? (
           <>
             <Stack.Screen

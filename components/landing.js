@@ -22,13 +22,18 @@ const Landing = ({navigation}) => {
           source={require('../assets/images/background.png')}
           style={styles.image}>
           <Center flex={1}>
-            <Image
+            {/* <Image
               source={require('../assets/images/medicosin.png')}
               alt="Company Logo"
               size="xl"
+            /> */}
+            <Image
+              source={require('../assets/images/pcico.png')}
+              alt="Company Logo"
+              size="md"
             />
-            <Heading textAlign="center" color="#000">
-              Médecins Sans Frontières
+            <Heading size={'2xl'} textAlign="center" color="#000">
+              phAMAcore
             </Heading>
           </Center>
         </ImageBackground>
