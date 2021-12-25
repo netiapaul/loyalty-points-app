@@ -292,7 +292,28 @@ const Dashboard = ({route, navigation}) => {
           </VStack>
           {/* </Box> */}
         </VStack>
-        <VStack justifyContent="flex-end" my="2">
+        <HStack
+          shadow={2}
+          bg="#fff"
+          p="4"
+          justifyContent="space-between"
+          alignItems="center">
+          <Text color="#5d3915" fontSize="20" fontWeight="bold">
+            Dashboard
+          </Text>
+          <Spacer />
+          <Text color="#5d3915" fontSize="20" fontWeight="bold">
+            Dashboard
+          </Text>
+          <Spacer />
+          <Link
+            onPress={() => navigation.navigate('profile', {token, memberNo})}>
+            <Avatar bg="blueGray.600" size="sm">
+              {name ? name.match(/\b([A-Z])/g).join('') : null}
+            </Avatar>
+          </Link>
+        </HStack>
+        {/* <VStack justifyContent="flex-end" my="2">
           <Center>
             <Text fontSize="xs" mx="10">
               Powered by
@@ -301,7 +322,7 @@ const Dashboard = ({route, navigation}) => {
               Corebase Solutions
             </Text>
           </Center>
-        </VStack>
+        </VStack> */}
       </Box>
     </NativeBaseProvider>
   );

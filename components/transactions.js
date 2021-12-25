@@ -99,10 +99,10 @@ const Transactions = ({route, navigation}) => {
                         fontSize={12}>
                         Date: {new Date(user.SALEDATE).toDateString()}
                       </Text>
-                      <Text color="#5d3915" fontWeight="bold" fontSize={15}>
+                      <Text color={'muted.800'} fontWeight="bold" fontSize={15}>
                         {user.CUSCODE}
                       </Text>
-                      <Text color="#5d3915" fontWeight="bold" fontSize={15}>
+                      <Text color={'light.600'} fontWeight="bold" fontSize={15}>
                         {user.SALESBRANCH}
                       </Text>
                       {/* <Text

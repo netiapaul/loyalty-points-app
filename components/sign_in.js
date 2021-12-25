@@ -156,15 +156,8 @@ const SignIn = ({navigation}) => {
 
       <VStack flex={1} bg="#fff">
         {/* TOP Area */}
-        <ImageBackground
-          source={require('../assets/images/background.png')}
-          style={styles.image}>
+        <Box flex={1} justifyContent={'center'} bg="#fff">
           <Center>
-            {/* <Image
-              source={require('../assets/images/medicosin.png')}
-              alt="Company Logo"
-              size="xl"
-            /> */}
             <Image
               source={require('../assets/images/pcico.png')}
               alt="Company Logo"
@@ -174,8 +167,8 @@ const SignIn = ({navigation}) => {
               phAMAcore
             </Heading>
           </Center>
-        </ImageBackground>
-        {/* FORM Area */}
+        </Box>
+
         <Box bg="#fff" flex={1} style={styles.inputContainer}>
           <HStack my={5} justifyContent={'center'}>
             {/* <Image

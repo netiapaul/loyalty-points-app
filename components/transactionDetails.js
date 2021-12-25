@@ -27,6 +27,7 @@ const SalesTransaction = ({route, navigation}) => {
   useEffect(() => {
     handleFetch();
     setBranchName(branch);
+
     // console.warn('users', users);
     return () => {
       return setstatus('');
@@ -97,11 +98,10 @@ const SalesTransaction = ({route, navigation}) => {
                 shadow={3}>
                 <VStack>
                   <Center>
-                    {/* <Text fontWeight="bold">{branch}</Text> */}
-                    <Text fontWeight="bold">{branchName}</Text>
+                    <Text fontWeight="bold">{user.itmname}</Text>
                     <Divider my="2" />
                   </Center>
-                  <HStack>
+                  {/* <HStack>
                     <Text
                       color="#5d3915"
                       fontSize={15}
@@ -113,7 +113,7 @@ const SalesTransaction = ({route, navigation}) => {
                     <Text color="#5d3915" fontSize={15} my={1}>
                       {user.itmname}
                     </Text>
-                  </HStack>
+                  </HStack> */}
 
                   <HStack>
                     <Text
@@ -123,7 +123,7 @@ const SalesTransaction = ({route, navigation}) => {
                       fontWeight="bold">
                       Total Quantity:{' '}
                     </Text>
-
+                    <Spacer />
                     <Text color="#5d3915" fontSize={15} my={1}>
                       {user.quantity}
                     </Text>
@@ -137,13 +137,13 @@ const SalesTransaction = ({route, navigation}) => {
                       my={1}>
                       Total Item Cost:{' '}
                     </Text>
-
+                    <Spacer />
                     <Text color="#5d3915" fontSize={15} my={1}>
                       {user.totalCost} ksh
                     </Text>
                   </HStack>
 
-                  <HStack my={1}>
+                  {/* <HStack my={1}>
                     <Text color="success.600" fontWeight="bold">
                       Received: {user.mempointsbuy}
                     </Text>
@@ -151,7 +151,7 @@ const SalesTransaction = ({route, navigation}) => {
                     <Text color="danger.600" ml={2} fontWeight="bold">
                       Redeemed: {user.mempointsredeem}
                     </Text>
-                  </HStack>
+                  </HStack> */}
 
                   <HStack my={1}>
                     <Text
@@ -163,7 +163,7 @@ const SalesTransaction = ({route, navigation}) => {
                     </Text>
                     <Text color={'muted.500'} fontSize={12}>
                       {/* {new Date(user.saledate + 'Z').toUTCString()} */}
-                      {new Date(user.saledate).toDateString()}
+                      {new Date(user.saledate).toLocaleString()}
                     </Text>
                   </HStack>
                 </VStack>
@@ -171,6 +171,21 @@ const SalesTransaction = ({route, navigation}) => {
             );
           })}
         </ScrollView>
+        {users.map((user, index) => {
+          return (
+            <HStack my={1}>
+              {/* <Text color="success.600" fontWeight="bold">
+                Received: {user.mempointsbuy}
+              </Text>
+              <Spacer />
+              <Text color="danger.600" ml={2} fontWeight="bold">
+                Redeemed: {user.mempointsredeem}
+              </Text> */}
+
+              {/* <Text>{user.totalCost}</Text> */}
+            </HStack>
+          );
+        })}
         <VStack justifyContent="flex-end">
           <Center>
             <Text fontSize="xs" mx="10">
