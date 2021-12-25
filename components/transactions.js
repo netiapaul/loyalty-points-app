@@ -70,16 +70,17 @@ const Transactions = ({route, navigation}) => {
 
           {users.map((user, index) => {
             return (
-              <Pressable
+              <Box
                 p="5"
-                m="2"
+                mb={2}
+                mx="2"
                 bg="muted.50"
                 key={index}
                 borderRadius="md"
                 borderColor="coolGray.200"
                 onPress={() => console.warn('pressed')}
                 borderWidth="1"
-                shadow={3}>
+                shadow={1}>
                 <Link
                   onPress={() =>
                     navigation.navigate('transactiondetails', {
@@ -91,15 +92,20 @@ const Transactions = ({route, navigation}) => {
                     })
                   }>
                   <HStack>
-                    <Center>
-                      <Avatar bg="blueGray.600" size="md">
-                        {user.SALESBRANCH.match(/\b([A-Z])/g).join('')}
-                      </Avatar>
-                      {/* <Text mt={1}>{user.SALESBRANCH}</Text> */}
-                    </Center>
-
                     <VStack>
                       <Text
+                        // color="#5d3915"
+                        color="#ff720d"
+                        fontSize={12}>
+                        Date: {new Date(user.SALEDATE).toDateString()}
+                      </Text>
+                      <Text color="#5d3915" fontWeight="bold" fontSize={15}>
+                        {user.CUSCODE}
+                      </Text>
+                      <Text color="#5d3915" fontWeight="bold" fontSize={15}>
+                        {user.SALESBRANCH}
+                      </Text>
+                      {/* <Text
                         color="#5d3915"
                         ml={3}
                         fontWeight="bold"
@@ -107,33 +113,24 @@ const Transactions = ({route, navigation}) => {
                         Total Items Bought: {user.ItemCount}
                       </Text>
 
-                      <HStack my={2}>
+                       <HStack my={2}>
                         <Text color="success.600" ml={3} fontWeight="bold">
                           Received: {user.MEMPOINTSBUY}
                         </Text>
                         <Text color="danger.600" ml={3} fontWeight="bold">
                           Redeemed: {user.MEMPOINTSREDEEM}
                         </Text>
-                      </HStack>
-
-                      <Text color="#5d3915" ml={3} fontSize={12}>
-                        {/* Date: {new Date(user.SALEDATE + 'Z').toUTCString()} */}
-                        Date: {new Date(user.SALEDATE).toDateString()}
-                        {/* Date: {user.SALEDATE} */}
-                      </Text>
+                      </HStack> */}
                     </VStack>
-                    <Spacer />
-                    {/* <Center>
-                          <Image
-                            source={require('../assets/images/right-arrow.png')}
-                            alt="company logo"
-                            style={styles.rightArrow}
-                            size="sm"
-                          />
-                        </Center> */}
                   </HStack>
+                  <Spacer />
+                  <Center>
+                    <Avatar bg="success.500" size="md">
+                      {user.SALESBRANCH.match(/\b([A-Z])/g).join('')}
+                    </Avatar>
+                  </Center>
                 </Link>
-              </Pressable>
+              </Box>
             );
           })}
         </ScrollView>

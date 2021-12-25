@@ -49,15 +49,15 @@ const SignIn = ({navigation}) => {
   // }
 
   useEffect(() => {
-    console.warn(status);
+    setStatus(status);
     return () => {
       setStatus('');
     };
   }, []);
 
-  const handleFetch = () => {
+  const handleFetch = async () => {
     try {
-      fetch('http://102.37.102.247:5016/CustomerPoints/CustomerLogin', {
+      await fetch('http://102.37.102.247:5016/CustomerPoints/CustomerLogin', {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         headers: {
           Accept: 'application/json',
@@ -68,25 +68,59 @@ const SignIn = ({navigation}) => {
           pin: pinNo,
         }),
       })
-        .then(async function (response) {
-          if (!response.ok) {
-            setStatus('request failed');
+        .then(response => {
+          if (response.ok) {
+            return response.json();
           } else {
-            const data = await response.json();
-            setData(data);
-            console.error(data);
-            return navigation.navigate('different', {
-              token: data.token,
-              memberNo: data.user.memberno,
-            });
+            setStatus('Please Confirm the details entered');
           }
         })
-        .catch(() =>
-          setStatus('Network request failed connect to the internet'),
-        );
+        .then(data => {
+          setData(data);
+          console.error(data.token);
+          return navigation.navigate('different', {
+            token: data.token,
+            memberNo: data.user.memberno,
+          });
+        })
+        .catch(() => {
+          setStatus('Network request failed connect to the internet');
+        });
     } catch (error) {
       console.warn(error);
     }
+
+    // try {
+    //   await fetch('http://102.37.102.247:5016/CustomerPoints/CustomerLogin', {
+    //     method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    //     headers: {
+    //       Accept: 'application/json',
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       idnumber: idNo,
+    //       pin: pinNo,
+    //     }),
+    //   })
+    //     .then(async response => {
+    //       if (!response.ok) {
+    //         setStatus('Please Confirm the details entered');
+    //       } else {
+    //         const data = await response.json();
+    //         setData(data);
+    //         console.error(data.token);
+    //         return navigation.navigate('different', {
+    //           token: data.token,
+    //           memberNo: data.user.memberno,
+    //         });
+    //       }
+    //     })
+    //     .catch(() =>
+    //       setStatus('Network request failed connect to the internet'),
+    //     );
+    // } catch (error) {
+    //   console.warn(error);
+    // }
   };
 
   return (

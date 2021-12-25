@@ -90,18 +90,18 @@ const App = () => {
         screenOptions={{
           headerShown: true,
           animationEnabled: true,
-          shadowColor: '#52006A',
           headerStyle: {
             backgroundColor: '#fff',
             elevation: 0,
             shadowOpacity: 0,
             borderBottomWidth: 0,
+            headerShadowVisible: true,
           },
-          headerShadowVisible: false,
+          headerShadowVisible: true,
           headerTintColor: '#000',
           headerTitleStyle: {
             fontWeight: 'bold',
-            color: '#000',
+            color: '#5d3915',
           },
         }}>
         <Stack.Screen

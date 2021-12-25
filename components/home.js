@@ -32,14 +32,13 @@ const config = {
 const Dashboard = ({route, navigation}) => {
   const [user, setUser] = useState({});
   const [status, setStatus] = useState('');
-  const [asyncData, setAsyncData] = useState({});
   const {token, memberNo} = route.params;
   const [name, setName] = useState('');
 
   useEffect(() => {
     handleSubmit();
-    console.warn('name', name);
-    console.warn('paramater', token);
+    // console.warn('name', name);
+    // console.warn('paramater', token);
   }, []);
 
   async function GetUSerData() {
@@ -55,7 +54,7 @@ const Dashboard = ({route, navigation}) => {
       },
     );
     if (!response.ok) {
-      setStatus('Error fetching Data from the server;');
+      setStatus('Login is required to view your data');
     } else {
       return response.json(); // parses JSON response into native JavaScript objects
     }
@@ -67,7 +66,7 @@ const Dashboard = ({route, navigation}) => {
         setName(data[0].membername);
         console.warn(data[0].membername);
       })
-      .catch(() => setStatus('Network request error: connect to a network'));
+      .catch(() => setStatus('Network request failed connect to the internet'));
   };
 
   return (
@@ -107,7 +106,7 @@ const Dashboard = ({route, navigation}) => {
         p="4"
         justifyContent="space-between"
         alignItems="center">
-        <Text color="#5d3915" fontSize="16" fontWeight="bold">
+        <Text color="#5d3915" fontSize="20" fontWeight="bold">
           Dashboard
         </Text>
         <Spacer />
@@ -207,21 +206,27 @@ const Dashboard = ({route, navigation}) => {
                   <Text fontSize="sm" mx="3" mb={1} fontWeight="bold">
                     Total Points
                   </Text>
-                  <Text fontSize="sm">{user.mempointsbal}</Text>
+                  <Text color="light.600" fontSize="sm">
+                    {user.mempointsbal}
+                  </Text>
                 </VStack>
 
                 <VStack alignItems="center">
                   <Text fontSize="sm" mx="3" mb={1} fontWeight="bold">
                     Redeemed Points
                   </Text>
-                  <Text fontSize="sm">{user.mempointsredeem}</Text>
+                  <Text color="danger.600" fontSize="sm">
+                    {user.mempointsredeem}
+                  </Text>
                 </VStack>
 
                 <VStack alignItems="center">
                   <Text fontSize="sm" mx="3" mb={1} fontWeight="bold">
                     Points Buy
                   </Text>
-                  <Text fontSize="sm">{user.mempointsbuy}</Text>
+                  <Text color="success.600" fontSize="sm">
+                    {user.mempointsbuy}
+                  </Text>
                 </VStack>
               </HStack>
             </Center>
