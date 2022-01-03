@@ -23,7 +23,6 @@ import * as Keychain from 'react-native-keychain';
 const SignIn = ({route, navigation}) => {
   const {token, memberNo} = route.params;
   const [user, setUser] = useState({});
-  // const [input, setInput] = useState('');
   const [name, setName] = useState('');
   const [idNo, setIdno] = useState('');
 
@@ -69,9 +68,7 @@ const SignIn = ({route, navigation}) => {
     <NativeBaseProvider>
       <VStack flex={1} bg="light.50">
         {/* TOP Area */}
-        <ImageBackground
-          source={require('../assets/images/background.png')}
-          style={styles.image}>
+        <Box flex={1} bg="#fff" justifyContent={'center'}>
           <Center>
             <Avatar bg="blueGray.600" size="md">
               {name ? name.match(/\b([A-Z])/g).join('') : null}
@@ -80,7 +77,8 @@ const SignIn = ({route, navigation}) => {
               {user.membername}
             </Heading>
           </Center>
-        </ImageBackground>
+        </Box>
+
         {/* FORM Area */}
         <Box bg="#fff" flex={3} style={styles.inputContainer}>
           <Center mt={2}>
@@ -103,7 +101,7 @@ const SignIn = ({route, navigation}) => {
               mt={5}
               onChangeText={handleID}
               value={idNo}
-              placeholder="Enter National ID"
+              placeholder="Enter Fullnames"
               w={{
                 base: '75%',
                 md: '25%',
@@ -115,7 +113,7 @@ const SignIn = ({route, navigation}) => {
               mt={5}
               onChangeText={handleID}
               value={idNo}
-              placeholder="Enter National ID"
+              placeholder="Enter Email"
               w={{
                 base: '75%',
                 md: '25%',
@@ -127,7 +125,7 @@ const SignIn = ({route, navigation}) => {
               mt={5}
               onChangeText={handleID}
               value={idNo}
-              placeholder="Enter National ID"
+              placeholder="Enter Pin"
               w={{
                 base: '75%',
                 md: '25%',
@@ -143,20 +141,22 @@ const SignIn = ({route, navigation}) => {
               p={4}
               bg={'#5d3915'}
               rounded="5">
-              Sign In
+              Update
             </Button>
 
             <Button
               mx="auto"
               mt={5}
-              variant={'outline'}
+              // variant={'outline'}
               w={{
                 base: '75%',
                 md: '25%',
               }}
+              borderWidth="1"
+              borderColor="#5d3915"
               p={4}
-              // bg={'#5d3915'}
-              colorScheme="danger.600"
+              bg={'#fff'}
+              colorScheme="danger.800"
               rounded="5"
               onPress={clearAll}>
               Log Out
@@ -168,9 +168,15 @@ const SignIn = ({route, navigation}) => {
               <Text fontSize="xs" mx="10">
                 Powered by
               </Text>
-              <Text fontSize="xs" fontWeight="bold" color="#5d3915" mx="10">
+              <Image
+                style={styles.image}
+                source={require('../assets/images/pcico.png')}
+                alt="Company Logo"
+                size="xs"
+              />
+              {/* <Text fontSize="xs" fontWeight="bold" color="#5d3915" mx="10">
                 Corebase Solutions
-              </Text>
+              </Text> */}
             </Center>
           </VStack>
         </Box>
@@ -181,8 +187,8 @@ const SignIn = ({route, navigation}) => {
 
 const styles = StyleSheet.create({
   image: {
-    flex: 1,
-    justifyContent: 'center',
+    maxWidth: 20,
+    maxHeight: 20,
   },
   inputContainer: {
     borderWidth: 1,

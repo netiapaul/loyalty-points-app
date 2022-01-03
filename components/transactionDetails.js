@@ -10,6 +10,7 @@ import {
   HStack,
   Spacer,
   Divider,
+  Image,
 } from 'native-base';
 
 const config = {
@@ -19,16 +20,20 @@ const config = {
 };
 
 const SalesTransaction = ({route, navigation}) => {
-  const {token, memberNo, docNum, salesBCODE, branch} = route.params;
+  const {token, memberNo, docNum, salesBCODE, branch, gain, redeemed} =
+    route.params;
   const [users, setUser] = useState([]);
   const [status, setstatus] = useState('');
   const [branchName, setBranchName] = useState('');
+  const [gainpts, setgainpts] = useState('');
+  const [redeemedpts, setredeemedpts] = useState('');
 
   useEffect(() => {
     handleFetch();
     setBranchName(branch);
-
-    // console.warn('users', users);
+    setgainpts(gain);
+    setredeemedpts(redeemed);
+    console.warn(users);
     return () => {
       return setstatus('');
     };
@@ -83,6 +88,36 @@ const SalesTransaction = ({route, navigation}) => {
         </Alert>
       ) : null}
 
+      <HStack
+        bg="#fff"
+        p="5"
+        justifyContent="space-between"
+        alignItems="center">
+        <Center mx={'auto'}>
+          <VStack>
+            <Text color="#5d3915" fontSize="20" fontWeight="bold">
+              Total Cost:{' '}
+              {users
+                .reduce((previousValue, curr) => {
+                  return previousValue + curr.totalCost;
+                }, 0)
+                .toFixed(2)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            </Text>
+
+            <VStack mx={'auto'}>
+              <Text color="success.600" ml={3} fontWeight="bold">
+                {gainpts.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              </Text>
+              <Text color="danger.600" ml={3} fontWeight="bold">
+                {redeemedpts.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              </Text>
+            </VStack>
+          </VStack>
+        </Center>
+      </HStack>
+
       <Box p="2" flex={1} bg="#fff">
         <ScrollView>
           {users.map((user, index) => {
@@ -97,23 +132,38 @@ const SalesTransaction = ({route, navigation}) => {
                 borderWidth="1"
                 shadow={3}>
                 <VStack>
-                  <Center>
+                  {/* <Center>
                     <Text fontWeight="bold">{user.itmname}</Text>
                     <Divider my="2" />
-                  </Center>
-                  {/* <HStack>
+                  </Center> */}
+
+                  <HStack>
                     <Text
                       color="#5d3915"
                       fontSize={15}
                       my={1}
                       fontWeight="bold">
-                      Item Bought:{' '}
+                      Item Code:{' '}
                     </Text>
+                    <Spacer />
+                    <Text color="#5d3915" fontSize={15} my={1}>
+                      {user.itmcode}
+                    </Text>
+                  </HStack>
 
+                  <HStack>
+                    <Text
+                      color="#5d3915"
+                      fontSize={15}
+                      my={1}
+                      fontWeight="bold">
+                      Item Name:{' '}
+                    </Text>
+                    <Spacer />
                     <Text color="#5d3915" fontSize={15} my={1}>
                       {user.itmname}
                     </Text>
-                  </HStack> */}
+                  </HStack>
 
                   <HStack>
                     <Text
@@ -135,11 +185,11 @@ const SalesTransaction = ({route, navigation}) => {
                       color="#5d3915"
                       fontSize={15}
                       my={1}>
-                      Total Item Cost:{' '}
+                      Item Cost:{' '}
                     </Text>
                     <Spacer />
                     <Text color="#5d3915" fontSize={15} my={1}>
-                      {user.totalCost} ksh
+                      {user.totalCost.toFixed(2)}
                     </Text>
                   </HStack>
 
@@ -154,16 +204,16 @@ const SalesTransaction = ({route, navigation}) => {
                   </HStack> */}
 
                   <HStack my={1}>
-                    <Text
+                    {/* <Text
                       // color="#5d3915"
                       color={'muted.500'}
                       fontSize={11}
                       fontWeight="bold">
                       Date:{' '}
-                    </Text>
+                    </Text> */}
                     <Text color={'muted.500'} fontSize={12}>
                       {/* {new Date(user.saledate + 'Z').toUTCString()} */}
-                      {new Date(user.saledate).toLocaleString()}
+                      {new Date(user.saledate).toLocaleDateString()}
                     </Text>
                   </HStack>
                 </VStack>
@@ -171,29 +221,43 @@ const SalesTransaction = ({route, navigation}) => {
             );
           })}
         </ScrollView>
-        {users.map((user, index) => {
+        {/* {users.map((user, index) => {
           return (
-            <HStack my={1}>
-              {/* <Text color="success.600" fontWeight="bold">
+            <HStack my={1} key={index}>
+              <Text color="success.600" fontWeight="bold">
                 Received: {user.mempointsbuy}
               </Text>
               <Spacer />
               <Text color="danger.600" ml={2} fontWeight="bold">
                 Redeemed: {user.mempointsredeem}
-              </Text> */}
-
-              {/* <Text>{user.totalCost}</Text> */}
+              </Text>
+              <Text>{+user.totalCost}</Text>
             </HStack>
           );
-        })}
+        })} */}
+        {/* <HStack>
+          <Text>Total Cost:</Text>
+          <Text>
+            {users.reduce((previousValue, curr) => {
+              return previousValue + curr.totalCost;
+            }, 0)}
+          </Text>
+        </HStack> */}
+
         <VStack justifyContent="flex-end">
           <Center>
             <Text fontSize="xs" mx="10">
               Powered by
             </Text>
-            <Text fontSize="xs" fontWeight="bold" color="#5d3915" mx="10">
+            <Image
+              style={styles.image}
+              source={require('../assets/images/pcico.png')}
+              alt="Company Logo"
+              size="xs"
+            />
+            {/* <Text fontSize="xs" fontWeight="bold" color="#5d3915" mx="10">
               Corebase Solutions
-            </Text>
+            </Text> */}
           </Center>
         </VStack>
       </Box>
@@ -206,8 +270,8 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
   image: {
-    flex: 3,
-    justifyContent: 'center',
+    maxWidth: 20,
+    maxHeight: 20,
   },
   transactionsImage: {
     width: 50,
@@ -217,7 +281,10 @@ const styles = StyleSheet.create({
     width: 40,
     height: 20,
   },
-  rightArrow: {width: 30, height: 30},
+  rightArrow: {
+    width: 30,
+    height: 30,
+  },
   inputContainer: {
     borderWidth: 1,
     borderTopRightRadius: 30,

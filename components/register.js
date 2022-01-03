@@ -76,16 +76,13 @@ const SignIn = ({navigation}) => {
       if (reponse.status >= 200 && reponse.status < 400) {
         const data = await reponse.json();
         console.warn('Success response', reponse.status);
-        return navigation.navigate('different', {
-          token: data.token,
-          memberNo: data.user.memberno,
-        });
+        return navigation.navigate('signIn');
       } else if (reponse.status === 400) {
-        setStatus('Bad Request:Failed response');
+        onsole.warn('Failed response', reponse.status);
       } else {
         // console.warn(reponse.status);
         // setStatus('Incorrect Details entered');
-        setStatus('other Failed response');
+        console.warn('Failed response', reponse.status);
       }
     } catch (error) {
       setStatus('Network request failed connect to the internet');
@@ -226,38 +223,44 @@ const SignIn = ({navigation}) => {
           </Heading>
         </Center>
       </Box>
-      <Box bg="#fff" flex={1} style={styles.inputContainer}>
-        <HStack my={3} justifyContent={'center'}>
-          {/* <Image
-              onPress={() => Alert.alert('landing')}
-              source={require('../assets/images/back.png')}
-              alt="next icon"
-              style={styles.next}
-              size="sm"
-              ml="10"
-            /> */}
-
-          <Text fontSize="md" style={{textAlign: 'center'}} fontWeight="bold">
-            Sign In
-          </Text>
-        </HStack>
-
+      <Box bg="#fff" flex={2} style={styles.inputContainer}>
         <Center>
+          <Heading
+            justifyContent={'center'}
+            size="lg"
+            color="coolGray.800"
+            _dark={{
+              color: 'warmGray.50',
+            }}
+            fontWeight="semibold">
+            Welcome
+          </Heading>
+
           <Text
             mx="10"
             fontSize="sm"
             // my="3"
             style={styles.promoCode}
             fontWeight="400">
-            Enter your
-            <Text fontWeight="bold"> National ID Number </Text>&
-            <Text fontWeight="bold"> PIN Number </Text>
-            to proceed.
+            Sign up to continue!
           </Text>
         </Center>
 
-        <FormControl bg="#fff" flex={1}>
+        <FormControl flex={1}>
           {/* <FormControl.Label>Password</FormControl.Label> */}
+          <Input
+            type="text"
+            mx="auto"
+            mt={5}
+            onChangeText={handleID}
+            value={idNo}
+            placeholder="Enter Fullnames"
+            w={{
+              base: '75%',
+              md: '25%',
+            }}
+          />
+
           <Input
             type="text"
             mx="auto"
@@ -271,6 +274,18 @@ const SignIn = ({navigation}) => {
             }}
           />
 
+          <Input
+            type="text"
+            mx="auto"
+            mt={5}
+            onChangeText={handleID}
+            value={idNo}
+            placeholder="Enter Organisation"
+            w={{
+              base: '75%',
+              md: '25%',
+            }}
+          />
           {/* <FormControl.Label>Password</FormControl.Label> */}
 
           <Input
@@ -315,9 +330,8 @@ const SignIn = ({navigation}) => {
               p={4}
               bg={'#5d3915'}
               rounded="5"
-              isDisabled
-              onPress={handleFetch}>
-              Sign In
+              isDisabled>
+              Sign Up
             </Button>
           ) : (
             <Button
@@ -331,32 +345,32 @@ const SignIn = ({navigation}) => {
               bg={'#5d3915'}
               rounded="5"
               onPress={handleFetch}>
-              Sign In
+              Sign Up
             </Button>
           )}
-          <HStack mt="3" justifyContent="center">
+          <HStack mt="6" justifyContent="center">
             <Text
               fontSize="sm"
               color="coolGray.600"
               _dark={{
                 color: 'warmGray.200',
               }}>
-              I'm a new user.{' '}
+              Already have an account.{' '}
             </Text>
             <Link
-              onPress={() => navigation.navigate('register')}
+              onPress={() => navigation.navigate('signIn')}
               _text={{
                 color: 'indigo.500',
                 fontWeight: 'medium',
                 fontSize: 'sm',
               }}>
-              Sign Up
+              Sign In
             </Link>
           </HStack>
         </FormControl>
       </Box>
-      <VStack bg={'#fff'} mb={0} justifyContent="flex-end">
-        <Center>
+      <VStack bg={'#fff'} justifyContent="flex-end">
+        <Center p={1}>
           <Text fontSize="xs" mx="10">
             Powered by
           </Text>
@@ -371,7 +385,6 @@ const SignIn = ({navigation}) => {
             </Text> */}
         </Center>
       </VStack>
-
       {/* </VStack> */}
     </NativeBaseProvider>
   );

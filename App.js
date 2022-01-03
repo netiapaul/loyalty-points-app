@@ -15,6 +15,7 @@ import Transactions from './components/transactions';
 import TransactionDetails from './components/transactionDetails';
 import Profile from './components/profile';
 import Different from './components/home';
+import Register from './components/register';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -125,7 +126,14 @@ const App = () => {
             headerShown: false,
           }}
         /> */}
-
+        <Stack.Screen
+          name="register"
+          component={Register}
+          options={{
+            headerShown: false,
+            title: 'Register',
+          }}
+        />
         <Stack.Screen
           name="transactions"
           component={Transactions}
@@ -152,7 +160,7 @@ const App = () => {
           name="profile"
           component={Profile}
           options={{
-            headerShown: false,
+            headerShown: true,
           }}
         />
         {/* {value ? (

@@ -15,6 +15,7 @@ import {
   Spacer,
 } from 'native-base';
 import * as Keychain from 'react-native-keychain';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const config = {
   dependencies: {
@@ -28,7 +29,7 @@ const Transactions = ({route, navigation}) => {
 
   useEffect(() => {
     handleFetch();
-
+    console.warn(users);
     // console.warn('users', users);
     // return () => {
     //   cleanup
@@ -64,7 +65,7 @@ const Transactions = ({route, navigation}) => {
           Transactions & Points
         </Text>
       </HStack> */}
-      <Box p="2" bg="#fff">
+      <Box flex={1} bg="#fff">
         <ScrollView>
           {/* Activity Items */}
 
@@ -72,7 +73,7 @@ const Transactions = ({route, navigation}) => {
             return (
               <Box
                 p="5"
-                mb={2}
+                mt={2}
                 mx="2"
                 bg="muted.50"
                 key={index}
@@ -89,6 +90,8 @@ const Transactions = ({route, navigation}) => {
                       docNum: user.DOCNUM,
                       salesBCODE: user.SALESBCODE,
                       branch: user.SALESBRANCH,
+                      gain: user.MEMPOINTSBUY,
+                      redeemed: user.MEMPOINTSREDEEM,
                     })
                   }>
                   <HStack>
@@ -97,10 +100,10 @@ const Transactions = ({route, navigation}) => {
                         // color="#5d3915"
                         color="#ff720d"
                         fontSize={12}>
-                        Date: {new Date(user.SALEDATE).toDateString()}
+                        {new Date(user.SALEDATE).toLocaleDateString()}
                       </Text>
                       <Text color={'muted.800'} fontWeight="bold" fontSize={15}>
-                        {user.CUSCODE}
+                        {user.DOCNUM}
                       </Text>
                       <Text color={'light.600'} fontWeight="bold" fontSize={15}>
                         {user.SALESBRANCH}
@@ -125,24 +128,109 @@ const Transactions = ({route, navigation}) => {
                   </HStack>
                   <Spacer />
                   <Center>
-                    <Avatar bg="success.500" size="md">
+                    {/* <Avatar bg="success.500" size="md">
                       {user.SALESBRANCH.match(/\b([A-Z])/g).join('')}
-                    </Avatar>
+                    </Avatar> */}
+                    <Text color="success.600" ml={3} fontWeight="bold">
+                      {user.MEMPOINTSBUY.toString().replace(
+                        /\B(?=(\d{3})+(?!\d))/g,
+                        ',',
+                      )}
+                    </Text>
+                    <Text color="danger.600" ml={3} fontWeight="bold">
+                      {user.MEMPOINTSREDEEM.toString().replace(
+                        /\B(?=(\d{3})+(?!\d))/g,
+                        ',',
+                      )}
+                    </Text>
                   </Center>
                 </Link>
               </Box>
             );
           })}
         </ScrollView>
+
+        {/* <HStack
+          shadow={2}
+          bg="#fff"
+          p="2"
+          justifyContent="flex-end"
+          justifyContent="space-between"
+          alignItems="center">
+          <Link onPress={() => navigation.navigate('different', {token})}>
+            <VStack>
+              <Center>
+                <MaterialCommunityIcons
+                  name="home"
+                  color={'#c58c4f'}
+                  size={20}
+                />
+              </Center>
+
+              <Text color="#5d3915" fontSize="10">
+                Home
+              </Text>
+            </VStack>
+          </Link>
+
+          <Spacer />
+          <Link
+            onPress={() =>
+              navigation.navigate('transactions', {
+                screen: 'transactions',
+                memberNo,
+                token,
+              })
+            }>
+            <VStack>
+              <Center>
+                <MaterialCommunityIcons
+                  name="bank"
+                  color={'#c58c4f'}
+                  size={20}
+                />
+              </Center>
+
+              <Text color="#5d3915" fontSize="10">
+                Transactions
+              </Text>
+            </VStack>
+          </Link>
+
+          <Spacer />
+          <Link
+            onPress={() => navigation.navigate('profile', {token, memberNo})}>
+            <VStack>
+              <Center>
+                <MaterialCommunityIcons
+                  name="account"
+                  color={'#c58c4f'}
+                  size={20}
+                />
+              </Center>
+
+              <Text color="#5d3915" fontSize="10">
+                Profile
+              </Text>
+            </VStack>
+          </Link>
+        </HStack> */}
       </Box>
+
       <VStack flex={1} bg={'#fff'} justifyContent="flex-end">
         <Center>
           <Text fontSize="xs" mx="10">
             Powered by
           </Text>
-          <Text fontSize="xs" fontWeight="bold" color="#5d3915" mx="10">
+          <Image
+            style={styles.image}
+            source={require('../assets/images/pcico.png')}
+            alt="Company Logo"
+            size="xs"
+          />
+          {/* <Text fontSize="xs" fontWeight="bold" color="#5d3915" mx="10">
             Corebase Solutions
-          </Text>
+          </Text> */}
         </Center>
       </VStack>
     </NativeBaseProvider>
@@ -154,8 +242,8 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
   image: {
-    flex: 3,
-    justifyContent: 'center',
+    maxWidth: 20,
+    maxHeight: 20,
   },
   transactionsImage: {
     width: 50,

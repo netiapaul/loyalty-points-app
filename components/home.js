@@ -19,9 +19,11 @@ import {
   Collapse,
   IconButton,
   CloseIcon,
+  useToast,
 } from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Keychain from 'react-native-keychain';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const config = {
   dependencies: {
@@ -107,14 +109,14 @@ const Dashboard = ({route, navigation}) => {
         justifyContent="space-between"
         alignItems="center">
         <Text color="#5d3915" fontSize="20" fontWeight="bold">
-          Dashboard
+          phAMAcore
         </Text>
         <Spacer />
-        <Link onPress={() => navigation.navigate('profile', {token, memberNo})}>
+        {/* <Link onPress={() => navigation.navigate('profile', {token, memberNo})}>
           <Avatar bg="blueGray.600" size="sm">
             {name ? name.match(/\b([A-Z])/g).join('') : null}
           </Avatar>
-        </Link>
+        </Link> */}
       </HStack>
 
       <Box flex={1} bg="#fff">
@@ -261,12 +263,20 @@ const Dashboard = ({route, navigation}) => {
                   })
                 }>
                 <HStack>
-                  <Image
+                  {/* <Image
                     source={require('../assets/images/picture.png')}
                     alt="company logo"
                     style={styles.transactionsImage}
                     size="sm"
-                  />
+                  /> */}
+                  <Center>
+                    <MaterialCommunityIcons
+                      name="receipt"
+                      color={'#c58c4f'}
+                      size={30}
+                    />
+                  </Center>
+
                   <Center>
                     <VStack ml={2}>
                       <Text color="#5d3915" fontWeight="bold">
@@ -293,24 +303,60 @@ const Dashboard = ({route, navigation}) => {
           {/* </Box> */}
         </VStack>
         <HStack
-          shadow={2}
+          shadow={5}
           bg="#fff"
-          p="4"
+          p="3"
           justifyContent="space-between"
           alignItems="center">
-          <Text color="#5d3915" fontSize="20" fontWeight="bold">
-            Dashboard
-          </Text>
+          <VStack>
+            <Center>
+              <MaterialCommunityIcons name="home" color={'#c58c4f'} size={20} />
+            </Center>
+
+            <Text color="#5d3915" fontSize="10">
+              Home
+            </Text>
+          </VStack>
           <Spacer />
-          <Text color="#5d3915" fontSize="20" fontWeight="bold">
-            Dashboard
-          </Text>
+          <Link
+            onPress={() =>
+              navigation.navigate('transactions', {
+                screen: 'transactions',
+                memberNo,
+                token,
+              })
+            }>
+            <VStack>
+              <Center>
+                <MaterialCommunityIcons
+                  name="receipt"
+                  color={'#c58c4f'}
+                  size={20}
+                />
+              </Center>
+
+              <Text color="#5d3915" fontSize="10">
+                Transactions
+              </Text>
+            </VStack>
+          </Link>
+
           <Spacer />
           <Link
             onPress={() => navigation.navigate('profile', {token, memberNo})}>
-            <Avatar bg="blueGray.600" size="sm">
-              {name ? name.match(/\b([A-Z])/g).join('') : null}
-            </Avatar>
+            <VStack>
+              <Center>
+                <MaterialCommunityIcons
+                  name="account"
+                  color={'#c58c4f'}
+                  size={20}
+                />
+              </Center>
+
+              <Text color="#5d3915" fontSize="10">
+                Profile
+              </Text>
+            </VStack>
           </Link>
         </HStack>
         {/* <VStack justifyContent="flex-end" my="2">
