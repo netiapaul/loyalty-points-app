@@ -32,7 +32,7 @@ const SignIn = ({route, navigation}) => {
 
   useEffect(() => {
     handleFetch();
-    console.warn('profile', user);
+    // console.warn('profile', user);
   }, []);
 
   const handleFetch = () => {
@@ -60,8 +60,7 @@ const SignIn = ({route, navigation}) => {
     } catch (e) {
       console.error('Something went wrong on fetching', e);
     }
-    navigation.navigate('landing');
-    console.warn('Done.');
+    return navigation.navigate('signIn');
   };
 
   return (

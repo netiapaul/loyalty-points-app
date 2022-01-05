@@ -114,16 +114,17 @@ const SalesTransaction = ({route, navigation}) => {
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </Text>
 
-            <VStack mx={'auto'}>
+            <VStack ml={20}>
               <Text color="success.600" ml={3} fontWeight="bold">
                 {gainpts.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
               </Text>
               <Text color="danger.600" ml={3} fontWeight="bold">
                 {redeemedpts.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
               </Text>
-
-              <Text>{date ? new Date(date).toDateString() : null}</Text>
             </VStack>
+            <Text mx={'auto'}>
+              {date ? new Date(date).toDateString() : null}
+            </Text>
           </VStack>
         </Center>
       </HStack>

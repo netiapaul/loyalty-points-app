@@ -101,6 +101,8 @@ const SignIn = ({navigation}) => {
       );
       if (reponse.ok) {
         const data = await reponse.json();
+        setPin('');
+        setIdno('');
         // console.warn('Success response', data);
         return navigation.navigate('different', {
           token: data.token,
