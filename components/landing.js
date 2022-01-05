@@ -18,9 +18,7 @@ const Landing = ({navigation}) => {
     <NativeBaseProvider>
       <VStack flex={1} bg="light.50">
         {/* TOP Area */}
-        <ImageBackground
-          source={require('../assets/images/background.png')}
-          style={styles.image}>
+        <Box flex={1} justifyContent={'center'} bg="#fff">
           <Center flex={1}>
             {/* <Image
               source={require('../assets/images/medicosin.png')}
@@ -32,14 +30,15 @@ const Landing = ({navigation}) => {
               alt="Company Logo"
               size="md"
             />
-            <Heading size={'2xl'} textAlign="center" color="#000">
+            <Heading size={'2xl'} textAlign="center" color="#5d3915">
               phAMAcore
             </Heading>
           </Center>
-        </ImageBackground>
+        </Box>
+
         {/* FORM Area */}
         <Box bg="#fff" flex={1} style={styles.inputContainer}>
-          <Center flex={2}>
+          <Center>
             <Text mx="10" my="3" fontWeight="400">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
@@ -48,7 +47,7 @@ const Landing = ({navigation}) => {
             </Text>
           </Center>
 
-          <HStack my="3" mx="10" flex={1} alignItems="center">
+          <HStack my="3" flex={1} mx="10" alignItems="center">
             <Text style={styles.stackText}>Next</Text>
             <Image
               source={require('../assets/images/next.png')}
@@ -84,13 +83,19 @@ const Landing = ({navigation}) => {
               );
             }}
           </Pressable>
-
-          <VStack flex={1} justifyContent="flex-end" mb="2">
+          <VStack bg={'#fff'} flex={1} mb={0} justifyContent="flex-end">
             <Center>
               <Text fontSize="xs">Powered by</Text>
-              <Text fontSize="xs" fontWeight="bold" color="#5d3915">
+              <Image
+                style={styles.image}
+                source={require('../assets/images/pcico.png')}
+                alt="Company Logo"
+                size="xs"
+              />
+
+              {/* <Text fontSize="xs" fontWeight="bold" color="#5d3915">
                 Corebase Solutions
-              </Text>
+              </Text> */}
             </Center>
           </VStack>
         </Box>
@@ -101,13 +106,17 @@ const Landing = ({navigation}) => {
 
 const styles = StyleSheet.create({
   image: {
-    flex: 1,
-    justifyContent: 'center',
+    // flex: 1,
+    // justifyContent: 'center',
+    maxWidth: 20,
+    maxHeight: 20,
   },
+
   inputContainer: {
     borderWidth: 1,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
+    borderBottomColor: '#fff',
   },
   stackText: {
     fontWeight: 'bold',

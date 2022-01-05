@@ -7,6 +7,7 @@ import {
   Heading,
   Image,
   Box,
+  Alert,
   Text,
   HStack,
   Pressable,
@@ -26,6 +27,7 @@ const config = {
 const Transactions = ({route, navigation}) => {
   const {token, memberNo} = route.params;
   const [users, setUser] = useState([]);
+  const [status, setStatus] = useState('');
 
   useEffect(() => {
     handleFetch();
@@ -37,6 +39,11 @@ const Transactions = ({route, navigation}) => {
   }, []);
 
   const handleFetch = () => {
+    // try {
+    //   const request = `http://102.37.102.247:5016/CustomerPoints/GetCustomerTransactions?memberNo=${memberNo}`;
+    // } catch (error) {
+
+    // }
     const request = `http://102.37.102.247:5016/CustomerPoints/GetCustomerTransactions?memberNo=${memberNo}`;
 
     fetch(request, {
@@ -51,7 +58,7 @@ const Transactions = ({route, navigation}) => {
       .then(response => {
         setUser(JSON.parse(response));
       })
-      .catch(() => console.warn('please connect to available network'));
+      .catch(() => setStatus('please connect to available network'));
   };
 
   return (
@@ -65,6 +72,35 @@ const Transactions = ({route, navigation}) => {
           Transactions & Points
         </Text>
       </HStack> */}
+
+      {status ? (
+        <Alert w="100%" status="error">
+          <VStack space={2} flexShrink={1} w="100%">
+            <HStack
+              flexShrink={1}
+              space={1}
+              alignItems="center"
+              justifyContent="space-between">
+              <HStack space={2} flexShrink={1} alignItems="center">
+                <Alert.Icon />
+                <Text
+                  fontSize="md"
+                  fontWeight="medium"
+                  _dark={{
+                    color: 'coolGray.800',
+                  }}>
+                  Connect to an internet connection
+                </Text>
+              </HStack>
+              {/* <IconButton
+                  variant="unstyled"
+                  icon={<CloseIcon size="3" color="coolGray.600" />}
+                  onPress={() => setShow(false)}
+                /> */}
+            </HStack>
+          </VStack>
+        </Alert>
+      ) : null}
       <Box flex={1} bg="#fff">
         <ScrollView>
           {/* Activity Items */}
@@ -92,6 +128,7 @@ const Transactions = ({route, navigation}) => {
                       branch: user.SALESBRANCH,
                       gain: user.MEMPOINTSBUY,
                       redeemed: user.MEMPOINTSREDEEM,
+                      transdate: user.SALEDATE,
                     })
                   }>
                   <HStack>
@@ -100,7 +137,8 @@ const Transactions = ({route, navigation}) => {
                         // color="#5d3915"
                         color="#ff720d"
                         fontSize={12}>
-                        {new Date(user.SALEDATE).toLocaleDateString()}
+                        {new Date(user.SALEDATE).toDateString()}
+                        {/* {new Date(user.SALEDATE).toLocaleDateString()} */}
                       </Text>
                       <Text color={'muted.800'} fontWeight="bold" fontSize={15}>
                         {user.DOCNUM}

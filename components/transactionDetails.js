@@ -12,6 +12,7 @@ import {
   Divider,
   Image,
 } from 'native-base';
+import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 
 const config = {
   dependencies: {
@@ -20,24 +21,31 @@ const config = {
 };
 
 const SalesTransaction = ({route, navigation}) => {
-  const {token, memberNo, docNum, salesBCODE, branch, gain, redeemed} =
-    route.params;
+  const {
+    token,
+    memberNo,
+    docNum,
+    salesBCODE,
+    branch,
+    gain,
+    redeemed,
+    transdate,
+  } = route.params;
   const [users, setUser] = useState([]);
   const [status, setstatus] = useState('');
   const [branchName, setBranchName] = useState('');
   const [gainpts, setgainpts] = useState('');
   const [redeemedpts, setredeemedpts] = useState('');
+  const [date, setDate] = useState('');
 
   useEffect(() => {
     handleFetch();
     setBranchName(branch);
     setgainpts(gain);
     setredeemedpts(redeemed);
+    setDate(transdate);
     console.warn(users);
-    return () => {
-      return setstatus('');
-    };
-  }, []);
+  });
 
   const handleFetch = () => {
     const request = `http://102.37.102.247:5016/CustomerPoints/GetTransactionDetails?salesBcode=${salesBCODE}&docNum=${docNum}&memberNumber=${memberNo}`;
@@ -113,6 +121,8 @@ const SalesTransaction = ({route, navigation}) => {
               <Text color="danger.600" ml={3} fontWeight="bold">
                 {redeemedpts.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
               </Text>
+
+              <Text>{date ? new Date(date).toDateString() : null}</Text>
             </VStack>
           </VStack>
         </Center>
@@ -160,7 +170,11 @@ const SalesTransaction = ({route, navigation}) => {
                       Item Name:{' '}
                     </Text>
                     <Spacer />
-                    <Text color="#5d3915" fontSize={15} my={1}>
+                    <Text
+                      color="#5d3915"
+                      style={{fontSize: RFValue(9.5, 580)}}
+                      // fontSize={9}
+                      my={1}>
                       {user.itmname}
                     </Text>
                   </HStack>
@@ -175,7 +189,7 @@ const SalesTransaction = ({route, navigation}) => {
                     </Text>
                     <Spacer />
                     <Text color="#5d3915" fontSize={15} my={1}>
-                      {user.quantity}
+                      {user.quantity.toFixed(2)}
                     </Text>
                   </HStack>
 
@@ -203,19 +217,11 @@ const SalesTransaction = ({route, navigation}) => {
                     </Text>
                   </HStack> */}
 
-                  <HStack my={1}>
-                    {/* <Text
-                      // color="#5d3915"
-                      color={'muted.500'}
-                      fontSize={11}
-                      fontWeight="bold">
-                      Date:{' '}
-                    </Text> */}
+                  {/* <HStack my={1}>
                     <Text color={'muted.500'} fontSize={12}>
-                      {/* {new Date(user.saledate + 'Z').toUTCString()} */}
                       {new Date(user.saledate).toLocaleDateString()}
                     </Text>
-                  </HStack>
+                  </HStack> */}
                 </VStack>
               </Box>
             );

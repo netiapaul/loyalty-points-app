@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import Snackbar from 'react-native-snackbar';
 import {ImageBackground, StyleSheet, TextInput} from 'react-native';
 import {
   NativeBaseProvider,
@@ -18,14 +19,12 @@ import {
   Link,
   KeyboardAvoidingView,
 } from 'native-base';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Keychain from 'react-native-keychain';
 
 const SignIn = ({navigation}) => {
   const [pinNo, setPin] = useState('');
   const [idNo, setIdno] = useState('');
   const [data, setData] = useState({});
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState(false);
   const [show, setShow] = useState(false);
 
   const handleClick = () => setShow(!show);
@@ -38,60 +37,13 @@ const SignIn = ({navigation}) => {
     return setPin(text);
   };
 
-  // async function storeToken(data) {
-  //   try {
-  //     const username = data.user.memberno;
-  //     const password = data.token;
-  //     await Keychain.setGenericPassword(username, password);
-  //     const jsonValue = JSON.stringify(data);
-  //     await AsyncStorage.setItem('userData', jsonValue);
-  //   } catch (error) {
-  //     console.error('Something went wrong on saving', error);
-  //   }
-  // }
-
-  useEffect(() => {
-    setStatus('');
-    return () => {
-      setStatus('');
-    };
-  }, []);
-
-  async function handleFetch() {
-    try {
-      const reponse = await fetch(
-        'http://102.37.102.247:5016/CustomerPoints/CustomerLogin',
-        {
-          method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            idnumber: idNo,
-            pin: pinNo,
-          }),
-        },
-      );
-      if (reponse.status >= 200 && reponse.status < 400) {
-        const data = await reponse.json();
-        console.warn('Success response', reponse.status);
-        return navigation.navigate('different', {
-          token: data.token,
-          memberNo: data.user.memberno,
-        });
-      } else if (reponse.status === 400) {
-        setStatus('Bad Request:Failed response');
-      } else {
-        // console.warn(reponse.status);
-        // setStatus('Incorrect Details entered');
-        setStatus('other Failed response');
-      }
-    } catch (error) {
-      setStatus('Network request failed connect to the internet');
-      // console.error('CATCH Error', error);
-    }
-  }
+  // useEffect(() => {
+  //   setStatus('');
+  //   return () => {
+  //     // setStatus('');
+  //     console.error('Component did unmount');
+  //   };
+  // }, [status]);
 
   // async function handleFetch() {
   //   try {
@@ -109,23 +61,70 @@ const SignIn = ({navigation}) => {
   //         }),
   //       },
   //     );
-  //     if (reponse.ok) {
+  //     if (reponse.status >= 200 && reponse.status < 400) {
   //       const data = await reponse.json();
-  //       console.warn('Success response', data);
+  //       console.warn('Success response', reponse.status);
+  //       setPin('');
+  //       setIdno('');
   //       return navigation.navigate('different', {
   //         token: data.token,
   //         memberNo: data.user.memberno,
   //       });
+  //     } else if (reponse.status === 400) {
+  //       console.warn('Please Confirm the details entered');
   //     } else {
-  //       console.warn(reponse.status);
+  //       // console.warn(reponse.status);
   //       // setStatus('Incorrect Details entered');
-  //       // console.warn('Failed response', reponse);
+  //       setStatus('Seems to be a server Error');
   //     }
   //   } catch (error) {
-  //     setStatus('Network request failed connect to the internet');
+  //     console.warn('Network request failed connect to the internet');
   //     // console.error('CATCH Error', error);
   //   }
   // }
+
+  async function handleFetch() {
+    try {
+      const reponse = await fetch(
+        'http://102.37.102.247:5016/CustomerPoints/CustomerLogin',
+        {
+          method: 'POST', // *GET, POST, PUT, DELETE, etc.
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            idnumber: idNo,
+            pin: pinNo,
+          }),
+        },
+      );
+      if (reponse.ok) {
+        const data = await reponse.json();
+        // console.warn('Success response', data);
+        return navigation.navigate('different', {
+          token: data.token,
+          memberNo: data.user.memberno,
+        });
+      } else {
+        Snackbar.show({
+          backgroundColor: '#e11d48',
+          text: 'Please confirm details entered',
+          duration: Snackbar.LENGTH_SHORT,
+        });
+        // console.warn(reponse.status);
+        // setStatus(!status);
+      }
+    } catch (error) {
+      console.warn(error);
+      // setStatus(!status);
+      Snackbar.show({
+        backgroundColor: '#e11d48',
+        text: 'Please connect to an internet',
+        duration: Snackbar.LENGTH_SHORT,
+      });
+    }
+  }
 
   // const handleFetch = () => {
   //   fetch('http://102.37.102.247:5016/CustomerPoints/CustomerLogin', {
@@ -199,7 +198,7 @@ const SignIn = ({navigation}) => {
                   _dark={{
                     color: 'coolGray.800',
                   }}>
-                  {status}
+                  Confirm details entered or Connect to an internet connection
                 </Text>
               </HStack>
               {/* <IconButton

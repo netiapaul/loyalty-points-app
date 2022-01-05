@@ -36,7 +36,9 @@ const Dashboard = ({route, navigation}) => {
   const [status, setStatus] = useState('');
   const {token, memberNo} = route.params;
   const [name, setName] = useState('');
-
+  const [points, setPoints] = useState();
+  const [buy, setbuy] = useState();
+  const [redeemed, setredeemed] = useState();
   useEffect(() => {
     handleSubmit();
     // console.warn('name', name);
@@ -66,6 +68,9 @@ const Dashboard = ({route, navigation}) => {
       .then(data => {
         setUser(data[0]);
         setName(data[0].membername);
+        setPoints(data[0].mempointsbal);
+        setbuy(data[0].mempointsbuy);
+        setredeemed(data[0].mempointsredeem);
         console.warn(data[0].membername);
       })
       .catch(() => setStatus('Network request failed connect to the internet'));
@@ -165,7 +170,11 @@ const Dashboard = ({route, navigation}) => {
                     fontSize="4xl"
                     // flex={1}
                     fontWeight={'bold'}>
-                    {user.mempointsbal} pts
+                    {/* {user.mempointsbal} pts */}
+                    {points
+                      ? points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                      : user.mempointsbal}{' '}
+                    pts
                   </Text>
                 </VStack>
               </HStack>
@@ -209,7 +218,9 @@ const Dashboard = ({route, navigation}) => {
                     Total Points
                   </Text>
                   <Text color="light.600" fontSize="sm">
-                    {user.mempointsbal}
+                    {points
+                      ? points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                      : user.mempointsbal}
                   </Text>
                 </VStack>
 
@@ -218,7 +229,11 @@ const Dashboard = ({route, navigation}) => {
                     Redeemed Points
                   </Text>
                   <Text color="danger.600" fontSize="sm">
-                    {user.mempointsredeem}
+                    {redeemed
+                      ? redeemed
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                      : user.mempointsredeem}
                   </Text>
                 </VStack>
 
@@ -227,7 +242,9 @@ const Dashboard = ({route, navigation}) => {
                     Points Buy
                   </Text>
                   <Text color="success.600" fontSize="sm">
-                    {user.mempointsbuy}
+                    {buy
+                      ? buy.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                      : user.mempointsbuy}
                   </Text>
                 </VStack>
               </HStack>
@@ -282,9 +299,9 @@ const Dashboard = ({route, navigation}) => {
                       <Text color="#5d3915" fontWeight="bold">
                         Transaction History
                       </Text>
-                      <Text color="#5d3915" fontSize={10}>
+                      {/* <Text color="#5d3915" fontSize={10}>
                         {new Date().toDateString()}
-                      </Text>
+                      </Text> */}
                     </VStack>
                   </Center>
                 </HStack>
