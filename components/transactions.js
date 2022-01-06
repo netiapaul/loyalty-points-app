@@ -66,22 +66,6 @@ const Transactions = ({route, navigation}) => {
         duration: Snackbar.LENGTH_SHORT,
       });
     }
-
-    // const request = `http://102.37.102.247:5016/CustomerPoints/GetCustomerTransactions?memberNo=${memberNo}`;
-
-    // fetch(request, {
-    //   method: 'GET',
-    //   headers: new Headers({
-    //     Authorization: `Bearer ${token}`,
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json',
-    //   }),
-    // })
-    //   .then(response => response.json())
-    //   .then(response => {
-    //     setUser(JSON.parse(response));
-    //   })
-    //   .catch(() => setStatus('please connect to available network'));
   }
 
   return (
