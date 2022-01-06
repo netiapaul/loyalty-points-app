@@ -24,6 +24,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Keychain from 'react-native-keychain';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Snackbar from 'react-native-snackbar';
 
 const config = {
   dependencies: {
@@ -46,34 +47,81 @@ const Dashboard = ({route, navigation}) => {
   }, []);
 
   async function GetUSerData() {
-    const response = await fetch(
-      `http://102.37.102.247:5016/Customers/members?memberNum=${memberNo}`,
-      {
-        method: 'GET', // *GET, POST, PUT, DELETE, etc.
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+    try {
+      const response = await fetch(
+        `http://102.37.102.247:5016/Customers/members?memberNum=${memberNo}`,
+        {
+          method: 'GET', // *GET, POST, PUT, DELETE, etc.
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
         },
-      },
-    );
-    if (!response.ok) {
-      setStatus('Login is required to view your data');
-    } else {
-      return response.json(); // parses JSON response into native JavaScript objects
-    }
-  }
-  const handleSubmit = () => {
-    GetUSerData()
-      .then(data => {
+      );
+      if (response.ok) {
+        const data = await response.json();
         setUser(data[0]);
         setName(data[0].membername);
         setPoints(data[0].mempointsbal);
         setbuy(data[0].mempointsbuy);
         setredeemed(data[0].mempointsredeem);
         console.warn(data[0].membername);
-      })
-      .catch(() => setStatus('Network request failed connect to the internet'));
+      } else {
+        // return response.json();
+        // return Snackbar.show({
+        //   backgroundColor: '#e11d48',
+        //   text: 'Login is required to view your data',
+        //   duration: Snackbar.LENGTH_SHORT,
+        // });
+        return navigation.goBack();
+      }
+    } catch (error) {
+      return Snackbar.show({
+        backgroundColor: '#e11d48',
+        text: 'Network request failed connect to the internet',
+        duration: Snackbar.LENGTH_SHORT,
+      });
+    }
+
+    // const response = await fetch(
+    //   `http://102.37.102.247:5016/Customers/members?memberNum=${memberNo}`,
+    //   {
+    //     method: 'GET', // *GET, POST, PUT, DELETE, etc.
+    //     headers: {
+    //       Accept: 'application/json',
+    //       'Content-Type': 'application/json',
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   },
+    // );
+    // if (!response.ok) {
+    //   setStatus('Login is required to view your data');
+    // } else {
+    //   return Snackbar.show({
+    //     backgroundColor: '#e11d48',
+    //     text: 'Network request failed connect to the internet',
+    //     duration: Snackbar.LENGTH_SHORT,
+    //   });
+    // }
+  }
+  const handleSubmit = () => {
+    GetUSerData();
+    // .then(data => {
+    //   setUser(data[0]);
+    //   setName(data[0].membername);
+    //   setPoints(data[0].mempointsbal);
+    //   setbuy(data[0].mempointsbuy);
+    //   setredeemed(data[0].mempointsredeem);
+    //   console.warn(data[0].membername);
+    // })
+    // .catch(() => {
+    //   return Snackbar.show({
+    //     backgroundColor: '#e11d48',
+    //     text: 'Network request failed connect to the internet',
+    //     duration: Snackbar.LENGTH_SHORT,
+    //   });
+    // });
   };
 
   return (
@@ -97,11 +145,6 @@ const Dashboard = ({route, navigation}) => {
                   {status}
                 </Text>
               </HStack>
-              {/* <IconButton
-                  variant="unstyled"
-                  icon={<CloseIcon size="3" color="coolGray.600" />}
-                  onPress={() => setShow(false)}
-                /> */}
             </HStack>
           </VStack>
         </Alert>
@@ -110,18 +153,13 @@ const Dashboard = ({route, navigation}) => {
       <HStack
         shadow={2}
         bg="#fff"
-        p="4"
+        p="5"
         justifyContent="space-between"
         alignItems="center">
-        <Text color="#5d3915" fontSize="20" fontWeight="bold">
-          phAMAcore
+        <Text color="#5d3915" fontSize="18" fontWeight="bold">
+          phAMACore Loyalty
         </Text>
         <Spacer />
-        {/* <Link onPress={() => navigation.navigate('profile', {token, memberNo})}>
-          <Avatar bg="blueGray.600" size="sm">
-            {name ? name.match(/\b([A-Z])/g).join('') : null}
-          </Avatar>
-        </Link> */}
       </HStack>
 
       <Box flex={1} bg="#fff">
@@ -157,30 +195,46 @@ const Dashboard = ({route, navigation}) => {
                 shadow: 2,
                 borderWidth: 0,
               }}>
-              <Stack flex={1} space={1}>
-                <Heading size="md" color="#fafafa">
-                  Loyalty Points
+              <Center flex={1}>
+                <Heading size="md" mt={-3} fontWeight={'400'} color="#fafafa">
+                  Loyalty Points Balance
                 </Heading>
-              </Stack>
+              </Center>
 
-              <HStack flex={2} space={10}>
-                <VStack>
-                  <Text
-                    color="#fafafa"
-                    fontSize="4xl"
-                    // flex={1}
-                    fontWeight={'bold'}>
-                    {/* {user.mempointsbal} pts */}
-                    {points
-                      ? points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                      : user.mempointsbal}{' '}
-                    pts
-                  </Text>
-                </VStack>
-              </HStack>
+              <Center flex={1}>
+                <Text color="#fafafa" fontSize="3xl" fontWeight={'bold'}>
+                  {points
+                    ? points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                    : user.mempointsbal}{' '}
+                  pts
+                </Text>
+              </Center>
+
+              <Center flex={1}>
+                <HStack>
+                  <HStack>
+                    <Text color="#fafafa">Earned: </Text>
+                    <Text color="#fafafa">
+                      {buy
+                        ? buy.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        : user.mempointsbuy}
+                    </Text>
+                  </HStack>
+                  <HStack ml={2}>
+                    <Text color="#fafafa">Redemed: </Text>
+                    <Text color="#fafafa">
+                      {redeemed
+                        ? redeemed
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        : user.mempointsredeem}
+                    </Text>
+                  </HStack>
+                </HStack>
+              </Center>
 
               <Divider mb={2} mt={-3} />
-              <Stack justifyContent="flex-end" space={1}>
+              <Center justifyContent="flex-end" space={1}>
                 <Text
                   color="light.50"
                   _dark={{
@@ -189,11 +243,10 @@ const Dashboard = ({route, navigation}) => {
                   fontWeight="400">
                   Last Updated: {new Date().toDateString()}
                 </Text>
-              </Stack>
+              </Center>
             </Box>
           </Box>
 
-          {/* Points Summary */}
           <Box
             bg="#fff"
             flex={1}
@@ -251,9 +304,6 @@ const Dashboard = ({route, navigation}) => {
             </Center>
           </Box>
 
-          {/* <Box bg="#fff" mx={'15'} flex={1} mt={-20} justifyContent="center"> */}
-          {/* Activity Items */}
-
           <VStack bg="#fff" flex={2} mx={'15'}>
             <Text
               color="#5d3915"
@@ -280,12 +330,6 @@ const Dashboard = ({route, navigation}) => {
                   })
                 }>
                 <HStack>
-                  {/* <Image
-                    source={require('../assets/images/picture.png')}
-                    alt="company logo"
-                    style={styles.transactionsImage}
-                    size="sm"
-                  /> */}
                   <Center>
                     <MaterialCommunityIcons
                       name="receipt"
@@ -299,9 +343,6 @@ const Dashboard = ({route, navigation}) => {
                       <Text color="#5d3915" fontWeight="bold">
                         Transaction History
                       </Text>
-                      {/* <Text color="#5d3915" fontSize={10}>
-                        {new Date().toDateString()}
-                      </Text> */}
                     </VStack>
                   </Center>
                 </HStack>
@@ -317,7 +358,6 @@ const Dashboard = ({route, navigation}) => {
               </Link>
             </Box>
           </VStack>
-          {/* </Box> */}
         </VStack>
         <HStack
           shadow={5}
