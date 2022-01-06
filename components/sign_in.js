@@ -1,6 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import Snackbar from 'react-native-snackbar';
-import {ImageBackground, StyleSheet, TextInput} from 'react-native';
+import {
+  ImageBackground,
+  StyleSheet,
+  KeyboardAvoidingView,
+  ScrollView,
+} from 'react-native';
 import {
   NativeBaseProvider,
   VStack,
@@ -17,7 +22,6 @@ import {
   Button,
   Input,
   Link,
-  KeyboardAvoidingView,
 } from 'native-base';
 
 const SignIn = ({navigation}) => {
@@ -36,52 +40,6 @@ const SignIn = ({navigation}) => {
   const handlePin = text => {
     return setPin(text);
   };
-
-  // useEffect(() => {
-  //   setStatus('');
-  //   return () => {
-  //     // setStatus('');
-  //     console.error('Component did unmount');
-  //   };
-  // }, [status]);
-
-  // async function handleFetch() {
-  //   try {
-  //     const reponse = await fetch(
-  //       'http://102.37.102.247:5016/CustomerPoints/CustomerLogin',
-  //       {
-  //         method: 'POST', // *GET, POST, PUT, DELETE, etc.
-  //         headers: {
-  //           Accept: 'application/json',
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify({
-  //           idnumber: idNo,
-  //           pin: pinNo,
-  //         }),
-  //       },
-  //     );
-  //     if (reponse.status >= 200 && reponse.status < 400) {
-  //       const data = await reponse.json();
-  //       console.warn('Success response', reponse.status);
-  //       setPin('');
-  //       setIdno('');
-  //       return navigation.navigate('different', {
-  //         token: data.token,
-  //         memberNo: data.user.memberno,
-  //       });
-  //     } else if (reponse.status === 400) {
-  //       console.warn('Please Confirm the details entered');
-  //     } else {
-  //       // console.warn(reponse.status);
-  //       // setStatus('Incorrect Details entered');
-  //       setStatus('Seems to be a server Error');
-  //     }
-  //   } catch (error) {
-  //     console.warn('Network request failed connect to the internet');
-  //     // console.error('CATCH Error', error);
-  //   }
-  // }
 
   async function handleFetch() {
     try {
@@ -128,60 +86,6 @@ const SignIn = ({navigation}) => {
     }
   }
 
-  // const handleFetch = () => {
-  //   fetch('http://102.37.102.247:5016/CustomerPoints/CustomerLogin', {
-  //     method: 'POST', // *GET, POST, PUT, DELETE, etc.
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       idnumber: idNo,
-  //       pin: pinNo,
-  //     }),
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       return navigation.navigate('different', {
-  //         token: data.token,
-  //         memberNo: data.user.memberno,
-  //       });
-  //     })
-  //     .catch(() => setStatus('Network request failed connect to the internet'));
-
-  //   // try {
-  //   //   await fetch('http://102.37.102.247:5016/CustomerPoints/CustomerLogin', {
-  //   //     method: 'POST', // *GET, POST, PUT, DELETE, etc.
-  //   //     headers: {
-  //   //       Accept: 'application/json',
-  //   //       'Content-Type': 'application/json',
-  //   //     },
-  //   //     body: JSON.stringify({
-  //   //       idnumber: idNo,
-  //   //       pin: pinNo,
-  //   //     }),
-  //   //   })
-  //   //     .then(async response => {
-  //   //       if (!response.ok) {
-  //   //         setStatus('Please Confirm the details entered');
-  //   //       } else {
-  //   //         const data = await response.json();
-  //   //         setData(data);
-  //   //         console.error(data.token);
-  //   //         return navigation.navigate('different', {
-  //   //           token: data.token,
-  //   //           memberNo: data.user.memberno,
-  //   //         });
-  //   //       }
-  //   //     })
-  //   //     .catch(() =>
-  //   //       setStatus('Network request failed connect to the internet'),
-  //   //     );
-  //   // } catch (error) {
-  //   //   console.warn(error);
-  //   // }
-  // };
-
   return (
     <NativeBaseProvider>
       {status ? (
@@ -213,23 +117,26 @@ const SignIn = ({navigation}) => {
         </Alert>
       ) : null}
 
-      {/* <VStack flex={1} bg="#fff"> */}
-      {/* TOP Area */}
-      <Box flex={1} justifyContent={'center'} bg="#fff">
-        <Center>
-          <Image
-            source={require('../assets/images/pcico.png')}
-            alt="Company Logo"
-            size="md"
-          />
-          <Heading size={'2xl'} textAlign="center" color="#5d3915">
-            phAMAcore
-          </Heading>
-        </Center>
-      </Box>
-      <Box bg="#fff" flex={1} style={styles.inputContainer}>
-        <HStack my={3} justifyContent={'center'}>
-          {/* <Image
+      <KeyboardAvoidingView
+        flex={1}
+        keyboardVerticalOffset={-500}
+        behavior="padding">
+        <Box flex={1} justifyContent={'center'} bg="#fafafa">
+          <Center>
+            <Image
+              source={require('../assets/images/pcico.png')}
+              alt="Company Logo"
+              size="md"
+            />
+            <Heading size={'xl'} mt={3} textAlign="center" color="#5d3915">
+              phAMACore Loyalty
+            </Heading>
+          </Center>
+        </Box>
+
+        <Box bg="#fff" flex={1} style={styles.inputContainer}>
+          <HStack my={3} justifyContent={'center'}>
+            {/* <Image
               onPress={() => Alert.alert('landing')}
               source={require('../assets/images/back.png')}
               alt="next icon"
@@ -238,124 +145,118 @@ const SignIn = ({navigation}) => {
               ml="10"
             /> */}
 
-          <Text fontSize="md" style={{textAlign: 'center'}} fontWeight="bold">
-            Sign In
-          </Text>
-        </HStack>
-
-        <Center>
-          <Text
-            mx="10"
-            fontSize="sm"
-            // my="3"
-            style={styles.promoCode}
-            fontWeight="400">
-            Enter your
-            <Text fontWeight="bold"> National ID Number </Text>&
-            <Text fontWeight="bold"> PIN Number </Text>
-            to proceed.
-          </Text>
-        </Center>
-
-        <FormControl bg="#fff" flex={1}>
-          {/* <FormControl.Label>Password</FormControl.Label> */}
-          <Input
-            type="text"
-            mx="auto"
-            mt={5}
-            onChangeText={handleID}
-            value={idNo}
-            placeholder="Enter National ID"
-            w={{
-              base: '75%',
-              md: '25%',
-            }}
-          />
-
-          {/* <FormControl.Label>Password</FormControl.Label> */}
-
-          <Input
-            mx="auto"
-            mt={2}
-            onChangeText={handlePin}
-            value={pinNo}
-            type={show ? 'text' : 'password'}
-            w={{
-              base: '75%',
-              md: '25%',
-            }}
-            InputRightElement={
-              <Button
-                size="xs"
-                bg={'#5d3915'}
-                rounded="none"
-                w="1/6"
-                h="full"
-                onPress={handleClick}>
-                {show ? 'Hide' : 'Show'}
-              </Button>
-            }
-            placeholder="Enter PIN"
-          />
-          {/* <TextInput
-            style={styles.input}
-            onChangeText={handlePin}
-            value={pinNo}
-            placeholder="Enter PIN"
-            placeholderTextColor="#a3a3a3"
-          /> */}
-
-          {!idNo || !pinNo ? (
-            <Button
-              mx="auto"
-              mt={5}
-              w={{
-                base: '75%',
-                md: '25%',
-              }}
-              p={4}
-              bg={'#5d3915'}
-              rounded="5"
-              isDisabled
-              onPress={handleFetch}>
+            <Text fontSize="md" style={{textAlign: 'center'}} fontWeight="bold">
               Sign In
-            </Button>
-          ) : (
-            <Button
-              mx="auto"
-              mt={5}
-              w={{
-                base: '75%',
-                md: '25%',
-              }}
-              p={4}
-              bg={'#5d3915'}
-              rounded="5"
-              onPress={handleFetch}>
-              Sign In
-            </Button>
-          )}
-          <HStack mt="3" justifyContent="center">
-            <Text
-              fontSize="sm"
-              color="coolGray.600"
-              _dark={{
-                color: 'warmGray.200',
-              }}>
-              I'm a new user.{' '}
             </Text>
-            <Link
-              onPress={() => navigation.navigate('register')}
-              _text={{
-                color: 'indigo.500',
-                fontWeight: 'medium',
-                fontSize: 'sm',
-              }}>
-              Sign Up
-            </Link>
           </HStack>
-        </FormControl>
-      </Box>
+
+          <Center>
+            <Text
+              mx="10"
+              fontSize="sm"
+              // my="3"
+              style={styles.promoCode}
+              fontWeight="400">
+              Enter your
+              <Text fontWeight="bold"> National ID Number </Text>&
+              <Text fontWeight="bold"> PIN Number </Text>
+              to proceed.
+            </Text>
+          </Center>
+
+          <FormControl bg="#fff" flex={1}>
+            {/* <FormControl.Label>Password</FormControl.Label> */}
+            <Input
+              type="number"
+              mx="auto"
+              mt={5}
+              onChangeText={handleID}
+              value={idNo}
+              placeholder="Enter National ID"
+              w={{
+                base: '75%',
+                md: '25%',
+              }}
+            />
+
+            {/* <FormControl.Label>Password</FormControl.Label> */}
+
+            <Input
+              mx="auto"
+              mt={2}
+              onChangeText={handlePin}
+              value={pinNo}
+              type={show ? 'number' : 'password'}
+              w={{
+                base: '75%',
+                md: '25%',
+              }}
+              InputRightElement={
+                <Button
+                  size="xs"
+                  bg={'#5d3915'}
+                  rounded="none"
+                  w="1/6"
+                  h="full"
+                  onPress={handleClick}>
+                  {show ? 'Hide' : 'Show'}
+                </Button>
+              }
+              placeholder="Enter PIN"
+            />
+
+            {!idNo || !pinNo ? (
+              <Button
+                mx="auto"
+                mt={5}
+                w={{
+                  base: '75%',
+                  md: '25%',
+                }}
+                p={4}
+                bg={'#5d3915'}
+                rounded="5"
+                isDisabled
+                onPress={handleFetch}>
+                Sign In
+              </Button>
+            ) : (
+              <Button
+                mx="auto"
+                mt={5}
+                w={{
+                  base: '75%',
+                  md: '25%',
+                }}
+                p={4}
+                bg={'#5d3915'}
+                rounded="5"
+                onPress={handleFetch}>
+                Sign In
+              </Button>
+            )}
+            <HStack mt="3" justifyContent="center">
+              <Text
+                fontSize="sm"
+                color="coolGray.600"
+                _dark={{
+                  color: 'warmGray.200',
+                }}>
+                I'm a new user.{' '}
+              </Text>
+              <Link
+                onPress={() => navigation.navigate('register')}
+                _text={{
+                  color: 'indigo.500',
+                  fontWeight: 'medium',
+                  fontSize: 'sm',
+                }}>
+                Sign Up
+              </Link>
+            </HStack>
+          </FormControl>
+        </Box>
+      </KeyboardAvoidingView>
       <VStack bg={'#fff'} mb={0} justifyContent="flex-end">
         <Center>
           <Text fontSize="xs" mx="10">
@@ -389,9 +290,9 @@ const styles = StyleSheet.create({
     marginTop: '1rem',
   },
   inputContainer: {
-    borderWidth: 1,
-    borderTopRightRadius: 30,
-    borderTopLeftRadius: 30,
+    borderWidth: 0.5,
+    // borderTopRightRadius: 30,
+    // borderTopLeftRadius: 30,
     borderBottomColor: '#fff',
   },
   promoCode: {
