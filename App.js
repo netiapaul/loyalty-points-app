@@ -71,20 +71,6 @@ function Home() {
 }
 
 const App = () => {
-  // const [value, setValue] = useState('');
-  // useEffect(() => {
-  //   (async function getToken() {
-  //     try {
-  //       const value = await AsyncStorage.getItem('userData');
-  //       return setValue(JSON.parse(value).token);
-  //     } catch (error) {
-  //       console.warn('Something went wrong on fetching', error);
-  //     }
-  //   })();
-  //   return () => {
-  //     setValue('');
-  //   };
-  // }, []);
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -119,21 +105,7 @@ const App = () => {
             headerShown: false,
           }}
         />
-        {/* <Stack.Screen
-          name="dashboard"
-          component={Home}
-          options={{
-            headerShown: false,
-          }}
-        /> */}
-        <Stack.Screen
-          name="register"
-          component={Register}
-          options={{
-            headerShown: false,
-            title: 'Register',
-          }}
-        />
+
         <Stack.Screen
           name="transactions"
           component={Transactions}
@@ -146,6 +118,14 @@ const App = () => {
           component={TransactionDetails}
           options={{
             title: 'Transaction Details',
+          }}
+        />
+        <Stack.Screen
+          name="register"
+          component={Register}
+          options={{
+            headerShown: false,
+            title: 'Register',
           }}
         />
 
@@ -163,48 +143,13 @@ const App = () => {
             headerShown: true,
           }}
         />
-        {/* {value ? (
-          <>
-            <Stack.Screen
-              name="dashboard"
-              component={Home}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="points"
-              component={PointsTransaction}
-              options={{
-                title: 'Points Transactions',
-              }}
-            />
-            <Stack.Screen
-              name="sales"
-              component={TransactionDetails}
-              options={{
-                title: 'Sales Transactions',
-              }}
-            />
-          </>
-        ) : (
-          <>
-            <Stack.Screen
-              name="signIn"
-              component={SignIn}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="landing"
-              component={Landing}
-              options={{
-                headerShown: false,
-              }}
-            />
-          </>
-        )} */}
+        {/* <Stack.Screen
+          name="dashboard"
+          component={Home}
+          options={{
+            headerShown: false,
+          }}
+        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
