@@ -788,9 +788,9 @@ const Dashboard = ({route, navigation}) => {
            //   <Text fontSize="xs" mx="10">
            //     Powered by
            //   </Text>
-          //    <Text fontSize="xs" fontWeight="bold" color="#5d3915" mx="10">
-          //      Corebase Solutions
-          //    </Text>
+          //    <Text fontSize="10" fontWeight="bold" color="#5d3915" mx="10">
+              // Corebase Solutions
+            // </Text>
           //  </Center>
         //  </VStack> 
       </Box> */}

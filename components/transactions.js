@@ -188,9 +188,9 @@ const Transactions = ({route, navigation}) => {
               alt="Company Logo"
               size="xs"
             />
-            {/* <Text fontSize="xs" fontWeight="bold" color="#5d3915" mx="10">
-            Corebase Solutions
-          </Text> */}
+            <Text fontSize="10" fontWeight="bold" color="#5d3915" mx="10">
+              Corebase Solutions
+            </Text>
           </Center>
         </VStack>
       </Box>
@@ -203,8 +203,8 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
   image: {
-    maxWidth: 20,
-    maxHeight: 20,
+    maxWidth: 15,
+    maxHeight: 15,
   },
   transactionsImage: {
     width: 50,

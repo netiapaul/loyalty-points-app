@@ -92,10 +92,9 @@ const Landing = ({navigation}) => {
                 alt="Company Logo"
                 size="xs"
               />
-
-              {/* <Text fontSize="xs" fontWeight="bold" color="#5d3915">
+              <Text fontSize="10" fontWeight="bold" color="#5d3915" mx="10">
                 Corebase Solutions
-              </Text> */}
+              </Text>
             </Center>
           </VStack>
         </Box>
@@ -106,10 +105,8 @@ const Landing = ({navigation}) => {
 
 const styles = StyleSheet.create({
   image: {
-    // flex: 1,
-    // justifyContent: 'center',
-    maxWidth: 20,
-    maxHeight: 20,
+    maxWidth: 15,
+    maxHeight: 15,
   },
 
   inputContainer: {
