@@ -70,6 +70,7 @@ const SignIn = ({navigation}) => {
           memberNo: data.user.memberno,
         });
       } else {
+        setIsLoading(false);
         Snackbar.show({
           backgroundColor: '#e11d48',
           text: 'Please confirm details entered',
@@ -79,6 +80,7 @@ const SignIn = ({navigation}) => {
         // setStatus(!status);
       }
     } catch (error) {
+      setIsLoading(false);
       console.warn(error);
       // setStatus(!status);
       Snackbar.show({
@@ -124,7 +126,7 @@ const SignIn = ({navigation}) => {
         flex={1}
         keyboardVerticalOffset={-500}
         behavior="padding">
-        <Box flex={1} justifyContent={'center'} bg="#fafafa">
+        <Box py={20} justifyContent={'center'} bg="#fafafa">
           <Center>
             <Image
               source={require('../assets/images/pcico.png')}
