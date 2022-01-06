@@ -11,6 +11,7 @@ import {
   Spacer,
   Divider,
   Image,
+  Spinner,
 } from 'native-base';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import Snackbar from 'react-native-snackbar';
@@ -38,6 +39,7 @@ const SalesTransaction = ({route, navigation}) => {
   const [gainpts, setgainpts] = useState('');
   const [redeemedpts, setredeemedpts] = useState('');
   const [date, setDate] = useState('');
+  const [isloading, setIsLoading] = useState(true);
 
   useEffect(() => {
     handleFetch();
@@ -45,7 +47,7 @@ const SalesTransaction = ({route, navigation}) => {
     setgainpts(gain);
     setredeemedpts(redeemed);
     setDate(transdate);
-    console.warn(users);
+    // console.warn(users);
   });
 
   async function handleFetch() {
@@ -64,6 +66,7 @@ const SalesTransaction = ({route, navigation}) => {
       if (response.ok) {
         const data = await response.json();
         setUser(data);
+        setIsLoading(false);
       } else {
         return navigation.goBack();
       }
@@ -94,191 +97,160 @@ const SalesTransaction = ({route, navigation}) => {
 
   return (
     <NativeBaseProvider config={config}>
-      {status ? (
-        <Alert w="100%" status="error">
-          <VStack space={2} flexShrink={1} w="100%">
-            <HStack
-              flexShrink={1}
-              space={1}
-              alignItems="center"
-              justifyContent="space-between">
-              <HStack space={2} flexShrink={1} alignItems="center">
-                <Alert.Icon />
-                <Text
-                  fontSize="md"
-                  fontWeight="medium"
-                  _dark={{
-                    color: 'coolGray.800',
-                  }}>
-                  {status}
-                </Text>
+      <Box flex={1} bg={'#fff'}>
+        {/* {status ? (
+          <Alert w="100%" status="error">
+            <VStack space={2} flexShrink={1} w="100%">
+              <HStack
+                flexShrink={1}
+                space={1}
+                alignItems="center"
+                justifyContent="space-between">
+                <HStack space={2} flexShrink={1} alignItems="center">
+                  <Alert.Icon />
+                  <Text
+                    fontSize="md"
+                    fontWeight="medium"
+                    _dark={{
+                      color: 'coolGray.800',
+                    }}>
+                    {status}
+                  </Text>
+                </HStack>
+      
               </HStack>
-              {/* <IconButton
-                  variant="unstyled"
-                  icon={<CloseIcon size="3" color="coolGray.600" />}
-                  onPress={() => setShow(false)}
-                /> */}
-            </HStack>
-          </VStack>
-        </Alert>
-      ) : null}
-
-      <HStack
-        bg="#fff"
-        p="5"
-        justifyContent="space-between"
-        alignItems="center">
-        <Center mx={'auto'}>
-          <VStack>
-            <Text color="#5d3915" fontSize="20" fontWeight="bold">
-              Total Cost:{' '}
-              {users
-                .reduce((previousValue, curr) => {
-                  return previousValue + curr.totalCost;
-                }, 0)
-                .toFixed(2)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            </Text>
-
-            <VStack ml={20}>
-              <Text color="success.600" ml={3} fontWeight="bold">
-                {gainpts.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              </Text>
-              <Text color="danger.600" ml={3} fontWeight="bold">
-                {redeemedpts.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              </Text>
             </VStack>
-            <Text mx={'auto'}>
-              {date ? new Date(date).toDateString() : null}
-            </Text>
-          </VStack>
-        </Center>
-      </HStack>
+          </Alert>
+        ) : null} */}
 
-      <Box p="2" flex={1} bg="#fff">
-        <ScrollView>
-          {users.map((user, index) => {
-            return (
-              <Box
-                p="5"
-                m="2"
-                bg="muted.50"
-                key={index}
-                borderRadius="md"
-                borderColor="coolGray.200"
-                borderWidth="1"
-                shadow={3}>
+        {isloading ? (
+          <Center flex={1}>
+            <Spinner size="lg" color="warning.500" />
+          </Center>
+        ) : (
+          <>
+            <HStack
+              bg="#fff"
+              p="2"
+              justifyContent="space-between"
+              alignItems="center">
+              <Center mx={'auto'}>
                 <VStack>
-                  {/* <Center>
+                  <Text color="#5d3915" fontSize="18" fontWeight="500">
+                    Total Cost:{' '}
+                    {users
+                      .reduce((previousValue, curr) => {
+                        return previousValue + curr.totalCost;
+                      }, 0)
+                      .toFixed(2)
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  </Text>
+
+                  <VStack ml={20}>
+                    <Text color="success.600" ml={3} fontWeight="bold">
+                      {gainpts.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    </Text>
+                    <Text color="danger.600" ml={3} fontWeight="bold">
+                      {redeemedpts
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    </Text>
+                  </VStack>
+                  <Text mx={'auto'}>
+                    {date ? new Date(date).toDateString() : null}
+                  </Text>
+                </VStack>
+              </Center>
+            </HStack>
+
+            {/* SCROLLVIEW */}
+            <ScrollView>
+              {users.map((user, index) => {
+                return (
+                  <Box
+                    p="5"
+                    m="2"
+                    bg="muted.50"
+                    key={index}
+                    borderRadius="md"
+                    borderColor="coolGray.200"
+                    borderWidth="1"
+                    shadow={3}>
+                    <VStack>
+                      {/* <Center>
                     <Text fontWeight="bold">{user.itmname}</Text>
                     <Divider my="2" />
                   </Center> */}
 
-                  <HStack>
-                    <Text
-                      color="#5d3915"
-                      fontSize={15}
-                      my={1}
-                      fontWeight="bold">
-                      Item Code:{' '}
-                    </Text>
-                    <Spacer />
-                    <Text color="#5d3915" fontSize={15} my={1}>
-                      {user.itmcode}
-                    </Text>
-                  </HStack>
+                      <HStack>
+                        <Text
+                          color="#5d3915"
+                          fontSize={15}
+                          my={1}
+                          fontWeight="bold">
+                          Item Code:{' '}
+                        </Text>
+                        <Spacer />
+                        <Text color="#5d3915" fontSize={15} my={1}>
+                          {user.itmcode}
+                        </Text>
+                      </HStack>
 
-                  <HStack>
-                    <Text
-                      color="#5d3915"
-                      fontSize={15}
-                      my={1}
-                      fontWeight="bold">
-                      Item Name:{' '}
-                    </Text>
-                    <Spacer />
-                    <Text
-                      color="#5d3915"
-                      style={{fontSize: RFValue(9.5, 580)}}
-                      // fontSize={9}
-                      my={1}>
-                      {user.itmname}
-                    </Text>
-                  </HStack>
+                      <HStack>
+                        <Text
+                          color="#5d3915"
+                          fontSize={15}
+                          my={1}
+                          fontWeight="bold">
+                          Item Name:{' '}
+                        </Text>
+                        <Spacer />
+                        <Text
+                          color="#5d3915"
+                          style={{fontSize: RFValue(9.5, 580)}}
+                          // fontSize={9}
+                          my={1}>
+                          {user.itmname}
+                        </Text>
+                      </HStack>
 
-                  <HStack>
-                    <Text
-                      color="#5d3915"
-                      fontSize={15}
-                      my={1}
-                      fontWeight="bold">
-                      Total Quantity:{' '}
-                    </Text>
-                    <Spacer />
-                    <Text color="#5d3915" fontSize={15} my={1}>
-                      {user.quantity.toFixed(2)}
-                    </Text>
-                  </HStack>
+                      <HStack>
+                        <Text
+                          color="#5d3915"
+                          fontSize={15}
+                          my={1}
+                          fontWeight="bold">
+                          Total Quantity:{' '}
+                        </Text>
+                        <Spacer />
+                        <Text color="#5d3915" fontSize={15} my={1}>
+                          {user.quantity.toFixed(2)}
+                        </Text>
+                      </HStack>
 
-                  <HStack>
-                    <Text
-                      fontWeight="bold"
-                      color="#5d3915"
-                      fontSize={15}
-                      my={1}>
-                      Item Cost:{' '}
-                    </Text>
-                    <Spacer />
-                    <Text color="#5d3915" fontSize={15} my={1}>
-                      {user.totalCost.toFixed(2)}
-                    </Text>
-                  </HStack>
+                      <HStack>
+                        <Text
+                          fontWeight="bold"
+                          color="#5d3915"
+                          fontSize={15}
+                          my={1}>
+                          Item Cost:{' '}
+                        </Text>
+                        <Spacer />
+                        <Text color="#5d3915" fontSize={15} my={1}>
+                          {user.totalCost.toFixed(2)}
+                        </Text>
+                      </HStack>
+                    </VStack>
+                  </Box>
+                );
+              })}
+            </ScrollView>
+          </>
+        )}
 
-                  {/* <HStack my={1}>
-                    <Text color="success.600" fontWeight="bold">
-                      Received: {user.mempointsbuy}
-                    </Text>
-                    <Spacer />
-                    <Text color="danger.600" ml={2} fontWeight="bold">
-                      Redeemed: {user.mempointsredeem}
-                    </Text>
-                  </HStack> */}
-
-                  {/* <HStack my={1}>
-                    <Text color={'muted.500'} fontSize={12}>
-                      {new Date(user.saledate).toLocaleDateString()}
-                    </Text>
-                  </HStack> */}
-                </VStack>
-              </Box>
-            );
-          })}
-        </ScrollView>
-        {/* {users.map((user, index) => {
-          return (
-            <HStack my={1} key={index}>
-              <Text color="success.600" fontWeight="bold">
-                Received: {user.mempointsbuy}
-              </Text>
-              <Spacer />
-              <Text color="danger.600" ml={2} fontWeight="bold">
-                Redeemed: {user.mempointsredeem}
-              </Text>
-              <Text>{+user.totalCost}</Text>
-            </HStack>
-          );
-        })} */}
-        {/* <HStack>
-          <Text>Total Cost:</Text>
-          <Text>
-            {users.reduce((previousValue, curr) => {
-              return previousValue + curr.totalCost;
-            }, 0)}
-          </Text>
-        </HStack> */}
-
-        <VStack justifyContent="flex-end">
+        <VStack justifyContent="flex-end" bg={'#fff'}>
           <Center>
             <Text fontSize="xs" mx="10">
               Powered by
