@@ -218,8 +218,8 @@ const SignIn = ({navigation}) => {
             alt="Company Logo"
             size="md"
           />
-          <Heading size={'2xl'} textAlign="center" color="#5d3915">
-            phAMAcore
+          <Heading size={'xl'} mt={3} textAlign="center" color="#5d3915">
+            phAMACore Loyalty
           </Heading>
         </Center>
       </Box>
@@ -401,9 +401,9 @@ const styles = StyleSheet.create({
     marginTop: '1rem',
   },
   inputContainer: {
-    borderWidth: 1,
-    borderTopRightRadius: 30,
-    borderTopLeftRadius: 30,
+    borderWidth: 0.5,
+    // borderTopRightRadius: 30,
+    // borderTopLeftRadius: 30,
     borderBottomColor: '#fff',
   },
   promoCode: {
