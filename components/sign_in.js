@@ -22,6 +22,7 @@ import {
   Button,
   Input,
   Link,
+  Spinner,
 } from 'native-base';
 
 const SignIn = ({navigation}) => {
@@ -30,6 +31,7 @@ const SignIn = ({navigation}) => {
   const [data, setData] = useState({});
   const [status, setStatus] = useState(false);
   const [show, setShow] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
 
   const handleClick = () => setShow(!show);
 
@@ -62,6 +64,7 @@ const SignIn = ({navigation}) => {
         setPin('');
         setIdno('');
         // console.warn('Success response', data);
+        setIsLoading(false);
         return navigation.navigate('different', {
           token: data.token,
           memberNo: data.user.memberno,
@@ -217,8 +220,10 @@ const SignIn = ({navigation}) => {
                 bg={'#5d3915'}
                 rounded="5"
                 isDisabled
-                onPress={handleFetch}>
-                Sign In
+                onPress={() => {
+                  handleFetch();
+                }}>
+                Sign in
               </Button>
             ) : (
               <Button
@@ -231,8 +236,17 @@ const SignIn = ({navigation}) => {
                 p={4}
                 bg={'#5d3915'}
                 rounded="5"
-                onPress={handleFetch}>
-                Sign In
+                onPress={() => {
+                  setTimeout(() => {
+                    handleFetch();
+                    setIsLoading(true);
+                  }, 1000);
+                }}>
+                {isloading ? (
+                  <Spinner size="sm" color="warning.500" />
+                ) : (
+                  'Sign in'
+                )}
               </Button>
             )}
             <HStack mt="3" justifyContent="center">
