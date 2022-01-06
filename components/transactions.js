@@ -55,9 +55,11 @@ const Transactions = ({route, navigation}) => {
         setUser(JSON.parse(data));
         setIsLoading(false);
       } else {
+        setIsLoading(false);
         return navigation.goBack();
       }
     } catch (error) {
+      // setIsLoading(false);
       return Snackbar.show({
         backgroundColor: '#e11d48',
         text: 'Network request failed connect to the internet',
@@ -131,7 +133,6 @@ const Transactions = ({route, navigation}) => {
                   key={index}
                   borderRadius="md"
                   borderColor="coolGray.200"
-                  onPress={() => console.warn('pressed')}
                   borderWidth="1"
                   shadow={1}>
                   <Link
