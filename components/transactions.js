@@ -53,9 +53,8 @@ const Transactions = ({route, navigation}) => {
       if (response.ok) {
         const data = await response.json();
         setUser(JSON.parse(data));
-        setIsLoading(false);
+        return setIsLoading(false);
       } else {
-        setIsLoading(false);
         return navigation.goBack();
       }
     } catch (error) {
@@ -63,7 +62,7 @@ const Transactions = ({route, navigation}) => {
       return Snackbar.show({
         backgroundColor: '#e11d48',
         text: 'Network request failed connect to the internet',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
       });
     }
   }

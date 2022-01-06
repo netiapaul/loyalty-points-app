@@ -74,7 +74,7 @@ const SignIn = ({navigation}) => {
         Snackbar.show({
           backgroundColor: '#e11d48',
           text: 'Please confirm details entered',
-          duration: Snackbar.LENGTH_SHORT,
+          duration: Snackbar.LENGTH_LONG,
         });
         // console.warn(reponse.status);
         // setStatus(!status);
@@ -86,7 +86,7 @@ const SignIn = ({navigation}) => {
       Snackbar.show({
         backgroundColor: '#e11d48',
         text: 'Please connect to an internet',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
       });
     }
   }
@@ -240,8 +240,8 @@ const SignIn = ({navigation}) => {
                 rounded="5"
                 onPress={() => {
                   setTimeout(() => {
-                    handleFetch();
                     setIsLoading(true);
+                    handleFetch();
                   }, 1000);
                 }}>
                 {isloading ? (

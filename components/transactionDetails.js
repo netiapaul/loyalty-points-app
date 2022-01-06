@@ -48,7 +48,7 @@ const SalesTransaction = ({route, navigation}) => {
     setredeemedpts(redeemed);
     setDate(transdate);
     // console.warn(users);
-  });
+  }, []);
 
   async function handleFetch() {
     try {
@@ -66,15 +66,16 @@ const SalesTransaction = ({route, navigation}) => {
       if (response.ok) {
         const data = await response.json();
         setUser(data);
-        setIsLoading(false);
+        return setIsLoading(false);
       } else {
+        // setIsLoading(false);
         return navigation.goBack();
       }
     } catch (error) {
       return Snackbar.show({
         backgroundColor: '#e11d48',
         text: 'Network request failed connect to the internet',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
       });
     }
 
@@ -129,15 +130,22 @@ const SalesTransaction = ({route, navigation}) => {
           </Center>
         ) : (
           <>
-            <HStack
+            {/* <HStack
               bg="#fff"
               p="2"
               justifyContent="space-between"
               alignItems="center">
               <Center mx={'auto'}>
                 <VStack>
-                  <Text color="#5d3915" fontSize="18" fontWeight="500">
-                    Total Cost:{' '}
+                  <Text mx={'auto'} color={'muted.500'}>
+                    {date ? new Date(date).toDateString() : null}
+                  </Text>
+                  <Text
+                    alignItems="center"
+                    color="#5d3915"
+                    fontSize="18"
+                    fontWeight="500">
+                    Kshs:{' '}
                     {users
                       .reduce((previousValue, curr) => {
                         return previousValue + curr.totalCost;
@@ -147,29 +155,37 @@ const SalesTransaction = ({route, navigation}) => {
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                   </Text>
 
-                  <VStack ml={20}>
-                    <Text color="success.600" ml={3} fontWeight="bold">
-                      {gainpts.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                    </Text>
-                    <Text color="danger.600" ml={3} fontWeight="bold">
-                      {redeemedpts
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                    </Text>
-                  </VStack>
-                  <Text mx={'auto'}>
-                    {date ? new Date(date).toDateString() : null}
-                  </Text>
+                  <Center>
+                    <HStack space={3}>
+                      <HStack>
+                        <Text>EPts: </Text>
+                        <Text color="success.600" fontWeight="bold">
+                          {gainpts
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        </Text>
+                      </HStack>
+                      <HStack>
+                        <Text>RPts: </Text>
+
+                        <Text color="danger.600" fontWeight="bold">
+                          {redeemedpts
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        </Text>
+                      </HStack>
+                    </HStack>
+                  </Center>
                 </VStack>
               </Center>
-            </HStack>
+            </HStack> */}
 
             {/* SCROLLVIEW */}
             <ScrollView>
               {users.map((user, index) => {
                 return (
                   <Box
-                    p="5"
+                    p="3"
                     m="2"
                     bg="muted.50"
                     key={index}
@@ -177,13 +193,75 @@ const SalesTransaction = ({route, navigation}) => {
                     borderColor="coolGray.200"
                     borderWidth="1"
                     shadow={3}>
+                    <HStack justifyContent="space-between" alignItems="center">
+                      <Center mx={'auto'}>
+                        <VStack>
+                          <HStack mx={'auto'}>
+                            <Text mx={'auto'} color={'muted.500'} fontSize={10}>
+                              {date ? new Date(date).toDateString() : null}{' '}
+                            </Text>
+                            <Divider
+                              orientation="vertical"
+                              // thickness={2}
+                              bg={'muted.500'}
+                              mx={1}
+                            />
+                            <Text mx={'auto'} color={'muted.500'} fontSize={10}>
+                              {branchName}
+                            </Text>
+                          </HStack>
+                          {/* <Text mx={'auto'} color={'muted.500'} fontSize={12}>
+                            {date ? new Date(date).toDateString() : null}{' '}
+                            <Divider /> {branchName}
+                          </Text> */}
+                          <Text
+                            alignItems="center"
+                            color="#5d3915"
+                            fontSize="18"
+                            mx={'auto'}
+                            fontWeight="500">
+                            Kshs: {user.totalCost.toFixed(2)}
+                            {/* {users
+                              .reduce((previousValue, curr) => {
+                                return previousValue + curr.totalCost;
+                              }, 0)
+                              .toFixed(2)
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} */}
+                          </Text>
+
+                          <Center>
+                            <HStack space={3}>
+                              <HStack>
+                                <Text>EPts: </Text>
+                                <Text color="success.600" fontWeight="bold">
+                                  {user.mempointsbuy
+                                    .toString()
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                </Text>
+                              </HStack>
+                              <HStack>
+                                <Text>RPts: </Text>
+
+                                <Text color="danger.600" fontWeight="bold">
+                                  {user.mempointsredeem
+                                    .toString()
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                </Text>
+                              </HStack>
+                            </HStack>
+                          </Center>
+                        </VStack>
+                      </Center>
+                    </HStack>
+
                     <VStack>
                       {/* <Center>
                     <Text fontWeight="bold">{user.itmname}</Text>
                     <Divider my="2" />
                   </Center> */}
-
-                      <HStack>
+                      <Divider my={2} />
+                      {/* <HStack>
                         <Text
                           color="#5d3915"
                           fontSize={15}
@@ -195,53 +273,44 @@ const SalesTransaction = ({route, navigation}) => {
                         <Text color="#5d3915" fontSize={15} my={1}>
                           {user.itmcode}
                         </Text>
-                      </HStack>
+                      </HStack> */}
 
                       <HStack>
-                        <Text
-                          color="#5d3915"
-                          fontSize={15}
-                          my={1}
-                          fontWeight="bold">
-                          Item Name:{' '}
-                        </Text>
+                        <VStack>
+                          <Text
+                            color="#5d3915"
+                            style={{fontSize: RFValue(10, 580)}}
+                            // fontSize={15}
+                            my={1}
+                            fontWeight={500}>
+                            {user.itmname}
+                          </Text>
+                          <HStack>
+                            <Text
+                              color={'muted.500'}
+                              fontSize={14}
+                              mb={1}
+                              fontWeight={400}>
+                              {user.itmcode}
+                            </Text>
+                            <Spacer />
+                            <Text color={'muted.500'} fontSize={14}>
+                              Qty: {user.quantity}
+                            </Text>
+                          </HStack>
+                        </VStack>
+
                         <Spacer />
                         <Text
                           color="#5d3915"
-                          style={{fontSize: RFValue(9.5, 580)}}
+                          // style={{fontSize: RFValue(9.5, 580)}}
                           // fontSize={9}
                           my={1}>
-                          {user.itmname}
-                        </Text>
-                      </HStack>
-
-                      <HStack>
-                        <Text
-                          color="#5d3915"
-                          fontSize={15}
-                          my={1}
-                          fontWeight="bold">
-                          Total Quantity:{' '}
-                        </Text>
-                        <Spacer />
-                        <Text color="#5d3915" fontSize={15} my={1}>
-                          {user.quantity.toFixed(2)}
-                        </Text>
-                      </HStack>
-
-                      <HStack>
-                        <Text
-                          fontWeight="bold"
-                          color="#5d3915"
-                          fontSize={15}
-                          my={1}>
-                          Item Cost:{' '}
-                        </Text>
-                        <Spacer />
-                        <Text color="#5d3915" fontSize={15} my={1}>
                           {user.totalCost.toFixed(2)}
                         </Text>
                       </HStack>
+
+                      <Divider my={2} />
                     </VStack>
                   </Box>
                 );
@@ -261,9 +330,9 @@ const SalesTransaction = ({route, navigation}) => {
               alt="Company Logo"
               size="xs"
             />
-            {/* <Text fontSize="xs" fontWeight="bold" color="#5d3915" mx="10">
+            <Text fontSize="10" fontWeight="bold" color="#5d3915" mx="10">
               Corebase Solutions
-            </Text> */}
+            </Text>
           </Center>
         </VStack>
       </Box>
@@ -276,8 +345,8 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
   image: {
-    maxWidth: 20,
-    maxHeight: 20,
+    maxWidth: 15,
+    maxHeight: 15,
   },
   transactionsImage: {
     width: 50,

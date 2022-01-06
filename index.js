@@ -16,14 +16,17 @@ AppRegistry.registerComponent(appName, () => {
   //     console.log('app running');
   //   }, 6000);
   // })();
+  // setTimeout(() => {
+  //   console.log('app running');
+  //   console.log('app running');
+  //   console.log('app running');
+  //   console.log('app running');
+  //   console.log('app running');
+  // }, 6000);
+  // clearInterval(setTimeout);
   setTimeout(() => {
-    console.log('app running');
-    console.log('app running');
-    console.log('app running');
-    console.log('app running');
-    console.log('app running');
-  }, 6000);
-  clearInterval(setTimeout);
-  SplashScreen.hide();
+    SplashScreen.hide();
+  }, 5000);
+
   return App;
 });

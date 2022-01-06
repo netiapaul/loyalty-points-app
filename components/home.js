@@ -97,7 +97,7 @@ const Dashboard = ({route, navigation}) => {
         setbuy(data[0].mempointsbuy);
         setredeemed(data[0].mempointsredeem);
         console.warn(data[0].membername);
-        setIsLoading(false);
+        return setIsLoading(false);
       } else {
         // return response.json();
         // return Snackbar.show({
@@ -111,7 +111,7 @@ const Dashboard = ({route, navigation}) => {
       return Snackbar.show({
         backgroundColor: '#e11d48',
         text: 'Network request failed connect to the internet',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
       });
     }
 
@@ -314,12 +314,13 @@ const Dashboard = ({route, navigation}) => {
                     // shadow={1}
                     borderWidth="1">
                     <Text fontWeight="500" fontSize={12} my={1}>
-                      Last 5 Transactions:
+                      Last 5 Transactions
                     </Text>
                     <Divider my={1} />
+
                     {transactions.slice(0, 5).map((transaction, index) => {
                       return (
-                        <Box p={1}>
+                        <Box p={1} key={index}>
                           <HStack>
                             <VStack>
                               <Text
@@ -805,7 +806,6 @@ const Dashboard = ({route, navigation}) => {
             <Center>
               <MaterialCommunityIcons name="home" color={'#c58c4f'} size={20} />
             </Center>
-
             <Text color="#5d3915" fontSize="10">
               Home
             </Text>
