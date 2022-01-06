@@ -13,6 +13,7 @@ import {
   Image,
 } from 'native-base';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
+import Snackbar from 'react-native-snackbar';
 
 const config = {
   dependencies: {
@@ -47,23 +48,49 @@ const SalesTransaction = ({route, navigation}) => {
     console.warn(users);
   });
 
-  const handleFetch = () => {
-    const request = `http://102.37.102.247:5016/CustomerPoints/GetTransactionDetails?salesBcode=${salesBCODE}&docNum=${docNum}&memberNumber=${memberNo}`;
+  async function handleFetch() {
+    try {
+      const response = await fetch(
+        `http://102.37.102.247:5016/CustomerPoints/GetTransactionDetails?salesBcode=${salesBCODE}&docNum=${docNum}&memberNumber=${memberNo}`,
+        {
+          method: 'GET', // *GET, POST, PUT, DELETE, etc.
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data);
+      } else {
+        return navigation.goBack();
+      }
+    } catch (error) {
+      return Snackbar.show({
+        backgroundColor: '#e11d48',
+        text: 'Network request failed connect to the internet',
+        duration: Snackbar.LENGTH_SHORT,
+      });
+    }
 
-    fetch(request, {
-      method: 'GET',
-      headers: new Headers({
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      }),
-    })
-      .then(response => response.json())
-      .then(response => {
-        setUser(response);
-      })
-      .catch(() => setstatus('please connect to a working network'));
-  };
+    // const request = `http://102.37.102.247:5016/CustomerPoints/GetTransactionDetails?salesBcode=${salesBCODE}&docNum=${docNum}&memberNumber=${memberNo}`;
+
+    // fetch(request, {
+    //   method: 'GET',
+    //   headers: new Headers({
+    //     Authorization: `Bearer ${token}`,
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json',
+    //   }),
+    // })
+    // .then(response => response.json())
+    // .then(response => {
+    //   setUser(response);
+    // })
+    // .catch(() => setstatus('please connect to a working network'));
+  }
 
   return (
     <NativeBaseProvider config={config}>
