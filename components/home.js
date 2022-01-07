@@ -185,7 +185,7 @@ const Dashboard = ({route, navigation}) => {
         <HStack
           shadow={2}
           bg="#fff"
-          p="5"
+          p="4"
           justifyContent="space-between"
           alignItems="center">
           <Text color="#5d3915" fontSize="18" fontWeight="bold">
@@ -243,7 +243,7 @@ const Dashboard = ({route, navigation}) => {
                       </Heading>
                     </Center>
 
-                    <Center flex={1}>
+                    <Center flex={2}>
                       <Text color="#fafafa" fontSize="3xl" fontWeight={'bold'}>
                         {points
                           ? points
@@ -254,7 +254,7 @@ const Dashboard = ({route, navigation}) => {
                       </Text>
                     </Center>
 
-                    <Center flex={1}>
+                    <Center flex={1} p={4}>
                       <HStack>
                         <HStack>
                           <Text color="#fafafa">Earned: </Text>
@@ -280,7 +280,7 @@ const Dashboard = ({route, navigation}) => {
                     </Center>
 
                     <Divider mb={2} mt={-3} />
-                    <Center justifyContent="flex-end" space={1}>
+                    <Center justifyContent="flex-end">
                       <Text
                         color="light.50"
                         _dark={{
@@ -294,14 +294,14 @@ const Dashboard = ({route, navigation}) => {
                 </Box>
 
                 <VStack bg="#fff" flex={2} mx={'15'}>
-                  <Text
+                  {/* <Text
                     color="#5d3915"
                     fontSize="md"
                     mb={5}
                     ml={2}
                     fontWeight={'bold'}>
                     Activities
-                  </Text>
+                  </Text> */}
 
                   <Box
                     p="1"
@@ -325,7 +325,7 @@ const Dashboard = ({route, navigation}) => {
                             <VStack>
                               <Text
                                 color={'muted.800'}
-                                fontWeight="bold"
+                                fontWeight="600"
                                 fontSize={15}>
                                 {transaction.DOCNUM}
                               </Text>
@@ -360,17 +360,17 @@ const Dashboard = ({route, navigation}) => {
                             <VStack>
                               <Text
                                 color={'muted.800'}
-                                fontWeight="bold"
+                                fontWeight="600"
                                 fontSize={15}>
                                 Kshs.
-                                {transaction.DOCNUM}
+                                {transaction.Itmtotalinc.toFixed(2)}
                               </Text>
                               <HStack space={3}>
                                 <Text
                                   color={'muted.800'}
                                   fontWeight="400"
                                   fontSize={10}>
-                                  EPts:{' '}
+                                  Earned:{' '}
                                   {transaction.MEMPOINTSBUY.toString().replace(
                                     /\B(?=(\d{3})+(?!\d))/g,
                                     ',',
@@ -381,7 +381,7 @@ const Dashboard = ({route, navigation}) => {
                                   color={'muted.800'}
                                   fontWeight="400"
                                   fontSize={10}>
-                                  RPts:{' '}
+                                  Redeemed:{' '}
                                   {transaction.MEMPOINTSREDEEM.toString().replace(
                                     /\B(?=(\d{3})+(?!\d))/g,
                                     ',',
@@ -799,8 +799,8 @@ const Dashboard = ({route, navigation}) => {
         <HStack
           shadow={5}
           bg="#fff"
-          p="3"
-          justifyContent="space-between"
+          p="2"
+          justifyContent="space-around"
           alignItems="center">
           <VStack>
             <Center>
@@ -810,7 +810,7 @@ const Dashboard = ({route, navigation}) => {
               Home
             </Text>
           </VStack>
-          <Spacer />
+          {/* <Spacer /> */}
           <Link
             onPress={() =>
               navigation.navigate('transactions', {
@@ -834,7 +834,7 @@ const Dashboard = ({route, navigation}) => {
             </VStack>
           </Link>
 
-          <Spacer />
+          {/* <Spacer /> */}
           <Link
             onPress={() => navigation.navigate('profile', {token, memberNo})}>
             <VStack>

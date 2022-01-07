@@ -280,7 +280,7 @@ const SignIn = ({navigation}) => {
           </Text>
           <Image
             style={styles.image}
-            source={require('../assets/images/pcico.png')}
+            source={require('../assets/images/corebase.png')}
             alt="Company Logo"
             size="xs"
           />

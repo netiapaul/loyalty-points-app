@@ -130,19 +130,26 @@ const SalesTransaction = ({route, navigation}) => {
           </Center>
         ) : (
           <>
-            {/* <HStack
+            <HStack
               bg="#fff"
               p="2"
               justifyContent="space-between"
               alignItems="center">
               <Center mx={'auto'}>
+                <Text
+                  mx={'auto'}
+                  fontWeight={'500'}
+                  color={'#5d3915'}
+                  fontSize={'sm'}>
+                  {docNum}
+                </Text>
                 <VStack>
                   <Text mx={'auto'} color={'muted.500'}>
                     {date ? new Date(date).toDateString() : null}
                   </Text>
                   <Text
-                    alignItems="center"
                     color="#5d3915"
+                    mx={'auto'}
                     fontSize="18"
                     fontWeight="500">
                     Kshs:{' '}
@@ -178,103 +185,24 @@ const SalesTransaction = ({route, navigation}) => {
                   </Center>
                 </VStack>
               </Center>
-            </HStack> */}
+            </HStack>
+            <Divider my={2} />
 
             {/* SCROLLVIEW */}
             <ScrollView>
               {users.map((user, index) => {
                 return (
-                  <Box
-                    p="3"
-                    m="2"
-                    bg="muted.50"
-                    key={index}
-                    borderRadius="md"
-                    borderColor="coolGray.200"
-                    borderWidth="1"
-                    shadow={3}>
-                    <HStack justifyContent="space-between" alignItems="center">
-                      <Center mx={'auto'}>
-                        <VStack>
-                          <HStack mx={'auto'}>
-                            <Text mx={'auto'} color={'muted.500'} fontSize={10}>
-                              {date ? new Date(date).toDateString() : null}{' '}
-                            </Text>
-                            <Divider
-                              orientation="vertical"
-                              // thickness={2}
-                              bg={'muted.500'}
-                              mx={1}
-                            />
-                            <Text mx={'auto'} color={'muted.500'} fontSize={10}>
-                              {branchName}
-                            </Text>
-                          </HStack>
-                          {/* <Text mx={'auto'} color={'muted.500'} fontSize={12}>
-                            {date ? new Date(date).toDateString() : null}{' '}
-                            <Divider /> {branchName}
-                          </Text> */}
-                          <Text
-                            alignItems="center"
-                            color="#5d3915"
-                            fontSize="18"
-                            mx={'auto'}
-                            fontWeight="500">
-                            Kshs: {user.totalCost.toFixed(2)}
-                            {/* {users
-                              .reduce((previousValue, curr) => {
-                                return previousValue + curr.totalCost;
-                              }, 0)
-                              .toFixed(2)
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} */}
-                          </Text>
-
-                          <Center>
-                            <HStack space={3}>
-                              <HStack>
-                                <Text>EPts: </Text>
-                                <Text color="success.600" fontWeight="bold">
-                                  {user.mempointsbuy
-                                    .toString()
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                </Text>
-                              </HStack>
-                              <HStack>
-                                <Text>RPts: </Text>
-
-                                <Text color="danger.600" fontWeight="bold">
-                                  {user.mempointsredeem
-                                    .toString()
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                </Text>
-                              </HStack>
-                            </HStack>
-                          </Center>
-                        </VStack>
-                      </Center>
-                    </HStack>
-
+                  // <Box
+                  //   p="3"
+                  //   m="2"
+                  //   bg="muted.50"
+                  //   key={index}
+                  //   borderRadius="md"
+                  //   borderColor="coolGray.200"
+                  //   borderWidth="1"
+                  //   shadow={3}>
+                  <Box mx={'5'}>
                     <VStack>
-                      {/* <Center>
-                    <Text fontWeight="bold">{user.itmname}</Text>
-                    <Divider my="2" />
-                  </Center> */}
-                      <Divider my={2} />
-                      {/* <HStack>
-                        <Text
-                          color="#5d3915"
-                          fontSize={15}
-                          my={1}
-                          fontWeight="bold">
-                          Item Code:{' '}
-                        </Text>
-                        <Spacer />
-                        <Text color="#5d3915" fontSize={15} my={1}>
-                          {user.itmcode}
-                        </Text>
-                      </HStack> */}
-
                       <HStack>
                         <VStack>
                           <Text
@@ -309,12 +237,11 @@ const SalesTransaction = ({route, navigation}) => {
                           {user.totalCost.toFixed(2)}
                         </Text>
                       </HStack>
-
-                      <Divider my={2} />
                     </VStack>
                   </Box>
                 );
               })}
+              <Divider my={2} />
             </ScrollView>
           </>
         )}
@@ -326,7 +253,7 @@ const SalesTransaction = ({route, navigation}) => {
             </Text>
             <Image
               style={styles.image}
-              source={require('../assets/images/pcico.png')}
+              source={require('../assets/images/corebase.png')}
               alt="Company Logo"
               size="xs"
             />

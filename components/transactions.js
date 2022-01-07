@@ -13,6 +13,7 @@ import {
   Pressable,
   Link,
   Avatar,
+  Divider,
   Spacer,
   Spinner,
 } from 'native-base';
@@ -108,68 +109,101 @@ const Transactions = ({route, navigation}) => {
           <ScrollView>
             {users.map((user, index) => {
               return (
-                <Box
-                  p="5"
-                  mt={2}
-                  mx="2"
-                  bg="muted.50"
+                // <Box
+                //   p="5"
+                //   mt={2}
+                //   mx="2"
+                //   bg="muted.50"
+                //   key={index}
+                //   borderRadius="sm"
+                //   borderColor="coolGray.200"
+                //   borderWidth="1"
+                //   shadow={1}>
+                <Link
                   key={index}
-                  borderRadius="md"
-                  borderColor="coolGray.200"
-                  borderWidth="1"
-                  shadow={1}>
-                  <Link
-                    onPress={() =>
-                      navigation.navigate('transactiondetails', {
-                        token,
-                        memberNo: memberNo,
-                        docNum: user.DOCNUM,
-                        salesBCODE: user.SALESBCODE,
-                        branch: user.SALESBRANCH,
-                        gain: user.MEMPOINTSBUY,
-                        redeemed: user.MEMPOINTSREDEEM,
-                        transdate: user.SALEDATE,
-                      })
-                    }>
-                    <HStack>
+                  onPress={() =>
+                    navigation.navigate('transactiondetails', {
+                      token,
+                      memberNo: memberNo,
+                      docNum: user.DOCNUM,
+                      salesBCODE: user.SALESBCODE,
+                      branch: user.SALESBRANCH,
+                      gain: user.MEMPOINTSBUY,
+                      redeemed: user.MEMPOINTSREDEEM,
+                      transdate: user.SALEDATE,
+                    })
+                  }>
+                  <Box flex={1} mt={5} mx={'5'}>
+                    <HStack bg={'#fff'} justifyContent="space-between">
                       <VStack>
                         <Text
-                          // color="#5d3915"
-                          color="#ff720d"
-                          fontSize={12}>
-                          {new Date(user.SALEDATE).toDateString()}
-                        </Text>
-                        <Text
                           color={'muted.800'}
-                          fontWeight="bold"
+                          fontWeight="600"
                           fontSize={15}>
                           {user.DOCNUM}
                         </Text>
+                        <HStack>
+                          <Text
+                            color={'muted.800'}
+                            fontWeight="400"
+                            fontSize={10}>
+                            {new Date(user.SALEDATE).toDateString()}
+                          </Text>
+                          <Center>
+                            <Divider
+                              orientation="vertical"
+                              h={3}
+                              bg={'muted.500'}
+                              mx={1}
+                            />
+                          </Center>
+
+                          <Text
+                            color={'muted.800'}
+                            fontWeight="400"
+                            fontSize={10}>
+                            {user.SALESBRANCH}
+                          </Text>
+                        </HStack>
+                      </VStack>
+                      {/* <Spacer /> */}
+                      <VStack>
                         <Text
-                          color={'light.600'}
-                          fontWeight="bold"
+                          color={'muted.800'}
+                          fontWeight="600"
                           fontSize={15}>
-                          {user.SALESBRANCH}
+                          Kshs.
+                          {user.Itmtotalinc.toFixed(2)}
                         </Text>
+                        <HStack space={3}>
+                          <Text
+                            color={'muted.800'}
+                            fontWeight="400"
+                            fontSize={10}>
+                            EPts:{' '}
+                            {user.MEMPOINTSBUY.toString().replace(
+                              /\B(?=(\d{3})+(?!\d))/g,
+                              ',',
+                            )}
+                          </Text>
+
+                          <Text
+                            color={'muted.800'}
+                            fontWeight="400"
+                            fontSize={10}>
+                            RPts:{' '}
+                            {user.MEMPOINTSREDEEM.toString().replace(
+                              /\B(?=(\d{3})+(?!\d))/g,
+                              ',',
+                            )}
+                          </Text>
+                        </HStack>
                       </VStack>
                     </HStack>
-                    <Spacer />
-                    <Center>
-                      <Text color="success.600" ml={3} fontWeight="bold">
-                        {user.MEMPOINTSBUY.toString().replace(
-                          /\B(?=(\d{3})+(?!\d))/g,
-                          ',',
-                        )}
-                      </Text>
-                      <Text color="danger.600" ml={3} fontWeight="bold">
-                        {user.MEMPOINTSREDEEM.toString().replace(
-                          /\B(?=(\d{3})+(?!\d))/g,
-                          ',',
-                        )}
-                      </Text>
-                    </Center>
-                  </Link>
-                </Box>
+                    <Divider my={1} />
+                  </Box>
+                </Link>
+                // {/* </Box> */}
               );
             })}
           </ScrollView>
@@ -183,7 +217,7 @@ const Transactions = ({route, navigation}) => {
             </Text>
             <Image
               style={styles.image}
-              source={require('../assets/images/pcico.png')}
+              source={require('../assets/images/corebase.png')}
               alt="Company Logo"
               size="xs"
             />

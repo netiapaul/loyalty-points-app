@@ -65,7 +65,7 @@ const SignIn = ({route, navigation}) => {
 
   return (
     <NativeBaseProvider>
-      <VStack flex={1} bg="light.50">
+      <VStack flex={1} bg="#fff">
         {/* TOP Area */}
         <Box flex={1} bg="#fff" justifyContent={'center'}>
           <Center>
@@ -161,24 +161,23 @@ const SignIn = ({route, navigation}) => {
               Log Out
             </Button>
           </FormControl>
-
-          <VStack flex={1} justifyContent="flex-end" my="2">
-            <Center>
-              <Text fontSize="xs" mx="10">
-                Powered by
-              </Text>
-              <Image
-                style={styles.image}
-                source={require('../assets/images/pcico.png')}
-                alt="Company Logo"
-                size="xs"
-              />
-              <Text fontSize="10" fontWeight="bold" color="#5d3915" mx="10">
-                Corebase Solutions
-              </Text>
-            </Center>
-          </VStack>
         </Box>
+        <VStack justifyContent="flex-end">
+          <Center>
+            <Text fontSize="xs" mx="10">
+              Powered by
+            </Text>
+            <Image
+              style={styles.image}
+              source={require('../assets/images/corebase.png')}
+              alt="Company Logo"
+              size="xs"
+            />
+            <Text fontSize="10" fontWeight="bold" color="#5d3915" mx="10">
+              Corebase Solutions
+            </Text>
+          </Center>
+        </VStack>
       </VStack>
     </NativeBaseProvider>
   );
@@ -190,9 +189,9 @@ const styles = StyleSheet.create({
     maxHeight: 15,
   },
   inputContainer: {
-    borderWidth: 1,
-    borderTopRightRadius: 30,
-    borderTopLeftRadius: 30,
+    borderWidth: 0.5,
+    // borderTopRightRadius: 30,
+    // borderTopLeftRadius: 30,
     borderBottomColor: 'white',
   },
   promoCode: {
