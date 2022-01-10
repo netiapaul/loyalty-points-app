@@ -24,10 +24,10 @@ const SignIn = ({route, navigation}) => {
   const {token, memberNo} = route.params;
   const [user, setUser] = useState({});
   const [name, setName] = useState('');
-  const [idNo, setIdno] = useState('');
+  const [pin, setPin] = useState('');
 
-  const handleID = text => {
-    return setIdno(text);
+  const handlePin = text => {
+    return setPin(text);
   };
 
   useEffect(() => {
@@ -94,7 +94,7 @@ const SignIn = ({route, navigation}) => {
           </Center>
 
           <FormControl isRequired>
-            <Input
+            {/* <Input
               type="text"
               mx="auto"
               mt={5}
@@ -105,8 +105,8 @@ const SignIn = ({route, navigation}) => {
                 base: '75%',
                 md: '25%',
               }}
-            />
-            <Input
+            /> */}
+            {/* <Input
               type="text"
               mx="auto"
               mt={5}
@@ -117,13 +117,13 @@ const SignIn = ({route, navigation}) => {
                 base: '75%',
                 md: '25%',
               }}
-            />
+            /> */}
             <Input
-              type="text"
+              type="number"
               mx="auto"
               mt={5}
-              onChangeText={handleID}
-              value={idNo}
+              onChangeText={handlePin}
+              value={pin}
               placeholder="Enter Pin"
               w={{
                 base: '75%',

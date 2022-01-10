@@ -320,78 +320,96 @@ const Dashboard = ({route, navigation}) => {
 
                     {transactions.slice(0, 5).map((transaction, index) => {
                       return (
-                        <Box p={1} key={index}>
-                          <HStack>
-                            <VStack>
-                              <Text
-                                color={'muted.800'}
-                                fontWeight="600"
-                                fontSize={15}>
-                                {transaction.DOCNUM}
-                              </Text>
-                              <HStack>
+                        <Link
+                          key={index}
+                          onPress={() =>
+                            navigation.navigate('transactiondetails', {
+                              token,
+                              memberNo: memberNo,
+                              docNum: transaction.DOCNUM,
+                              salesBCODE: transaction.SALESBCODE,
+                              branch: transaction.SALESBRANCH,
+                              gain: transaction.MEMPOINTSBUY,
+                              redeemed: transaction.MEMPOINTSREDEEM,
+                              transdate: transaction.SALEDATE,
+                            })
+                          }>
+                          <Box p={1} flex={1}>
+                            <HStack>
+                              <VStack>
                                 <Text
                                   color={'muted.800'}
-                                  fontWeight="400"
-                                  fontSize={10}>
-                                  {new Date(
-                                    transaction.SALEDATE,
-                                  ).toDateString()}
+                                  fontWeight="600"
+                                  fontSize={15}>
+                                  {transaction.DOCNUM}
                                 </Text>
-                                <Center>
-                                  <Divider
-                                    orientation="vertical"
-                                    h={3}
-                                    bg={'muted.500'}
-                                    mx={1}
-                                  />
-                                </Center>
+                                <HStack>
+                                  <Text
+                                    color={'muted.800'}
+                                    fontWeight="400"
+                                    fontSize={10}>
+                                    {new Date(
+                                      transaction.SALEDATE,
+                                    ).toDateString()}
+                                  </Text>
+                                  <Center>
+                                    <Divider
+                                      orientation="vertical"
+                                      h={3}
+                                      bg={'muted.500'}
+                                      mx={1}
+                                    />
+                                  </Center>
 
-                                <Text
-                                  color={'muted.800'}
-                                  fontWeight="400"
-                                  fontSize={10}>
-                                  {transaction.SALESBRANCH}
-                                </Text>
-                              </HStack>
-                            </VStack>
+                                  <Text
+                                    color={'muted.800'}
+                                    fontWeight="400"
+                                    fontSize={10}>
+                                    {transaction.SALESBRANCH}
+                                  </Text>
+                                </HStack>
+                              </VStack>
 
-                            <Spacer />
-                            <VStack>
-                              <Text
-                                color={'muted.800'}
-                                fontWeight="600"
-                                fontSize={15}>
-                                Kshs.
-                                {transaction.Itmtotalinc.toFixed(2)}
-                              </Text>
-                              <HStack space={3}>
+                              <Spacer />
+                              <VStack>
                                 <Text
                                   color={'muted.800'}
-                                  fontWeight="400"
-                                  fontSize={10}>
-                                  Earned:{' '}
-                                  {transaction.MEMPOINTSBUY.toString().replace(
-                                    /\B(?=(\d{3})+(?!\d))/g,
-                                    ',',
-                                  )}
+                                  fontWeight="600"
+                                  fontSize={15}>
+                                  Kshs.
+                                  {/* {totalCost} */}
+                                  {transaction.Itmtotalinc.toFixed(2)
+                                    .toString()
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                 </Text>
+                                <HStack space={3}>
+                                  <Text
+                                    color="success.600"
+                                    fontWeight="400"
+                                    fontSize={10}>
+                                    Earned:{' '}
+                                    {transaction.MEMPOINTSBUY.toString().replace(
+                                      /\B(?=(\d{3})+(?!\d))/g,
+                                      ',',
+                                    )}
+                                  </Text>
 
-                                <Text
-                                  color={'muted.800'}
-                                  fontWeight="400"
-                                  fontSize={10}>
-                                  Redeemed:{' '}
-                                  {transaction.MEMPOINTSREDEEM.toString().replace(
-                                    /\B(?=(\d{3})+(?!\d))/g,
-                                    ',',
-                                  )}
-                                </Text>
-                              </HStack>
-                            </VStack>
-                          </HStack>
-                          <Divider my={1} />
-                        </Box>
+                                  <Text
+                                    color="danger.600"
+                                    fontWeight="400"
+                                    fontSize={10}>
+                                    Redeemed:{' '}
+                                    {transaction.MEMPOINTSREDEEM.toString().replace(
+                                      /\B(?=(\d{3})+(?!\d))/g,
+                                      ',',
+                                    )}
+                                  </Text>
+                                </HStack>
+                              </VStack>
+                            </HStack>
+                            <Divider my={1} />
+                          </Box>
+                        </Link>
                       );
                     })}
                   </Box>

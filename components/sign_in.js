@@ -126,7 +126,7 @@ const SignIn = ({navigation}) => {
         flex={1}
         keyboardVerticalOffset={-500}
         behavior="padding">
-        <Box py={20} justifyContent={'center'} bg="#fafafa">
+        <Box flex={1} pb={4} justifyContent={'center'} bg="#fafafa">
           <Center>
             <Image
               source={require('../assets/images/pcico.png')}
@@ -139,17 +139,8 @@ const SignIn = ({navigation}) => {
           </Center>
         </Box>
 
-        <Box bg="#fff" flex={1} style={styles.inputContainer}>
+        <Box bg="#fff" flex={3} style={styles.inputContainer}>
           <HStack my={3} justifyContent={'center'}>
-            {/* <Image
-              onPress={() => Alert.alert('landing')}
-              source={require('../assets/images/back.png')}
-              alt="next icon"
-              style={styles.next}
-              size="sm"
-              ml="10"
-            /> */}
-
             <Text fontSize="md" style={{textAlign: 'center'}} fontWeight="bold">
               Sign In
             </Text>

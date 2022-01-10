@@ -173,14 +173,16 @@ const Transactions = ({route, navigation}) => {
                           fontWeight="600"
                           fontSize={15}>
                           Kshs.
-                          {user.Itmtotalinc.toFixed(2)}
+                          {user.Itmtotalinc.toFixed(2)
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         </Text>
                         <HStack space={3}>
                           <Text
-                            color={'muted.800'}
+                            color="success.600"
                             fontWeight="400"
                             fontSize={10}>
-                            EPts:{' '}
+                            Earned:{' '}
                             {user.MEMPOINTSBUY.toString().replace(
                               /\B(?=(\d{3})+(?!\d))/g,
                               ',',
@@ -188,10 +190,10 @@ const Transactions = ({route, navigation}) => {
                           </Text>
 
                           <Text
-                            color={'muted.800'}
+                            color="danger.600"
                             fontWeight="400"
                             fontSize={10}>
-                            RPts:{' '}
+                            Redeemed:{' '}
                             {user.MEMPOINTSREDEEM.toString().replace(
                               /\B(?=(\d{3})+(?!\d))/g,
                               ',',

@@ -136,22 +136,32 @@ const SalesTransaction = ({route, navigation}) => {
               justifyContent="space-between"
               alignItems="center">
               <Center mx={'auto'}>
-                <Text
-                  mx={'auto'}
-                  fontWeight={'500'}
-                  color={'#5d3915'}
-                  fontSize={'sm'}>
+                <Text mx={'auto'} fontWeight={'500'} color={'#5d3915'}>
                   {docNum}
                 </Text>
                 <VStack>
-                  <Text mx={'auto'} color={'muted.500'}>
+                  <HStack>
+                    <Text mx={'auto'} color={'muted.500'}>
+                      {date ? new Date(date).toDateString() : null}
+                    </Text>
+                    <Center>
+                      <Divider
+                        orientation="vertical"
+                        h={3}
+                        bg={'muted.500'}
+                        mx={1}
+                      />
+                    </Center>
+                    <Center>
+                      <Text color={'muted.500'} fontWeight="400" fontSize={10}>
+                        {branchName}
+                      </Text>
+                    </Center>
+                  </HStack>
+                  {/* <Text mx={'auto'} color={'muted.500'}>
                     {date ? new Date(date).toDateString() : null}
-                  </Text>
-                  <Text
-                    color="#5d3915"
-                    mx={'auto'}
-                    fontSize="18"
-                    fontWeight="500">
+                  </Text> */}
+                  <Text color="#5d3915" mx={'auto'} fontWeight={500}>
                     Kshs:{' '}
                     {users
                       .reduce((previousValue, curr) => {
@@ -165,17 +175,17 @@ const SalesTransaction = ({route, navigation}) => {
                   <Center>
                     <HStack space={3}>
                       <HStack>
-                        <Text>EPts: </Text>
-                        <Text color="success.600" fontWeight="bold">
+                        <Text>Earned: </Text>
+                        <Text color="success.600">
                           {gainpts
                             .toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         </Text>
                       </HStack>
                       <HStack>
-                        <Text>RPts: </Text>
+                        <Text>Redeemed: </Text>
 
-                        <Text color="danger.600" fontWeight="bold">
+                        <Text color="danger.600">
                           {redeemedpts
                             .toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -207,7 +217,7 @@ const SalesTransaction = ({route, navigation}) => {
                         <VStack>
                           <Text
                             color="#5d3915"
-                            style={{fontSize: RFValue(10, 580)}}
+                            fontSize={'sm'}
                             // fontSize={15}
                             my={1}
                             fontWeight={500}>
