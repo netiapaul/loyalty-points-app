@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {ImageBackground, StyleSheet, TextInput, Alert} from 'react-native';
+import Snackbar from 'react-native-snackbar';
 import {
   NativeBaseProvider,
   VStack,
@@ -13,6 +14,7 @@ import {
   Spacer,
   Avatar,
   Button,
+  Spinner,
   FormControl,
   Input,
 } from 'native-base';
@@ -25,15 +27,60 @@ const SignIn = ({route, navigation}) => {
   const [user, setUser] = useState({});
   const [name, setName] = useState('');
   const [pin, setPin] = useState('');
+  const [current, setCurrent] = useState('');
+  const [isloading, setIsLoading] = useState(false);
 
   const handlePin = text => {
     return setPin(text);
   };
 
+  const currentPin = text => {
+    return setCurrent(text);
+  };
   useEffect(() => {
     handleFetch();
     // console.warn('profile', user);
   }, []);
+
+  const handleUpdate = async () => {
+    try {
+      const reponse = await fetch(
+        `http://102.37.102.247:5016/CustomerPoints/UpdatePassword/${memberNo}`,
+        {
+          method: 'POST', // *GET, POST, PUT, DELETE, etc.
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            currentPin: current,
+            newPin: pin,
+          }),
+        },
+      );
+      if (reponse.ok) {
+        const data = await reponse.json();
+        setCurrent('');
+        setPin('');
+        setIsLoading(false);
+        return navigation.navigate('signIn');
+      } else {
+        setIsLoading(false);
+        return Snackbar.show({
+          backgroundColor: '#e11d48',
+          text: 'Please confirm details entered',
+          duration: Snackbar.LENGTH_LONG,
+        });
+      }
+    } catch (error) {
+      setIsLoading(false);
+      return Snackbar.show({
+        backgroundColor: '#e11d48',
+        text: 'please connect to available network',
+        duration: Snackbar.LENGTH_LONG,
+      });
+    }
+  };
 
   const handleFetch = () => {
     const request = `http://102.37.102.247:5016/Customers/members?memberNum=${memberNo}`;
@@ -50,7 +97,13 @@ const SignIn = ({route, navigation}) => {
       .then(response => {
         setUser(response[0]), setName(response[0].membername);
       })
-      .catch(() => console.warn('please connect to available network'));
+      .catch(() =>
+        Snackbar.show({
+          backgroundColor: '#e11d48',
+          text: 'please connect to available network',
+          duration: Snackbar.LENGTH_LONG,
+        }),
+      );
   };
 
   const clearAll = async () => {
@@ -82,14 +135,14 @@ const SignIn = ({route, navigation}) => {
         <Box bg="#fff" flex={3} style={styles.inputContainer}>
           <Center mt={2}>
             <Text fontSize="24" style={{textAlign: 'center'}} fontWeight="bold">
-              Profile
+              Update PIN
             </Text>
             <Text
               mx="10"
               fontSize="14"
               style={styles.promoCode}
               fontWeight="400">
-              Edit your personal information below.
+              Fill in the form to update your pin.
             </Text>
           </Center>
 
@@ -121,10 +174,24 @@ const SignIn = ({route, navigation}) => {
             <Input
               type="number"
               mx="auto"
+              keyboardType="numeric"
+              mt={5}
+              onChangeText={currentPin}
+              value={current}
+              placeholder="Current Pin"
+              w={{
+                base: '75%',
+                md: '25%',
+              }}
+            />
+            <Input
+              type="number"
+              mx="auto"
+              keyboardType="numeric"
               mt={5}
               onChangeText={handlePin}
               value={pin}
-              placeholder="Enter Pin"
+              placeholder="Enter New Pin"
               w={{
                 base: '75%',
                 md: '25%',
@@ -139,8 +206,14 @@ const SignIn = ({route, navigation}) => {
               }}
               p={4}
               bg={'#5d3915'}
-              rounded="5">
-              Update
+              rounded="5"
+              onPress={() => {
+                setTimeout(() => {
+                  setIsLoading(true);
+                  handleUpdate();
+                }, 1000);
+              }}>
+              {isloading ? <Spinner size="sm" color="warning.500" /> : 'Update'}
             </Button>
 
             <Button

@@ -65,11 +65,20 @@ const SignIn = ({navigation}) => {
         setPin('');
         setIdno('');
         // console.warn('Success response', data);
-        setIsLoading(false);
-        return navigation.navigate('different', {
-          token: data.token,
-          memberNo: data.user.memberno,
-        });
+
+        if (data['user'].isPasswordChanged === false) {
+          setIsLoading(false);
+          return navigation.navigate('profile', {
+            token: data.token,
+            memberNo: data.user.memberno,
+          });
+        } else {
+          setIsLoading(false);
+          return navigation.navigate('different', {
+            token: data.token,
+            memberNo: data.user.memberno,
+          });
+        }
       } else {
         setIsLoading(false);
         Snackbar.show({
@@ -77,8 +86,6 @@ const SignIn = ({navigation}) => {
           text: 'Please confirm details entered',
           duration: Snackbar.LENGTH_LONG,
         });
-        // console.warn(reponse.status);
-        // setStatus(!status);
       }
     } catch (error) {
       setIsLoading(false);
