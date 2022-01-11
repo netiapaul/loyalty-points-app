@@ -5,6 +5,7 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   ScrollView,
+  TextInput,
 } from 'react-native';
 import {
   NativeBaseProvider,
@@ -165,6 +166,7 @@ const SignIn = ({navigation}) => {
             <Input
               type="number"
               mx="auto"
+              keyboardType="default"
               mt={5}
               onChangeText={handleID}
               value={idNo}
@@ -175,14 +177,32 @@ const SignIn = ({navigation}) => {
               }}
             />
 
+            {/* <TextInput
+              mx="10"
+              mt={5}
+              style={{
+                height: 40,
+                margin: 12,
+                borderWidth: 1,
+                padding: 10,
+                color: '#5d3915',
+              }}
+              onChangeText={handleID}
+              value={idNo}
+              placeholder="Enter National ID"
+              keyboardType="default"
+             
+            /> */}
+
             {/* <FormControl.Label>Password</FormControl.Label> */}
 
             <Input
               mx="auto"
+              keyboardType="numeric"
               mt={2}
               onChangeText={handlePin}
               value={pinNo}
-              type={show ? 'number' : 'password'}
+              type={show ? 'text' : 'password'}
               w={{
                 base: '75%',
                 md: '25%',
