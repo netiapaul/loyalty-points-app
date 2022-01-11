@@ -184,23 +184,6 @@ const SignIn = ({navigation}) => {
               }}
             />
 
-            {/* <TextInput
-              mx="10"
-              mt={5}
-              style={{
-                height: 40,
-                margin: 12,
-                borderWidth: 1,
-                padding: 10,
-                color: '#5d3915',
-              }}
-              onChangeText={handleID}
-              value={idNo}
-              placeholder="Enter National ID"
-              keyboardType="default"
-             
-            /> */}
-
             {/* <FormControl.Label>Password</FormControl.Label> */}
 
             <Input

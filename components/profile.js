@@ -28,6 +28,8 @@ const SignIn = ({route, navigation}) => {
   const [name, setName] = useState('');
   const [pin, setPin] = useState('');
   const [current, setCurrent] = useState('');
+  const [confirm, setConfirm] = useState('');
+
   const [isloading, setIsLoading] = useState(false);
 
   const handlePin = text => {
@@ -37,6 +39,11 @@ const SignIn = ({route, navigation}) => {
   const currentPin = text => {
     return setCurrent(text);
   };
+
+  const confirmPin = text => {
+    return setConfirm(text);
+  };
+
   useEffect(() => {
     handleFetch();
     // console.warn('profile', user);
@@ -197,24 +204,67 @@ const SignIn = ({route, navigation}) => {
                 md: '25%',
               }}
             />
-            <Button
+            <Input
+              type="number"
               mx="auto"
+              keyboardType="numeric"
               mt={5}
+              onChangeText={confirmPin}
+              value={confirm}
+              placeholder="Confirm New Pin"
               w={{
                 base: '75%',
                 md: '25%',
               }}
-              p={4}
-              bg={'#5d3915'}
-              rounded="5"
-              onPress={() => {
-                setTimeout(() => {
-                  setIsLoading(true);
-                  handleUpdate();
-                }, 1000);
-              }}>
-              {isloading ? <Spinner size="sm" color="warning.500" /> : 'Update'}
-            </Button>
+            />
+            {pin !== confirm || !pin || !confirm ? (
+              <Button
+                isDisabled
+                mx="auto"
+                mt={5}
+                w={{
+                  base: '75%',
+                  md: '25%',
+                }}
+                p={4}
+                bg={'#5d3915'}
+                rounded="5"
+                onPress={() => {
+                  setTimeout(() => {
+                    setIsLoading(true);
+                    handleUpdate();
+                  }, 1000);
+                }}>
+                {isloading ? (
+                  <Spinner size="sm" color="warning.500" />
+                ) : (
+                  'Update'
+                )}
+              </Button>
+            ) : (
+              <Button
+                mx="auto"
+                mt={5}
+                w={{
+                  base: '75%',
+                  md: '25%',
+                }}
+                p={4}
+                bg={'#5d3915'}
+                rounded="5"
+                onPress={() => {
+                  setTimeout(() => {
+                    setIsLoading(true);
+                    handleUpdate();
+                  }, 1000);
+                }}>
+                {isloading ? (
+                  <Spinner size="sm" color="warning.500" />
+                ) : (
+                  'Update'
+                )}
+              </Button>
+            )}
 
             <Button
               mx="auto"
