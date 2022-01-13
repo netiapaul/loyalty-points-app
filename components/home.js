@@ -346,7 +346,7 @@ const Dashboard = ({route, navigation}) => {
                       </Heading>
                     </Center>
 
-                    <Center flex={1}>
+                    <Center flex={2}>
                       <Text color="#fafafa" fontSize="3xl" fontWeight={'bold'}>
                         {points
                           ? points

@@ -25,6 +25,10 @@ import {
   Link,
   Spinner,
 } from 'native-base';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const SignIn = ({navigation}) => {
   const [pinNo, setPin] = useState('');
@@ -279,7 +283,7 @@ const SignIn = ({navigation}) => {
       </KeyboardAvoidingView>
       <VStack bg={'#fff'} mb={0} justifyContent="flex-end">
         <Center>
-          <Text fontSize="2xs" mx="10">
+          <Text style={styles.myText} mx="10">
             Powered by
           </Text>
           <Image
@@ -288,7 +292,7 @@ const SignIn = ({navigation}) => {
             alt="Company Logo"
             size="2xs"
           />
-          <Text fontSize="2xs" fontWeight="bold" color="#5d3915" mx="10">
+          <Text style={styles.myText} fontWeight="bold" color="#5d3915" mx="10">
             Corebase Solutions
           </Text>
         </Center>
@@ -298,6 +302,9 @@ const SignIn = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  myText: {
+    fontSize: hp('1%'), // End result looks like the provided UI mockup
+  },
   image: {
     maxWidth: 15,
     maxHeight: 15,

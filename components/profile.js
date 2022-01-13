@@ -311,7 +311,7 @@ const SignIn = ({route, navigation}) => {
 
 const styles = StyleSheet.create({
   myText: {
-    fontSize: hp('1.2%'), // End result looks like the provided UI mockup
+    fontSize: hp('1%'), // End result looks like the provided UI mockup
   },
   image: {
     maxWidth: 15,
