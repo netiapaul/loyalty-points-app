@@ -20,12 +20,20 @@ import {
 import * as Keychain from 'react-native-keychain';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Snackbar from 'react-native-snackbar';
+import {Dimensions} from 'react-native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const config = {
   dependencies: {
     'linear-gradient': require('react-native-linear-gradient').default,
   },
 };
+
+const window = Dimensions.get('window');
+const screen = Dimensions.get('screen');
 
 const Transactions = ({route, navigation}) => {
   const {token, memberNo} = route.params;
@@ -36,6 +44,7 @@ const Transactions = ({route, navigation}) => {
   useEffect(() => {
     handleFetch();
     console.warn(users);
+    console.warn(window);
   }, []);
 
   async function handleFetch() {
@@ -132,7 +141,7 @@ const Transactions = ({route, navigation}) => {
                       transdate: user.SALEDATE,
                     })
                   }>
-                  <Box key={index} flex={1} mt={5} mx={'5'}>
+                  <Box style={styles.transactions} key={index} mt={5} mx={5}>
                     <HStack bg={'#fff'} justifyContent="space-between">
                       <VStack>
                         <Text
@@ -145,7 +154,9 @@ const Transactions = ({route, navigation}) => {
                           <Text
                             color={'muted.800'}
                             fontWeight="400"
-                            fontSize={'8'}>
+                            style={styles.myText}
+                            // fontSize={'8'}
+                          >
                             {new Date(user.SALEDATE).toDateString()}
                           </Text>
                           <Center>
@@ -160,7 +171,9 @@ const Transactions = ({route, navigation}) => {
                           <Text
                             color={'muted.800'}
                             fontWeight="400"
-                            fontSize={'8'}>
+                            style={styles.myText}
+                            // fontSize={'8'}
+                          >
                             {user.SALESBRANCH}
                           </Text>
                         </HStack>
@@ -180,7 +193,7 @@ const Transactions = ({route, navigation}) => {
                           <Text
                             color="success.600"
                             fontWeight="400"
-                            fontSize={10}>
+                            style={styles.myText}>
                             Earned:{' '}
                             {user.MEMPOINTSBUY.toString().replace(
                               /\B(?=(\d{3})+(?!\d))/g,
@@ -191,7 +204,7 @@ const Transactions = ({route, navigation}) => {
                           <Text
                             color="danger.600"
                             fontWeight="400"
-                            fontSize={10}>
+                            style={styles.myText}>
                             Redeemed:{' '}
                             {user.MEMPOINTSREDEEM.toString().replace(
                               /\B(?=(\d{3})+(?!\d))/g,
@@ -239,6 +252,15 @@ const styles = StyleSheet.create({
   image: {
     maxWidth: 15,
     maxHeight: 15,
+  },
+  transactions: {
+    width: wp('90%'),
+  },
+  myText: {
+    fontSize: hp('1.2%'), // End result looks like the provided UI mockup
+  },
+  smallText: {
+    fontSize: hp('1.2%'), // End result looks like the provided UI mockup
   },
   transactionsImage: {
     width: 50,

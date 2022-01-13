@@ -18,7 +18,10 @@ import {
   FormControl,
   Input,
 } from 'native-base';
-
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Keychain from 'react-native-keychain';
 
@@ -127,9 +130,9 @@ const SignIn = ({route, navigation}) => {
     <NativeBaseProvider>
       <VStack flex={1} bg="#fff">
         {/* TOP Area */}
-        <Box flex={1} bg="#fff" justifyContent={'center'}>
+        <Box bg="#fff" my={1} justifyContent={'center'}>
           <Center>
-            <Avatar bg="blueGray.600" size="md">
+            <Avatar bg="blueGray.600" size="sm">
               {name ? name.match(/\b([A-Z])/g).join('') : null}
             </Avatar>
             <Heading textAlign="center" color="#000">
@@ -141,14 +144,10 @@ const SignIn = ({route, navigation}) => {
         {/* FORM Area */}
         <Box bg="#fff" flex={3} style={styles.inputContainer}>
           <Center mt={2}>
-            <Text fontSize="24" style={{textAlign: 'center'}} fontWeight="bold">
+            <Text style={{textAlign: 'center'}} fontWeight="bold">
               Update PIN
             </Text>
-            <Text
-              mx="10"
-              fontSize="14"
-              style={styles.promoCode}
-              fontWeight="400">
+            <Text mx="10" style={styles.promoCode} fontWeight="400">
               Fill in the form to update your pin.
             </Text>
           </Center>
@@ -226,7 +225,7 @@ const SignIn = ({route, navigation}) => {
                   base: '75%',
                   md: '25%',
                 }}
-                p={4}
+                p={3}
                 bg={'#5d3915'}
                 rounded="5"
                 onPress={() => {
@@ -249,7 +248,7 @@ const SignIn = ({route, navigation}) => {
                   base: '75%',
                   md: '25%',
                 }}
-                p={4}
+                p={3}
                 bg={'#5d3915'}
                 rounded="5"
                 onPress={() => {
@@ -276,7 +275,7 @@ const SignIn = ({route, navigation}) => {
               }}
               borderWidth="1"
               borderColor="#5d3915"
-              p={4}
+              p={2}
               bg={'#fff'}
               colorScheme="danger.800"
               rounded="5"
@@ -285,18 +284,22 @@ const SignIn = ({route, navigation}) => {
             </Button>
           </FormControl>
         </Box>
-        <VStack justifyContent="flex-end">
+        <VStack flex={1} justifyContent="flex-end">
           <Center>
-            <Text fontSize="xs" mx="10">
+            <Text style={styles.myText} mx="10">
               Powered by
             </Text>
             <Image
               style={styles.image}
               source={require('../assets/images/corebase.png')}
               alt="Company Logo"
-              size="xs"
+              size="2xs"
             />
-            <Text fontSize="10" fontWeight="bold" color="#5d3915" mx="10">
+            <Text
+              style={styles.myText}
+              fontWeight="bold"
+              color="#5d3915"
+              mx="10">
               Corebase Solutions
             </Text>
           </Center>
@@ -307,6 +310,9 @@ const SignIn = ({route, navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  myText: {
+    fontSize: hp('1.2%'), // End result looks like the provided UI mockup
+  },
   image: {
     maxWidth: 15,
     maxHeight: 15,
