@@ -65,20 +65,23 @@ const SignIn = ({navigation}) => {
         setPin('');
         setIdno('');
         // console.warn('Success response', data);
-
-        if (data['user'].isPasswordChanged === false) {
-          setIsLoading(false);
-          return navigation.navigate('profile', {
-            token: data.token,
-            memberNo: data.user.memberno,
-          });
-        } else {
-          setIsLoading(false);
-          return navigation.navigate('different', {
-            token: data.token,
-            memberNo: data.user.memberno,
-          });
-        }
+        return navigation.navigate('different', {
+          token: data.token,
+          memberNo: data.user.memberno,
+        });
+        // if (data['user'].isPasswordChanged === false) {
+        //   setIsLoading(false);
+        //   return navigation.navigate('profile', {
+        //     token: data.token,
+        //     memberNo: data.user.memberno,
+        //   });
+        // } else {
+        //   setIsLoading(false);
+        //   return navigation.navigate('different', {
+        //     token: data.token,
+        //     memberNo: data.user.memberno,
+        //   });
+        // }
       } else {
         setIsLoading(false);
         Snackbar.show({
@@ -134,7 +137,7 @@ const SignIn = ({navigation}) => {
         flex={1}
         keyboardVerticalOffset={-500}
         behavior="padding">
-        <Box flex={1} pb={4} justifyContent={'center'} bg="#fafafa">
+        <Box flex={1} py={'10'} justifyContent={'center'} bg="#fafafa">
           <Center>
             <Image
               source={require('../assets/images/pcico.png')}
@@ -148,7 +151,7 @@ const SignIn = ({navigation}) => {
         </Box>
 
         <Box bg="#fff" flex={3} style={styles.inputContainer}>
-          <HStack my={3} justifyContent={'center'}>
+          <HStack my={2} justifyContent={'center'}>
             <Text fontSize="md" style={{textAlign: 'center'}} fontWeight="bold">
               Sign In
             </Text>
@@ -202,7 +205,7 @@ const SignIn = ({navigation}) => {
                   size="xs"
                   bg={'#5d3915'}
                   rounded="none"
-                  w="1/6"
+                  w="1/5"
                   h="full"
                   onPress={handleClick}>
                   {show ? 'Hide' : 'Show'}
@@ -253,22 +256,22 @@ const SignIn = ({navigation}) => {
               </Button>
             )}
             <HStack mt="3" justifyContent="center">
-              <Text
+              {/* <Text
                 fontSize="sm"
                 color="coolGray.600"
                 _dark={{
                   color: 'warmGray.200',
                 }}>
                 I'm a new user.{' '}
-              </Text>
+              </Text> */}
               <Link
-                onPress={() => navigation.navigate('register')}
+                onPress={() => navigation.navigate('forget')}
                 _text={{
                   color: 'indigo.500',
                   fontWeight: 'medium',
                   fontSize: 'sm',
                 }}>
-                Sign Up
+                Forgot password?
               </Link>
             </HStack>
           </FormControl>
@@ -276,16 +279,16 @@ const SignIn = ({navigation}) => {
       </KeyboardAvoidingView>
       <VStack bg={'#fff'} mb={0} justifyContent="flex-end">
         <Center>
-          <Text fontSize="xs" mx="10">
+          <Text fontSize="2xs" mx="10">
             Powered by
           </Text>
           <Image
             style={styles.image}
             source={require('../assets/images/corebase.png')}
             alt="Company Logo"
-            size="xs"
+            size="2xs"
           />
-          <Text fontSize="10" fontWeight="bold" color="#5d3915" mx="10">
+          <Text fontSize="2xs" fontWeight="bold" color="#5d3915" mx="10">
             Corebase Solutions
           </Text>
         </Center>
@@ -304,6 +307,9 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     borderWidth: 0.5,
+    borderTopColor: '#000',
+    borderLeftColor: '#fff',
+    borderRightColor: '#fff',
     // borderTopRightRadius: 30,
     // borderTopLeftRadius: 30,
     borderBottomColor: '#fff',

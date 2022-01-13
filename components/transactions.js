@@ -120,7 +120,6 @@ const Transactions = ({route, navigation}) => {
                 //   borderWidth="1"
                 //   shadow={1}>
                 <Link
-                  key={index}
                   onPress={() =>
                     navigation.navigate('transactiondetails', {
                       token,
@@ -133,20 +132,20 @@ const Transactions = ({route, navigation}) => {
                       transdate: user.SALEDATE,
                     })
                   }>
-                  <Box flex={1} mt={5} mx={'5'}>
+                  <Box key={index} flex={1} mt={5} mx={'5'}>
                     <HStack bg={'#fff'} justifyContent="space-between">
                       <VStack>
                         <Text
                           color={'muted.800'}
                           fontWeight="600"
-                          fontSize={15}>
+                          fontSize={'sm'}>
                           {user.DOCNUM}
                         </Text>
                         <HStack>
                           <Text
                             color={'muted.800'}
                             fontWeight="400"
-                            fontSize={10}>
+                            fontSize={'8'}>
                             {new Date(user.SALEDATE).toDateString()}
                           </Text>
                           <Center>
@@ -161,7 +160,7 @@ const Transactions = ({route, navigation}) => {
                           <Text
                             color={'muted.800'}
                             fontWeight="400"
-                            fontSize={10}>
+                            fontSize={'8'}>
                             {user.SALESBRANCH}
                           </Text>
                         </HStack>
@@ -171,7 +170,7 @@ const Transactions = ({route, navigation}) => {
                         <Text
                           color={'muted.800'}
                           fontWeight="600"
-                          fontSize={15}>
+                          fontSize={'sm'}>
                           Kshs.
                           {user.Itmtotalinc.toFixed(2)
                             .toString()
@@ -214,16 +213,16 @@ const Transactions = ({route, navigation}) => {
 
         <VStack bg={'#fff'} justifyContent="flex-end">
           <Center>
-            <Text fontSize="xs" mx="10">
+            <Text fontSize="2xs" mx="10">
               Powered by
             </Text>
             <Image
               style={styles.image}
               source={require('../assets/images/corebase.png')}
               alt="Company Logo"
-              size="xs"
+              size="2xs"
             />
-            <Text fontSize="10" fontWeight="bold" color="#5d3915" mx="10">
+            <Text fontSize="2xs" fontWeight="bold" color="#5d3915" mx="10">
               Corebase Solutions
             </Text>
           </Center>

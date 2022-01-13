@@ -16,6 +16,7 @@ import TransactionDetails from './components/transactionDetails';
 import Profile from './components/profile';
 import Different from './components/home';
 import Register from './components/register';
+import Forget from './components/forget';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -105,7 +106,6 @@ const App = () => {
             headerShown: false,
           }}
         />
-
         <Stack.Screen
           name="transactions"
           component={Transactions}
@@ -128,7 +128,13 @@ const App = () => {
             title: 'Register',
           }}
         />
-
+        <Stack.Screen
+          name="forget"
+          component={Forget}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen
           name="landing"
           component={Landing}
