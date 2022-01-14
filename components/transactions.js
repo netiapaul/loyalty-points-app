@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, ScrollView} from 'react-native';
+import {StyleSheet, ScrollView, RefreshControl} from 'react-native';
 import {
   NativeBaseProvider,
   VStack,
@@ -40,11 +40,22 @@ const Transactions = ({route, navigation}) => {
   const [users, setUser] = useState([]);
   const [status, setStatus] = useState('');
   const [isloading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   useEffect(() => {
     handleFetch();
     console.warn(users);
     console.warn(window);
+  }, []);
+
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    handleFetch();
+    wait(2000).then(() => setRefreshing(false));
   }, []);
 
   async function handleFetch() {
@@ -115,7 +126,10 @@ const Transactions = ({route, navigation}) => {
           </Center>
         ) : (
           // <Box flex={1} bg="#fff">
-          <ScrollView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }>
             {users.map((user, index) => {
               return (
                 // <Box

@@ -1,5 +1,10 @@
 import React, {useEffect, useState, Component} from 'react';
-import {ImageBackground, StyleSheet, ScrollView} from 'react-native';
+import {
+  ImageBackground,
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import {
   NativeBaseProvider,
   VStack,
@@ -46,15 +51,19 @@ const Dashboard = ({route, navigation}) => {
   const [buy, setbuy] = useState();
   const [redeemed, setredeemed] = useState();
   const [isloading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     handleSubmit();
     handleTransactions();
-    // console.warn(transactions);
     console.warn(width);
-    // console.warn('name', name);
-    // console.warn('paramater', token);
+    // const dataInterval = setInterval(() => handleSubmit(), 5 * 1000);
+    // return () => clearInterval(dataInterval);
   }, []);
+
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
 
   async function handleTransactions() {
     try {
@@ -74,6 +83,11 @@ const Dashboard = ({route, navigation}) => {
         setTransactions(JSON.parse(data));
       } else {
         console.error('error');
+        return Snackbar.show({
+          backgroundColor: '#e11d48',
+          text: 'Failed to fetch Transactions',
+          duration: Snackbar.LENGTH_SHORT,
+        });
       }
     } catch (error) {
       // setIsLoading(false);
@@ -105,7 +119,7 @@ const Dashboard = ({route, navigation}) => {
         setPoints(data[0].mempointsbal);
         setbuy(data[0].mempointsbuy);
         setredeemed(data[0].mempointsredeem);
-        console.warn(data[0].membername);
+        // console.warn(data[0].membername);
         return setIsLoading(false);
       } else {
         // return response.json();
@@ -164,6 +178,13 @@ const Dashboard = ({route, navigation}) => {
     // });
   };
 
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    handleSubmit();
+    handleTransactions();
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
   return (
     <NativeBaseProvider config={config}>
       <Box flex={1} bg={'#fff'}>
@@ -202,69 +223,76 @@ const Dashboard = ({route, navigation}) => {
           </Text>
           <Spacer />
         </HStack>
-
-        {isloading ? (
-          <Center flex={1}>
-            <Spinner size="lg" color="warning.500" />
-          </Center>
-        ) : (
-          <>
-            <Box flex={1} bg="#fff">
-              {/* <VStack mt={2} bg="#fff"> */}
-              {width <= 350 ? (
-                <Box flex={1}>
-                  <HStack mx="5" my="3">
-                    <Text
-                      color="#000"
-                      fontSize="md"
-                      style={styles.noBackGround}
-                      fontWeight="bold">
-                      Hi, {user.membername}.
-                    </Text>
-                  </HStack>
-                  <Box
-                    flex={1}
-                    // style={{height: height * 0.1}}
-                    // maxW="80"
-                    mx="5"
-                    mb="3"
-                    p="3"
-                    shadow={9}
-                    bg={{
-                      linearGradient: {
-                        colors: ['amber.500', 'amber.900'],
-                        start: [0, 1],
-                        end: [1, 0],
-                      },
-                    }}
-                    rounded="lg"
-                    overflow="hidden"
-                    borderColor="coolGray.200"
-                    _web={{
-                      shadow: 2,
-                      borderWidth: 0,
-                    }}>
-                    <Center>
-                      <Heading
-                        size="sm"
-                        mt={-3}
-                        fontWeight={'400'}
-                        color="#fafafa">
-                        Loyalty Points Balance
-                      </Heading>
-                    </Center>
-
-                    <Center flex={1}>
-                      <Text color="#fafafa" fontSize="3xl" fontWeight={'bold'}>
-                        {points
-                          ? points
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                          : user.mempointsbal}{' '}
-                        pts
+        <ScrollView
+          h="100%"
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
+          {isloading ? (
+            <Center flex={1}>
+              <Spinner size="lg" color="warning.500" />
+            </Center>
+          ) : (
+            <>
+              <Box flex={1} bg="#fff">
+                {/* <VStack mt={2} bg="#fff"> */}
+                {width <= 350 ? (
+                  <Box flex={1}>
+                    <HStack mx="5" my="3">
+                      <Text
+                        color="#000"
+                        fontSize="md"
+                        style={styles.noBackGround}
+                        fontWeight="bold">
+                        Hi, {user.membername}.
                       </Text>
-                    </Center>
-                    {/* 
+                    </HStack>
+                    <Box
+                      flex={1}
+                      // style={{height: height * 0.1}}
+                      // maxW="80"
+                      mx="5"
+                      mb="3"
+                      p="3"
+                      shadow={9}
+                      bg={{
+                        linearGradient: {
+                          colors: ['amber.500', 'amber.900'],
+                          start: [0, 1],
+                          end: [1, 0],
+                        },
+                      }}
+                      rounded="lg"
+                      overflow="hidden"
+                      borderColor="coolGray.200"
+                      _web={{
+                        shadow: 2,
+                        borderWidth: 0,
+                      }}>
+                      <Center>
+                        <Heading
+                          size="sm"
+                          mt={-3}
+                          fontWeight={'400'}
+                          color="#fafafa">
+                          Loyalty Points Balance
+                        </Heading>
+                      </Center>
+
+                      <Center flex={1}>
+                        <Text
+                          color="#fafafa"
+                          fontSize="3xl"
+                          fontWeight={'bold'}>
+                          {points
+                            ? points
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                            : user.mempointsbal}{' '}
+                          pts
+                        </Text>
+                      </Center>
+                      {/* 
                     <Center flex={1} justifyContent="flex-end">
                       <Center mb={2}>
                         <HStack>
@@ -301,120 +329,290 @@ const Dashboard = ({route, navigation}) => {
                         Last Updated: {new Date().toDateString()}
                       </Text>
                     </Center> */}
+                    </Box>
                   </Box>
-                </Box>
-              ) : (
-                <Box flex={1}>
-                  <HStack mx="5" my="3">
-                    <Text
-                      color="#000"
-                      fontSize="md"
-                      style={styles.noBackGround}
-                      fontWeight="bold">
-                      Hi, {user.membername}.
-                    </Text>
-                  </HStack>
-                  <Box
-                    flex={1}
-                    // style={{height: height * 0.1}}
-                    // maxW="80"
-                    mx="5"
-                    mb="3"
-                    p="3"
-                    shadow={9}
-                    bg={{
-                      linearGradient: {
-                        colors: ['amber.500', 'amber.900'],
-                        start: [0, 1],
-                        end: [1, 0],
-                      },
-                    }}
-                    rounded="lg"
-                    overflow="hidden"
-                    borderColor="coolGray.200"
-                    _web={{
-                      shadow: 2,
-                      borderWidth: 0,
-                    }}>
-                    <Center>
-                      <Heading
-                        size="sm"
-                        mt={-3}
-                        fontWeight={'400'}
-                        color="#fafafa">
-                        Loyalty Points Balance
-                      </Heading>
-                    </Center>
-
-                    <Center flex={2}>
-                      <Text color="#fafafa" fontSize="3xl" fontWeight={'bold'}>
-                        {points
-                          ? points
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                          : user.mempointsbal}{' '}
-                        pts
+                ) : (
+                  <Box flex={1}>
+                    <HStack mx="5" my="3">
+                      <Text
+                        color="#000"
+                        fontSize="md"
+                        style={styles.noBackGround}
+                        fontWeight="bold">
+                        Hi, {user.membername}.
                       </Text>
-                    </Center>
-
-                    <Center flex={1} justifyContent="flex-end">
-                      <Center mb={2}>
-                        <HStack>
-                          <HStack>
-                            <Text color="#fafafa">Earned: </Text>
-                            <Text color="#fafafa">
-                              {buy
-                                ? buy
-                                    .toString()
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                : user.mempointsbuy}
-                            </Text>
-                          </HStack>
-                          <HStack ml={2}>
-                            <Text color="#fafafa">Redemed: </Text>
-                            <Text color="#fafafa">
-                              {redeemed
-                                ? redeemed
-                                    .toString()
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                : user.mempointsredeem}
-                            </Text>
-                          </HStack>
-                        </HStack>
+                    </HStack>
+                    <Box
+                      flex={1}
+                      // style={{height: height * 0.1}}
+                      // maxW="80"
+                      mx="5"
+                      mb="3"
+                      p="3"
+                      shadow={9}
+                      bg={{
+                        linearGradient: {
+                          colors: ['amber.500', 'amber.900'],
+                          start: [0, 1],
+                          end: [1, 0],
+                        },
+                      }}
+                      rounded="lg"
+                      overflow="hidden"
+                      borderColor="coolGray.200"
+                      _web={{
+                        shadow: 2,
+                        borderWidth: 0,
+                      }}>
+                      <Center>
+                        <Heading
+                          size="sm"
+                          mt={-3}
+                          fontWeight={'400'}
+                          color="#fafafa">
+                          Loyalty Points Balance
+                        </Heading>
                       </Center>
 
-                      <Divider />
-                      <Text
-                        color="light.50"
-                        _dark={{
-                          color: 'light.100',
-                        }}
-                        fontWeight="400">
-                        Last Updated: {new Date().toDateString()}
-                      </Text>
-                    </Center>
-                  </Box>
-                </Box>
-              )}
+                      <Center flex={2}>
+                        <Text
+                          color="#fafafa"
+                          fontSize="3xl"
+                          fontWeight={'bold'}>
+                          {points
+                            ? points
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                            : user.mempointsbal}{' '}
+                          pts
+                        </Text>
+                      </Center>
 
-              <VStack bg="#fff" flex={2} mx={'15'}>
-                {width <= 350 ? (
-                  <>
-                    <Box
-                      p="1"
-                      mx="1"
-                      bg="muted.50"
-                      // bg="#000"
-                      // borderRadius="sm"
-                      mb={5}
-                      borderColor="coolGray.200"
-                      // shadow={1}
-                      borderWidth="1">
-                      <Text fontWeight="500" fontSize={12} my={1}>
-                        Last 5 Transactions
-                      </Text>
-                      <Divider my={1} />
-                      <ScrollView>
+                      <Center flex={1} justifyContent="flex-end">
+                        <Center mb={2}>
+                          <HStack>
+                            <HStack>
+                              <Text color="#fafafa">Earned: </Text>
+                              <Text color="#fafafa">
+                                {buy
+                                  ? buy
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                                  : user.mempointsbuy}
+                              </Text>
+                            </HStack>
+                            <HStack ml={2}>
+                              <Text color="#fafafa">Redemed: </Text>
+                              <Text color="#fafafa">
+                                {redeemed
+                                  ? redeemed
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                                  : user.mempointsredeem}
+                              </Text>
+                            </HStack>
+                          </HStack>
+                        </Center>
+
+                        <Divider />
+                        <Text
+                          color="light.50"
+                          _dark={{
+                            color: 'light.100',
+                          }}
+                          fontWeight="400">
+                          Last Updated:{' '}
+                          {new Date()
+                            .toUTCString()
+                            .split(' ')
+                            .slice(0, 5)
+                            .join(' ')}
+                        </Text>
+                      </Center>
+                    </Box>
+                  </Box>
+                )}
+
+                <VStack bg="#fff" flex={2} mx={'15'}>
+                  {width <= 350 ? (
+                    <>
+                      <Box
+                        p="1"
+                        mx="1"
+                        bg="muted.50"
+                        // bg="#000"
+                        // borderRadius="sm"
+                        mb={5}
+                        borderColor="coolGray.200"
+                        // shadow={1}
+                        borderWidth="1">
+                        <Text fontWeight="500" fontSize={12} my={1}>
+                          Last 5 Transactions
+                        </Text>
+                        <Divider my={1} />
+                        <ScrollView>
+                          {transactions
+                            .slice(0, 5)
+                            .map((transaction, index) => {
+                              return (
+                                <Link
+                                  onPress={() =>
+                                    navigation.navigate('transactiondetails', {
+                                      token,
+                                      memberNo: memberNo,
+                                      docNum: transaction.DOCNUM,
+                                      salesBCODE: transaction.SALESBCODE,
+                                      branch: transaction.SALESBRANCH,
+                                      gain: transaction.MEMPOINTSBUY,
+                                      redeemed: transaction.MEMPOINTSREDEEM,
+                                      transdate: transaction.SALEDATE,
+                                    })
+                                  }>
+                                  <Box key={index} p={1} flex={1}>
+                                    <HStack>
+                                      <VStack>
+                                        <Text
+                                          color={'muted.800'}
+                                          fontWeight="600"
+                                          fontSize={'sm'}>
+                                          {transaction.DOCNUM}
+                                        </Text>
+                                        <HStack>
+                                          <Text
+                                            color={'muted.800'}
+                                            fontWeight="400"
+                                            style={styles.myText}>
+                                            {new Date(
+                                              transaction.SALEDATE,
+                                            ).toDateString()}
+                                          </Text>
+                                          <Center>
+                                            <Divider
+                                              orientation="vertical"
+                                              h={3}
+                                              bg={'muted.500'}
+                                              mx={1}
+                                            />
+                                          </Center>
+
+                                          <Text
+                                            color={'muted.800'}
+                                            fontWeight="400"
+                                            style={styles.myText}>
+                                            {transaction.SALESBRANCH}
+                                          </Text>
+                                        </HStack>
+                                      </VStack>
+
+                                      <Spacer />
+                                      <VStack>
+                                        <Text
+                                          color={'muted.800'}
+                                          fontWeight="600"
+                                          fontSize={'sm'}>
+                                          Kshs.
+                                          {/* {totalCost} */}
+                                          {transaction.Itmtotalinc.toFixed(2)
+                                            .toString()
+                                            .replace(
+                                              /\B(?=(\d{3})+(?!\d))/g,
+                                              ',',
+                                            )}
+                                        </Text>
+                                        <HStack space={3}>
+                                          <Text
+                                            color="success.600"
+                                            fontWeight="400"
+                                            style={styles.smallText}>
+                                            Earned:{' '}
+                                            {transaction.MEMPOINTSBUY.toString().replace(
+                                              /\B(?=(\d{3})+(?!\d))/g,
+                                              ',',
+                                            )}
+                                          </Text>
+
+                                          <Text
+                                            color="danger.600"
+                                            fontWeight="400"
+                                            style={styles.smallText}>
+                                            Redeemed:{' '}
+                                            {transaction.MEMPOINTSREDEEM.toString().replace(
+                                              /\B(?=(\d{3})+(?!\d))/g,
+                                              ',',
+                                            )}
+                                          </Text>
+                                        </HStack>
+                                      </VStack>
+                                    </HStack>
+                                    <Divider my={1} />
+                                  </Box>
+                                </Link>
+                              );
+                            })}
+                        </ScrollView>
+                      </Box>
+
+                      <Box
+                        p="5"
+                        bg="muted.50"
+                        borderRadius="md"
+                        borderColor="coolGray.200"
+                        borderWidth="1"
+                        shadow={3}>
+                        <Link
+                          onPress={() =>
+                            navigation.navigate('transactions', {
+                              screen: 'transactions',
+                              memberNo,
+                              token,
+                            })
+                          }>
+                          <HStack>
+                            <Center>
+                              <MaterialCommunityIcons
+                                name="receipt"
+                                color={'#c58c4f'}
+                                size={30}
+                              />
+                            </Center>
+
+                            <Center>
+                              <VStack ml={2}>
+                                <Text color="#5d3915" fontWeight="bold">
+                                  My Transactions
+                                </Text>
+                              </VStack>
+                            </Center>
+                          </HStack>
+                          <Spacer />
+                          <Center>
+                            <Image
+                              source={require('../assets/images/right-arrow.png')}
+                              alt="company logo"
+                              style={styles.rightArrow}
+                              size="sm"
+                            />
+                          </Center>
+                        </Link>
+                      </Box>
+                    </>
+                  ) : (
+                    <>
+                      <Box
+                        p="1"
+                        mx="1"
+                        bg="muted.50"
+                        // bg="#000"
+                        // borderRadius="sm"
+                        mb={5}
+                        borderColor="coolGray.200"
+                        // shadow={1}
+                        borderWidth="1">
+                        <Text fontWeight="500" fontSize={12} my={1}>
+                          Last 5 Transactions
+                        </Text>
+                        <Divider my={1} />
+
                         {transactions.slice(0, 5).map((transaction, index) => {
                           return (
                             <Link
@@ -508,610 +706,58 @@ const Dashboard = ({route, navigation}) => {
                             </Link>
                           );
                         })}
-                      </ScrollView>
-                    </Box>
+                      </Box>
 
-                    <Box
-                      p="5"
-                      bg="muted.50"
-                      borderRadius="md"
-                      borderColor="coolGray.200"
-                      borderWidth="1"
-                      shadow={3}>
-                      <Link
-                        onPress={() =>
-                          navigation.navigate('transactions', {
-                            screen: 'transactions',
-                            memberNo,
-                            token,
-                          })
-                        }>
-                        <HStack>
+                      <Box
+                        p="5"
+                        bg="muted.50"
+                        borderRadius="md"
+                        borderColor="coolGray.200"
+                        borderWidth="1"
+                        shadow={3}>
+                        <Link
+                          onPress={() =>
+                            navigation.navigate('transactions', {
+                              screen: 'transactions',
+                              memberNo,
+                              token,
+                            })
+                          }>
+                          <HStack>
+                            <Center>
+                              <MaterialCommunityIcons
+                                name="receipt"
+                                color={'#c58c4f'}
+                                size={30}
+                              />
+                            </Center>
+
+                            <Center>
+                              <VStack ml={2}>
+                                <Text color="#5d3915" fontWeight="bold">
+                                  My Transactions
+                                </Text>
+                              </VStack>
+                            </Center>
+                          </HStack>
+                          <Spacer />
                           <Center>
-                            <MaterialCommunityIcons
-                              name="receipt"
-                              color={'#c58c4f'}
-                              size={30}
+                            <Image
+                              source={require('../assets/images/right-arrow.png')}
+                              alt="company logo"
+                              style={styles.rightArrow}
+                              size="sm"
                             />
                           </Center>
-
-                          <Center>
-                            <VStack ml={2}>
-                              <Text color="#5d3915" fontWeight="bold">
-                                My Transactions
-                              </Text>
-                            </VStack>
-                          </Center>
-                        </HStack>
-                        <Spacer />
-                        <Center>
-                          <Image
-                            source={require('../assets/images/right-arrow.png')}
-                            alt="company logo"
-                            style={styles.rightArrow}
-                            size="sm"
-                          />
-                        </Center>
-                      </Link>
-                    </Box>
-                  </>
-                ) : (
-                  <>
-                    <Box
-                      p="1"
-                      mx="1"
-                      bg="muted.50"
-                      // bg="#000"
-                      // borderRadius="sm"
-                      mb={5}
-                      borderColor="coolGray.200"
-                      // shadow={1}
-                      borderWidth="1">
-                      <Text fontWeight="500" fontSize={12} my={1}>
-                        Last 5 Transactions
-                      </Text>
-                      <Divider my={1} />
-
-                      {transactions.slice(0, 5).map((transaction, index) => {
-                        return (
-                          <Link
-                            onPress={() =>
-                              navigation.navigate('transactiondetails', {
-                                token,
-                                memberNo: memberNo,
-                                docNum: transaction.DOCNUM,
-                                salesBCODE: transaction.SALESBCODE,
-                                branch: transaction.SALESBRANCH,
-                                gain: transaction.MEMPOINTSBUY,
-                                redeemed: transaction.MEMPOINTSREDEEM,
-                                transdate: transaction.SALEDATE,
-                              })
-                            }>
-                            <Box key={index} p={1} flex={1}>
-                              <HStack>
-                                <VStack>
-                                  <Text
-                                    color={'muted.800'}
-                                    fontWeight="600"
-                                    fontSize={'sm'}>
-                                    {transaction.DOCNUM}
-                                  </Text>
-                                  <HStack>
-                                    <Text
-                                      color={'muted.800'}
-                                      fontWeight="400"
-                                      style={styles.myText}>
-                                      {new Date(
-                                        transaction.SALEDATE,
-                                      ).toDateString()}
-                                    </Text>
-                                    <Center>
-                                      <Divider
-                                        orientation="vertical"
-                                        h={3}
-                                        bg={'muted.500'}
-                                        mx={1}
-                                      />
-                                    </Center>
-
-                                    <Text
-                                      color={'muted.800'}
-                                      fontWeight="400"
-                                      style={styles.myText}>
-                                      {transaction.SALESBRANCH}
-                                    </Text>
-                                  </HStack>
-                                </VStack>
-
-                                <Spacer />
-                                <VStack>
-                                  <Text
-                                    color={'muted.800'}
-                                    fontWeight="600"
-                                    fontSize={'sm'}>
-                                    Kshs.
-                                    {/* {totalCost} */}
-                                    {transaction.Itmtotalinc.toFixed(2)
-                                      .toString()
-                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                  </Text>
-                                  <HStack space={3}>
-                                    <Text
-                                      color="success.600"
-                                      fontWeight="400"
-                                      style={styles.smallText}>
-                                      Earned:{' '}
-                                      {transaction.MEMPOINTSBUY.toString().replace(
-                                        /\B(?=(\d{3})+(?!\d))/g,
-                                        ',',
-                                      )}
-                                    </Text>
-
-                                    <Text
-                                      color="danger.600"
-                                      fontWeight="400"
-                                      style={styles.smallText}>
-                                      Redeemed:{' '}
-                                      {transaction.MEMPOINTSREDEEM.toString().replace(
-                                        /\B(?=(\d{3})+(?!\d))/g,
-                                        ',',
-                                      )}
-                                    </Text>
-                                  </HStack>
-                                </VStack>
-                              </HStack>
-                              <Divider my={1} />
-                            </Box>
-                          </Link>
-                        );
-                      })}
-                    </Box>
-
-                    <Box
-                      p="5"
-                      bg="muted.50"
-                      borderRadius="md"
-                      borderColor="coolGray.200"
-                      borderWidth="1"
-                      shadow={3}>
-                      <Link
-                        onPress={() =>
-                          navigation.navigate('transactions', {
-                            screen: 'transactions',
-                            memberNo,
-                            token,
-                          })
-                        }>
-                        <HStack>
-                          <Center>
-                            <MaterialCommunityIcons
-                              name="receipt"
-                              color={'#c58c4f'}
-                              size={30}
-                            />
-                          </Center>
-
-                          <Center>
-                            <VStack ml={2}>
-                              <Text color="#5d3915" fontWeight="bold">
-                                My Transactions
-                              </Text>
-                            </VStack>
-                          </Center>
-                        </HStack>
-                        <Spacer />
-                        <Center>
-                          <Image
-                            source={require('../assets/images/right-arrow.png')}
-                            alt="company logo"
-                            style={styles.rightArrow}
-                            size="sm"
-                          />
-                        </Center>
-                      </Link>
-                    </Box>
-                  </>
-                )}
-                {/* 
-                <Box
-                  p="5"
-                  bg="muted.50"
-                  borderRadius="md"
-                  borderColor="coolGray.200"
-                  borderWidth="1"
-                  shadow={3}>
-                  <Link
-                    onPress={() =>
-                      navigation.navigate('transactions', {
-                        screen: 'transactions',
-                        memberNo,
-                        token,
-                      })
-                    }>
-                    <HStack>
-                      <Center>
-                        <MaterialCommunityIcons
-                          name="receipt"
-                          color={'#c58c4f'}
-                          size={30}
-                        />
-                      </Center>
-
-                      <Center>
-                        <VStack ml={2}>
-                          <Text color="#5d3915" fontWeight="bold">
-                            My Transactions
-                          </Text>
-                        </VStack>
-                      </Center>
-                    </HStack>
-                    <Spacer />
-                    <Center>
-                      <Image
-                        source={require('../assets/images/right-arrow.png')}
-                        alt="company logo"
-                        style={styles.rightArrow}
-                        size="sm"
-                      />
-                    </Center>
-                  </Link>
-                </Box> */}
-              </VStack>
-              {/* </VStack> */}
-              {/* <HStack
-                shadow={5}
-                bg="#fff"
-                p="3"
-                justifyContent="space-between"
-                alignItems="center">
-                <VStack>
-                  <Center>
-                    <MaterialCommunityIcons
-                      name="home"
-                      color={'#c58c4f'}
-                      size={20}
-                    />
-                  </Center>
-
-                  <Text color="#5d3915" fontSize="10">
-                    Home
-                  </Text>
+                        </Link>
+                      </Box>
+                    </>
+                  )}
                 </VStack>
-                <Spacer />
-                <Link
-                  onPress={() =>
-                    navigation.navigate('transactions', {
-                      screen: 'transactions',
-                      memberNo,
-                      token,
-                    })
-                  }>
-                  <VStack>
-                    <Center>
-                      <MaterialCommunityIcons
-                        name="receipt"
-                        color={'#c58c4f'}
-                        size={20}
-                      />
-                    </Center>
-
-                    <Text color="#5d3915" fontSize="10">
-                      Transactions
-                    </Text>
-                  </VStack>
-                </Link>
-
-                <Spacer />
-                <Link
-                  onPress={() =>
-                    navigation.navigate('profile', {token, memberNo})
-                  }>
-                  <VStack>
-                    <Center>
-                      <MaterialCommunityIcons
-                        name="account"
-                        color={'#c58c4f'}
-                        size={20}
-                      />
-                    </Center>
-
-                    <Text color="#5d3915" fontSize="10">
-                      Profile
-                    </Text>
-                  </VStack>
-                </Link>
-              </HStack> */}
-              {/* <VStack justifyContent="flex-end" my="2">
-          <Center>
-            <Text fontSize="xs" mx="10">
-              Powered by
-            </Text>
-            <Text fontSize="xs" fontWeight="bold" color="#5d3915" mx="10">
-              Corebase Solutions
-            </Text>
-          </Center>
-        </VStack> */}
-            </Box>
-          </>
-        )}
-
-        {/* <HStack
-        shadow={2}
-        bg="#fff"
-        p="5"
-        justifyContent="space-between"
-        alignItems="center">
-        <Text color="#5d3915" fontSize="18" fontWeight="bold">
-          phAMACore Loyalty
-        </Text>
-        <Spacer />
-      </HStack>
-
-      <Box flex={1} bg="#fff">
-        <VStack flex={1} mt={2} bg="#fff">
-          <Box flex={2}>
-            <HStack mx="5" mb="3">
-              <Text
-                color="#000"
-                fontSize="md"
-                style={styles.noBackGround}
-                fontWeight="bold">
-                Hi, {user.membername}.
-              </Text>
-            </HStack>
-            <Box
-              flex={1}
-              // maxW="80"
-              mx="5"
-              mb="3"
-              p="3"
-              shadow={9}
-              bg={{
-                linearGradient: {
-                  colors: ['amber.500', 'amber.900'],
-                  start: [0, 1],
-                  end: [1, 0],
-                },
-              }}
-              rounded="lg"
-              overflow="hidden"
-              borderColor="coolGray.200"
-              _web={{
-                shadow: 2,
-                borderWidth: 0,
-              }}>
-              <Center flex={1}>
-                <Heading size="md" mt={-3} fontWeight={'400'} color="#fafafa">
-                  Loyalty Points Balance
-                </Heading>
-              </Center>
-
-              <Center flex={1}>
-                <Text color="#fafafa" fontSize="3xl" fontWeight={'bold'}>
-                  {points
-                    ? points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    : user.mempointsbal}{' '}
-                  pts
-                </Text>
-              </Center>
-
-              <Center flex={1}>
-                <HStack>
-                  <HStack>
-                    <Text color="#fafafa">Earned: </Text>
-                    <Text color="#fafafa">
-                      {buy
-                        ? buy.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                        : user.mempointsbuy}
-                    </Text>
-                  </HStack>
-                  <HStack ml={2}>
-                    <Text color="#fafafa">Redemed: </Text>
-                    <Text color="#fafafa">
-                      {redeemed
-                        ? redeemed
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                        : user.mempointsredeem}
-                    </Text>
-                  </HStack>
-                </HStack>
-              </Center>
-
-              <Divider mb={2} mt={-3} />
-              <Center justifyContent="flex-end" space={1}>
-                <Text
-                  color="light.50"
-                  _dark={{
-                    color: 'light.100',
-                  }}
-                  fontWeight="400">
-                  Last Updated: {new Date().toDateString()}
-                </Text>
-              </Center>
-            </Box>
-          </Box>
-
-          <Box
-            bg="#fff"
-            flex={1}
-            mx={15}
-            justifyContent="center"
-            alignItems="center">
-            <Center>
-              <Text
-                fontSize="2xl"
-                fontWeight={'bold'}
-                color="#5d3915"
-                mb={3}
-                mx="10">
-                Points Summary
-              </Text>
-            </Center>
-
-            <Center>
-              <HStack>
-                <VStack alignItems="center">
-                  <Text fontSize="sm" mx="3" mb={1} fontWeight="bold">
-                    Total Points
-                  </Text>
-                  <Text color="light.600" fontSize="sm">
-                    {points
-                      ? points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                      : user.mempointsbal}
-                  </Text>
-                </VStack>
-
-                <VStack alignItems="center">
-                  <Text fontSize="sm" mx="3" mb={1} fontWeight="bold">
-                    Redeemed Points
-                  </Text>
-                  <Text color="danger.600" fontSize="sm">
-                    {redeemed
-                      ? redeemed
-                          .toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                      : user.mempointsredeem}
-                  </Text>
-                </VStack>
-
-                <VStack alignItems="center">
-                  <Text fontSize="sm" mx="3" mb={1} fontWeight="bold">
-                    Points Buy
-                  </Text>
-                  <Text color="success.600" fontSize="sm">
-                    {buy
-                      ? buy.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                      : user.mempointsbuy}
-                  </Text>
-                </VStack>
-              </HStack>
-            </Center>
-          </Box>
-
-          <VStack bg="#fff" flex={2} mx={'15'}>
-            <Text
-              color="#5d3915"
-              fontSize="md"
-              mb={5}
-              ml={2}
-              fontWeight={'bold'}>
-              Activities
-            </Text>
-
-            <Box
-              p="5"
-              bg="muted.50"
-              borderRadius="md"
-              borderColor="coolGray.200"
-              borderWidth="1"
-              shadow={3}>
-              <Link
-                onPress={() =>
-                  navigation.navigate('transactions', {
-                    screen: 'transactions',
-                    memberNo,
-                    token,
-                  })
-                }>
-                <HStack>
-                  <Center>
-                    <MaterialCommunityIcons
-                      name="receipt"
-                      color={'#c58c4f'}
-                      size={30}
-                    />
-                  </Center>
-
-                  <Center>
-                    <VStack ml={2}>
-                      <Text color="#5d3915" fontWeight="bold">
-                        Transaction History
-                      </Text>
-                    </VStack>
-                  </Center>
-                </HStack>
-                <Spacer />
-                <Center>
-                  <Image
-                    source={require('../assets/images/right-arrow.png')}
-                    alt="company logo"
-                    style={styles.rightArrow}
-                    size="sm"
-                  />
-                </Center>
-              </Link>
-            </Box>
-          </VStack>
-        </VStack>
-        <HStack
-          shadow={5}
-          bg="#fff"
-          p="3"
-          justifyContent="space-between"
-          alignItems="center">
-          <VStack>
-            <Center>
-              <MaterialCommunityIcons name="home" color={'#c58c4f'} size={20} />
-            </Center>
-
-            <Text color="#5d3915" fontSize="10">
-              Home
-            </Text>
-          </VStack>
-          <Spacer />
-          <Link
-            onPress={() =>
-              navigation.navigate('transactions', {
-                screen: 'transactions',
-                memberNo,
-                token,
-              })
-            }>
-            <VStack>
-              <Center>
-                <MaterialCommunityIcons
-                  name="receipt"
-                  color={'#c58c4f'}
-                  size={20}
-                />
-              </Center>
-
-              <Text color="#5d3915" fontSize="10">
-                Transactions
-              </Text>
-            </VStack>
-          </Link>
-
-          <Spacer />
-          <Link
-            onPress={() => navigation.navigate('profile', {token, memberNo})}>
-            <VStack>
-              <Center>
-                <MaterialCommunityIcons
-                  name="account"
-                  color={'#c58c4f'}
-                  size={20}
-                />
-              </Center>
-
-              <Text color="#5d3915" fontSize="10">
-                Profile
-              </Text>
-            </VStack>
-          </Link>
-        </HStack>
-       // <VStack justifyContent="flex-end" my="2">
-          //  <Center>
-           //   <Text fontSize="xs" mx="10">
-           //     Powered by
-           //   </Text>
-          //    <Text fontSize="10" fontWeight="bold" color="#5d3915" mx="10">
-              // Corebase Solutions
-            // </Text>
-          //  </Center>
-        //  </VStack> 
-      </Box> */}
+              </Box>
+            </>
+          )}
+        </ScrollView>
 
         <HStack
           shadow={5}
@@ -1178,6 +824,7 @@ const styles = StyleSheet.create({
     height: hp('50%'), // 70% of height device screen
     // 80% of width device screen
   },
+
   noBackGround: {
     opacity: 1,
   },

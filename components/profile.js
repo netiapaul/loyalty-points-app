@@ -61,6 +61,7 @@ const SignIn = ({route, navigation}) => {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             currentPin: current,
@@ -72,6 +73,12 @@ const SignIn = ({route, navigation}) => {
         const data = await reponse.json();
         setCurrent('');
         setPin('');
+
+        Snackbar.show({
+          backgroundColor: '#0f5132',
+          text: 'PIN changed successfully',
+          duration: Snackbar.LENGTH_LONG,
+        });
         setIsLoading(false);
         return navigation.navigate('signIn');
       } else {

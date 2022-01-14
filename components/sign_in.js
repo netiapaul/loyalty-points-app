@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Snackbar from 'react-native-snackbar';
 import {
   ImageBackground,
@@ -69,23 +69,23 @@ const SignIn = ({navigation}) => {
         setPin('');
         setIdno('');
         // console.warn('Success response', data);
-        return navigation.navigate('different', {
-          token: data.token,
-          memberNo: data.user.memberno,
-        });
-        // if (data['user'].isPasswordChanged === false) {
-        //   setIsLoading(false);
-        //   return navigation.navigate('profile', {
-        //     token: data.token,
-        //     memberNo: data.user.memberno,
-        //   });
-        // } else {
-        //   setIsLoading(false);
-        //   return navigation.navigate('different', {
-        //     token: data.token,
-        //     memberNo: data.user.memberno,
-        //   });
-        // }
+        // return navigation.navigate('different', {
+        //   token: data.token,
+        //   memberNo: data.user.memberno,
+        // });
+        if (data['user'].isPasswordChanged === false) {
+          setIsLoading(false);
+          return navigation.navigate('profile', {
+            token: data.token,
+            memberNo: data.user.memberno,
+          });
+        } else {
+          setIsLoading(false);
+          return navigation.navigate('different', {
+            token: data.token,
+            memberNo: data.user.memberno,
+          });
+        }
       } else {
         setIsLoading(false);
         Snackbar.show({

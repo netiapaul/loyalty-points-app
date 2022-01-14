@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, ScrollView} from 'react-native';
+import {StyleSheet, ScrollView, RefreshControl} from 'react-native';
 import {
   NativeBaseProvider,
   VStack,
@@ -40,6 +40,7 @@ const SalesTransaction = ({route, navigation}) => {
   const [redeemedpts, setredeemedpts] = useState('');
   const [date, setDate] = useState('');
   const [isloading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   useEffect(() => {
     handleFetch();
@@ -48,6 +49,15 @@ const SalesTransaction = ({route, navigation}) => {
     setredeemedpts(redeemed);
     setDate(transdate);
     // console.warn(users);
+  }, []);
+
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
   }, []);
 
   async function handleFetch() {
@@ -199,7 +209,10 @@ const SalesTransaction = ({route, navigation}) => {
             <Divider my={2} />
 
             {/* SCROLLVIEW */}
-            <ScrollView>
+            <ScrollView
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }>
               {users.map((user, index) => {
                 return (
                   // <Box

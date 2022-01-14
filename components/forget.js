@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {ImageBackground, StyleSheet, TextInput} from 'react-native';
+import Snackbar from 'react-native-snackbar';
+
 import {
   NativeBaseProvider,
   VStack,
@@ -16,6 +18,7 @@ import {
   Button,
   Input,
   Link,
+  Spinner,
   KeyboardAvoidingView,
 } from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -29,8 +32,8 @@ const SignIn = ({navigation}) => {
   const [pinNo, setPin] = useState('');
   const [idNo, setIdno] = useState('');
   const [data, setData] = useState({});
-  const [status, setStatus] = useState('');
   const [show, setShow] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
 
   const handleClick = () => setShow(!show);
 
@@ -38,181 +41,51 @@ const SignIn = ({navigation}) => {
     return setIdno(text);
   };
 
-  const handlePin = text => {
-    return setPin(text);
-  };
-
-  // async function storeToken(data) {
-  //   try {
-  //     const username = data.user.memberno;
-  //     const password = data.token;
-  //     await Keychain.setGenericPassword(username, password);
-  //     const jsonValue = JSON.stringify(data);
-  //     await AsyncStorage.setItem('userData', jsonValue);
-  //   } catch (error) {
-  //     console.error('Something went wrong on saving', error);
-  //   }
-  // }
-
-  useEffect(() => {
-    setStatus('');
-    return () => {
-      setStatus('');
-    };
-  }, []);
-
   async function handleFetch() {
     try {
       const reponse = await fetch(
-        'http://102.37.102.247:5016/CustomerPoints/CustomerLogin',
+        `http://102.37.102.247:5016/CustomerPoints/ForgotPassword?idNumber=${idNo}`,
         {
           method: 'POST', // *GET, POST, PUT, DELETE, etc.
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            idnumber: idNo,
-            pin: pinNo,
-          }),
         },
       );
-      if (reponse.status >= 200 && reponse.status < 400) {
+      if (reponse.ok) {
         const data = await reponse.json();
-        console.warn('Success response', reponse.status);
+        console.warn('Success response', data);
+        setIsLoading(false);
+        setIdno('');
+        Snackbar.show({
+          backgroundColor: '#0f5132',
+          text: 'New PIN sent to your phone number',
+          duration: Snackbar.LENGTH_LONG,
+        });
         return navigation.navigate('signIn');
-      } else if (reponse.status === 400) {
-        onsole.warn('Failed response', reponse.status);
       } else {
-        // console.warn(reponse.status);
-        // setStatus('Incorrect Details entered');
-        console.warn('Failed response', reponse.status);
+        console.warn(reponse.status);
+        setIsLoading(false);
+        return Snackbar.show({
+          backgroundColor: '#e11d48',
+          text: 'ID number does not exist',
+          duration: Snackbar.LENGTH_LONG,
+        });
       }
     } catch (error) {
-      setStatus('Network request failed connect to the internet');
-      // console.error('CATCH Error', error);
+      console.warn(error);
+      setIsLoading(false);
+      return Snackbar.show({
+        backgroundColor: '#e11d48',
+        text: 'please connect to available network',
+        duration: Snackbar.LENGTH_LONG,
+      });
     }
   }
 
-  // async function handleFetch() {
-  //   try {
-  //     const reponse = await fetch(
-  //       'http://102.37.102.247:5016/CustomerPoints/CustomerLogin',
-  //       {
-  //         method: 'POST', // *GET, POST, PUT, DELETE, etc.
-  //         headers: {
-  //           Accept: 'application/json',
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify({
-  //           idnumber: idNo,
-  //           pin: pinNo,
-  //         }),
-  //       },
-  //     );
-  //     if (reponse.ok) {
-  //       const data = await reponse.json();
-  //       console.warn('Success response', data);
-  //       return navigation.navigate('different', {
-  //         token: data.token,
-  //         memberNo: data.user.memberno,
-  //       });
-  //     } else {
-  //       console.warn(reponse.status);
-  //       // setStatus('Incorrect Details entered');
-  //       // console.warn('Failed response', reponse);
-  //     }
-  //   } catch (error) {
-  //     setStatus('Network request failed connect to the internet');
-  //     // console.error('CATCH Error', error);
-  //   }
-  // }
-
-  // const handleFetch = () => {
-  //   fetch('http://102.37.102.247:5016/CustomerPoints/CustomerLogin', {
-  //     method: 'POST', // *GET, POST, PUT, DELETE, etc.
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       idnumber: idNo,
-  //       pin: pinNo,
-  //     }),
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       return navigation.navigate('different', {
-  //         token: data.token,
-  //         memberNo: data.user.memberno,
-  //       });
-  //     })
-  //     .catch(() => setStatus('Network request failed connect to the internet'));
-
-  //   // try {
-  //   //   await fetch('http://102.37.102.247:5016/CustomerPoints/CustomerLogin', {
-  //   //     method: 'POST', // *GET, POST, PUT, DELETE, etc.
-  //   //     headers: {
-  //   //       Accept: 'application/json',
-  //   //       'Content-Type': 'application/json',
-  //   //     },
-  //   //     body: JSON.stringify({
-  //   //       idnumber: idNo,
-  //   //       pin: pinNo,
-  //   //     }),
-  //   //   })
-  //   //     .then(async response => {
-  //   //       if (!response.ok) {
-  //   //         setStatus('Please Confirm the details entered');
-  //   //       } else {
-  //   //         const data = await response.json();
-  //   //         setData(data);
-  //   //         console.error(data.token);
-  //   //         return navigation.navigate('different', {
-  //   //           token: data.token,
-  //   //           memberNo: data.user.memberno,
-  //   //         });
-  //   //       }
-  //   //     })
-  //   //     .catch(() =>
-  //   //       setStatus('Network request failed connect to the internet'),
-  //   //     );
-  //   // } catch (error) {
-  //   //   console.warn(error);
-  //   // }
-  // };
-
   return (
     <NativeBaseProvider>
-      {status ? (
-        <Alert w="100%" status="error">
-          <VStack space={2} flexShrink={1} w="100%">
-            <HStack
-              flexShrink={1}
-              space={1}
-              alignItems="center"
-              justifyContent="space-between">
-              <HStack space={2} flexShrink={1} alignItems="center">
-                <Alert.Icon />
-                <Text
-                  fontSize="md"
-                  fontWeight="medium"
-                  _dark={{
-                    color: 'coolGray.800',
-                  }}>
-                  {status}
-                </Text>
-              </HStack>
-              {/* <IconButton
-                  variant="unstyled"
-                  icon={<CloseIcon size="3" color="coolGray.600" />}
-                  onPress={() => setShow(false)}
-                /> */}
-            </HStack>
-          </VStack>
-        </Alert>
-      ) : null}
-
       {/* <VStack flex={1} bg="#fff"> */}
       {/* TOP Area */}
       <Box flex={1} justifyContent={'center'} bg="#fff">
@@ -265,40 +138,7 @@ const SignIn = ({navigation}) => {
             }}
           />
 
-          {/* <FormControl.Label>Password</FormControl.Label> */}
-
-          {/* <Input
-            mx="auto"
-            mt={2}
-            onChangeText={handlePin}
-            value={pinNo}
-            type={show ? 'text' : 'password'}
-            w={{
-              base: '75%',
-              md: '25%',
-            }}
-            InputRightElement={
-              <Button
-                size="xs"
-                bg={'#5d3915'}
-                rounded="none"
-                w="1/6"
-                h="full"
-                onPress={handleClick}>
-                {show ? 'Hide' : 'Show'}
-              </Button>
-            }
-            placeholder="Enter PIN"
-          /> */}
-          {/* <TextInput
-            style={styles.input}
-            onChangeText={handlePin}
-            value={pinNo}
-            placeholder="Enter PIN"
-            placeholderTextColor="#a3a3a3"
-          /> */}
-
-          {!idNo || !pinNo ? (
+          {!idNo ? (
             <Button
               mx="auto"
               mt={5}
@@ -323,8 +163,17 @@ const SignIn = ({navigation}) => {
               p={4}
               bg={'#5d3915'}
               rounded="5"
-              onPress={handleFetch}>
-              Submit
+              onPress={() => {
+                setTimeout(() => {
+                  setIsLoading(true);
+                  handleFetch();
+                }, 1000);
+              }}>
+              {isloading ? (
+                <Spinner size="sm" color="warning.500" />
+              ) : (
+                'Sign in'
+              )}
             </Button>
           )}
           <HStack mt="6" justifyContent="center">
