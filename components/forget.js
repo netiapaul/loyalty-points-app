@@ -1,5 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {ImageBackground, StyleSheet, TextInput} from 'react-native';
+import {
+  ImageBackground,
+  StyleSheet,
+  TextInput,
+  Keyboard,
+  Alert,
+} from 'react-native';
 import Snackbar from 'react-native-snackbar';
 
 import {
@@ -14,7 +20,8 @@ import {
   Pressable,
   FormControl,
   Spacer,
-  Alert,
+  IconButton,
+  CloseIcon,
   Button,
   Input,
   Link,
@@ -31,7 +38,7 @@ import {
 const SignIn = ({navigation}) => {
   const [pinNo, setPin] = useState('');
   const [idNo, setIdno] = useState('');
-  const [data, setData] = useState({});
+  const [number, setData] = useState('');
   const [show, setShow] = useState(false);
   const [isloading, setIsLoading] = useState(false);
 
@@ -43,7 +50,7 @@ const SignIn = ({navigation}) => {
 
   async function handleFetch() {
     try {
-      const reponse = await fetch(
+      const response = await fetch(
         `http://102.37.102.247:5016/CustomerPoints/ForgotPassword?idNumber=${idNo}`,
         {
           method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -53,19 +60,34 @@ const SignIn = ({navigation}) => {
           },
         },
       );
-      if (reponse.ok) {
-        const data = await reponse.json();
+      if (response.ok) {
+        const data = await response.json();
         console.warn('Success response', data);
         setIsLoading(false);
         setIdno('');
-        Snackbar.show({
-          backgroundColor: '#0f5132',
-          text: 'New PIN sent to your phone number',
-          duration: Snackbar.LENGTH_LONG,
-        });
-        return navigation.navigate('signIn');
+        setData(data.phoneNumber);
+
+        Alert.alert(
+          'PIN Changed',
+          `New PIN sent to your phone number +${data.phoneNumber}`,
+          [{text: 'OK', onPress: () => navigation.navigate('signIn')}],
+        );
+        // Snackbar.show({
+        //   backgroundColor: '#0f5132',
+        //   text: `New PIN sent to your phone number +${data.phoneNumber}`,
+        //   duration: Snackbar.LENGTH_INDEFINITE,
+        //   action: {
+        //     text: 'close',
+        //     textColor: 'white',
+        //     onPress: () => {
+        //       Snackbar.dismiss();
+        //     },
+        //   },
+        // });
+
+        // return navigation.navigate('signIn');
       } else {
-        console.warn(reponse.status);
+        console.error('ERROR response', response);
         setIsLoading(false);
         return Snackbar.show({
           backgroundColor: '#e11d48',
@@ -123,6 +145,22 @@ const SignIn = ({navigation}) => {
           </Text>
         </Center>
 
+        {/* {number ? (
+          <Alert w="100%" status={'success'} mx={'auto'}>
+            <VStack space={2} flexShrink={1} w="100%">
+              <HStack flexShrink={1} space={2} justifyContent="space-between">
+                <HStack space={2} flexShrink={1}>
+                  <Alert.Icon mt="1" />
+                  <Text fontSize="sm" color="coolGray.800">
+                    New PIN sent to your phone number +{number}
+                  </Text>
+                </HStack>
+              
+              </HStack>
+            </VStack>
+          </Alert>
+        ) : null} */}
+
         <FormControl flex={1}>
           {/* <FormControl.Label>Password</FormControl.Label> */}
           <Input
@@ -164,6 +202,7 @@ const SignIn = ({navigation}) => {
               bg={'#5d3915'}
               rounded="5"
               onPress={() => {
+                Keyboard.dismiss();
                 setTimeout(() => {
                   setIsLoading(true);
                   handleFetch();

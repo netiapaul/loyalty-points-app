@@ -51,7 +51,7 @@ const SignIn = ({navigation}) => {
 
   async function handleFetch() {
     try {
-      const reponse = await fetch(
+      const response = await fetch(
         'http://102.37.102.247:5016/CustomerPoints/CustomerLogin',
         {
           method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -65,8 +65,8 @@ const SignIn = ({navigation}) => {
           }),
         },
       );
-      if (reponse.ok) {
-        const data = await reponse.json();
+      if (response.ok) {
+        const data = await response.json();
         setPin('');
         setIdno('');
         // console.warn('Success response', data);
@@ -89,9 +89,10 @@ const SignIn = ({navigation}) => {
         }
       } else {
         setIsLoading(false);
+        // console.error(response);
         Snackbar.show({
           backgroundColor: '#e11d48',
-          text: 'Please confirm details entered',
+          text: 'User does not exist confirm details entered',
           duration: Snackbar.LENGTH_LONG,
         });
       }
