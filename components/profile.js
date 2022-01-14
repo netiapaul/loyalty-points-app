@@ -1,5 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {ImageBackground, StyleSheet, TextInput, Alert} from 'react-native';
+import {
+  ImageBackground,
+  StyleSheet,
+  TextInput,
+  Alert,
+  Keyboard,
+} from 'react-native';
 import Snackbar from 'react-native-snackbar';
 import {
   NativeBaseProvider,
@@ -236,6 +242,7 @@ const SignIn = ({route, navigation}) => {
                 bg={'#5d3915'}
                 rounded="5"
                 onPress={() => {
+                  Keyboard.dismiss();
                   setTimeout(() => {
                     setIsLoading(true);
                     handleUpdate();
@@ -259,6 +266,7 @@ const SignIn = ({route, navigation}) => {
                 bg={'#5d3915'}
                 rounded="5"
                 onPress={() => {
+                  Keyboard.dismiss();
                   setTimeout(() => {
                     setIsLoading(true);
                     handleUpdate();

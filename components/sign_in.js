@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   TextInput,
+  Keyboard,
 } from 'react-native';
 import {
   NativeBaseProvider,
@@ -247,6 +248,7 @@ const SignIn = ({navigation}) => {
                 bg={'#5d3915'}
                 rounded="5"
                 onPress={() => {
+                  Keyboard.dismiss();
                   setTimeout(() => {
                     setIsLoading(true);
                     handleFetch();

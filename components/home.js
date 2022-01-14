@@ -711,6 +711,7 @@ const Dashboard = ({route, navigation}) => {
                       <Box
                         p="5"
                         bg="muted.50"
+                        mb={5}
                         borderRadius="md"
                         borderColor="coolGray.200"
                         borderWidth="1"
