@@ -248,7 +248,7 @@ const SignIn = ({navigation}) => {
             size="2xs"
           />
           <Text style={styles.myText} fontWeight="bold" color="#5d3915" mx="10">
-            Corebase Solutions
+            CoreBase Solutions
           </Text>
         </Center>
       </VStack>

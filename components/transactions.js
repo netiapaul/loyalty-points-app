@@ -250,7 +250,7 @@ const Transactions = ({route, navigation}) => {
               size="2xs"
             />
             <Text fontSize="2xs" fontWeight="bold" color="#5d3915" mx="10">
-              Corebase Solutions
+              CoreBase Solutions
             </Text>
           </Center>
         </VStack>

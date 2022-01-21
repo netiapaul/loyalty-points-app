@@ -315,7 +315,7 @@ const SignIn = ({route, navigation}) => {
               fontWeight="bold"
               color="#5d3915"
               mx="10">
-              Corebase Solutions
+              CoreBase Solutions
             </Text>
           </Center>
         </VStack>
