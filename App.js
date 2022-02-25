@@ -32,7 +32,7 @@ function Home() {
     <Tab.Navigator>
       <Tab.Screen
         name="Home"
-        component={Dashboard}
+        component={Different}
         options={{
           headerShown: false,
           tabBarLabel: 'Home',
@@ -101,11 +101,18 @@ const App = () => {
         />
         <Stack.Screen
           name="different"
-          component={Different}
+          component={Home}
           options={{
             headerShown: false,
           }}
         />
+        {/* <Stack.Screen
+          name="different"
+          component={Different}
+          options={{
+            headerShown: false,
+          }}
+        /> */}
         <Stack.Screen
           name="transactions"
           component={Transactions}

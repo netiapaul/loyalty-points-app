@@ -15,6 +15,7 @@ import com.oblador.vectoricons.VectorIconsPackage; // <--- ICONS!
 import com.BV.LinearGradient.LinearGradientPackage; // <--- This!
 // react-native-splash-screen >= 0.3.1
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import in.sriraman.sharedpreferences.RNSharedPreferencesReactPackage;  // <--- import Shared Preferences
 
 // ...
 
@@ -37,6 +38,7 @@ public class MainApplication extends Application implements ReactApplication {
             new LinearGradientPackage(); // <---- and This!
             new VectorIconsPackage(); // <---- ICONS!
             new SplashScreenReactPackage();  // <---- Splash Screen! 
+            new RNSharedPreferencesReactPackage(); // <--- Shared Preferences!
 
           return packages;
         }

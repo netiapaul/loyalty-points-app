@@ -30,6 +30,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import * as Keychain from 'react-native-keychain';
 
 const SignIn = ({navigation}) => {
   const [pinNo, setPin] = useState('');
@@ -69,23 +70,29 @@ const SignIn = ({navigation}) => {
         const data = await response.json();
         setPin('');
         setIdno('');
-        // console.warn('Success response', data);
-        // return navigation.navigate('different', {
-        //   token: data.token,
-        //   memberNo: data.user.memberno,
-        // });
+        await Keychain.setGenericPassword(data.user.memberno, data.token);
         if (data['user'].isPasswordChanged === false) {
           setIsLoading(false);
-          return navigation.navigate('profile', {
-            token: data.token,
-            memberNo: data.user.memberno,
-          });
+          // const token = data.token;
+          // const memberNo = data.user.memberno;
+          // await Keychain.setGenericPassword(token, memberNo);
+
+          return navigation.navigate('profile');
+          // return navigation.navigate('profile', {
+          //   token: data.token,
+          //   memberNo: data.user.memberno,
+          // });
         } else {
           setIsLoading(false);
-          return navigation.navigate('different', {
-            token: data.token,
-            memberNo: data.user.memberno,
-          });
+          // const token = data.token;
+          // const memberNo = data.user.memberno;
+          // await Keychain.setGenericPassword(token, memberNo);
+
+          return navigation.navigate('different');
+          // return navigation.navigate('different', {
+          //   token: data.token,
+          //   memberNo: data.user.memberno,
+          // });
         }
       } else {
         setIsLoading(false);

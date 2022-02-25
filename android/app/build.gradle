@@ -221,6 +221,8 @@ dependencies {
 
     implementation project(':react-native-splash-screen') // <--- Splash Screen!
 
+    implementation project(":react-native-shared-preferences") // <--- React Native Shared Preferences!
+
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
     }

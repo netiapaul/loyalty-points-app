@@ -32,6 +32,8 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
+var SharedPreferences = require('react-native-shared-preferences');
+
 const config = {
   dependencies: {
     'linear-gradient': require('react-native-linear-gradient').default,
@@ -43,38 +45,42 @@ const {width, height} = Dimensions.get('window');
 const Dashboard = ({route, navigation}) => {
   const [user, setUser] = useState({});
   const [transactions, setTransactions] = useState([]);
-
   const [status, setStatus] = useState('');
-  const {token, memberNo} = route.params;
+  // const {token, memberNo} = route.params;
   const [name, setName] = useState('');
+  const [token, setToken] = useState('');
+  const [memberNo, setMemberNo] = useState('');
   const [points, setPoints] = useState();
   const [buy, setbuy] = useState();
   const [redeemed, setredeemed] = useState();
   const [isloading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-
-  useEffect(() => {
-    handleSubmit();
-    handleTransactions();
-    console.warn(width);
-    // const dataInterval = setInterval(() => handleSubmit(), 5 * 1000);
-    // return () => clearInterval(dataInterval);
-  }, []);
+  const [keyChain, setKeyChain] = useState({});
+  const [userDetails, setUserDetails] = useState({});
 
   const wait = timeout => {
     return new Promise(resolve => setTimeout(resolve, timeout));
   };
 
   async function handleTransactions() {
+    // SharedPreferences.getItem('token', function (value) {
+    //   setToken(value);
+    // });
+    // SharedPreferences.getItem('memberNo', function (value) {
+    //   setMemberNo(value);
+    // });
+
     try {
       const response = await fetch(
-        `http://102.37.102.247:5016/CustomerPoints/GetCustomerTransactions?memberNo=${memberNo}`,
+        `http://102.37.102.247:5016/CustomerPoints/GetCustomerTransactions?memberNo=${userDetails.username}`,
+        // `http://102.37.102.247:5016/CustomerPoints/GetCustomerTransactions?memberNo=${memberNo}`,
         {
           method: 'GET', // *GET, POST, PUT, DELETE, etc.
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${userDetails.password}`,
+            // Authorization: `Bearer ${token}`,
           },
         },
       );
@@ -100,15 +106,23 @@ const Dashboard = ({route, navigation}) => {
   }
 
   async function GetUSerData() {
+    // SharedPreferences.getItem('token', function (value) {
+    //   setToken(value);
+    // });
+    // SharedPreferences.getItem('memberNo', function (value) {
+    //   setMemberNo(value);
+    // });
     try {
       const response = await fetch(
-        `http://102.37.102.247:5016/Customers/members?memberNum=${memberNo}`,
+        `http://102.37.102.247:5016/Customers/members?memberNum=${userDetails.username}`,
+        // `http://102.37.102.247:5016/Customers/members?memberNum=${memberNo}`,
         {
           method: 'GET', // *GET, POST, PUT, DELETE, etc.
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${userDetails.password}`,
+            // Authorization: `Bearer ${token}`,
           },
         },
       );
@@ -128,7 +142,8 @@ const Dashboard = ({route, navigation}) => {
         //   text: 'Login is required to view your data',
         //   duration: Snackbar.LENGTH_SHORT,
         // });
-        return navigation.goBack();
+        console.error(response);
+        // return navigation.goBack();
       }
     } catch (error) {
       return Snackbar.show({
@@ -137,50 +152,39 @@ const Dashboard = ({route, navigation}) => {
         duration: Snackbar.LENGTH_LONG,
       });
     }
-
-    // const response = await fetch(
-    //   `http://102.37.102.247:5016/Customers/members?memberNum=${memberNo}`,
-    //   {
-    //     method: 'GET', // *GET, POST, PUT, DELETE, etc.
-    //     headers: {
-    //       Accept: 'application/json',
-    //       'Content-Type': 'application/json',
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   },
-    // );
-    // if (!response.ok) {
-    //   setStatus('Login is required to view your data');
-    // } else {
-    //   return Snackbar.show({
-    //     backgroundColor: '#e11d48',
-    //     text: 'Network request failed connect to the internet',
-    //     duration: Snackbar.LENGTH_SHORT,
-    //   });
-    // }
   }
-  const handleSubmit = () => {
-    GetUSerData();
-    // .then(data => {
-    //   setUser(data[0]);
-    //   setName(data[0].membername);
-    //   setPoints(data[0].mempointsbal);
-    //   setbuy(data[0].mempointsbuy);
-    //   setredeemed(data[0].mempointsredeem);
-    //   console.warn(data[0].membername);
-    // })
-    // .catch(() => {
-    //   return Snackbar.show({
-    //     backgroundColor: '#e11d48',
-    //     text: 'Network request failed connect to the internet',
-    //     duration: Snackbar.LENGTH_SHORT,
-    //   });
-    // });
+  const handleSubmit = async () => {
+    const tokenvalue = await AsyncStorage.getItem('token');
+    const memberNovalue = await AsyncStorage.getItem('memberNo');
+    setToken(tokenvalue);
+    setMemberNo(memberNovalue);
+    // GetUSerData();
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const credentials = await Keychain.getGenericPassword();
+        if (credentials) {
+          setUserDetails(credentials);
+        } else {
+          console.log('No credentials stored');
+        }
+      } catch (error) {
+        console.log("Keychain couldn't be accessed!", error);
+      }
+    })();
+
+    GetUSerData();
+
+    // handleTransactions();
+    // const dataInterval = setInterval(() => handleSubmit(), 5 * 1000);
+    // return () => clearInterval(dataInterval);
+  }, []);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    handleSubmit();
+    GetUSerData();
     handleTransactions();
     wait(2000).then(() => setRefreshing(false));
   }, []);
@@ -511,7 +515,6 @@ const Dashboard = ({route, navigation}) => {
                                           fontWeight="600"
                                           fontSize={'sm'}>
                                           Kshs.
-                                          {/* {totalCost} */}
                                           {transaction.Itmtotalinc.toFixed(2)
                                             .toString()
                                             .replace(
@@ -671,7 +674,6 @@ const Dashboard = ({route, navigation}) => {
                                       fontWeight="600"
                                       fontSize={'sm'}>
                                       Kshs.
-                                      {/* {totalCost} */}
                                       {transaction.Itmtotalinc.toFixed(2)
                                         .toString()
                                         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -760,7 +762,7 @@ const Dashboard = ({route, navigation}) => {
           )}
         </ScrollView>
 
-        <HStack
+        {/* <HStack
           shadow={5}
           bg="#fff"
           p="2"
@@ -774,7 +776,6 @@ const Dashboard = ({route, navigation}) => {
               Home
             </Text>
           </VStack>
-          {/* <Spacer /> */}
           <Link
             onPress={() =>
               navigation.navigate('transactions', {
@@ -798,7 +799,6 @@ const Dashboard = ({route, navigation}) => {
             </VStack>
           </Link>
 
-          {/* <Spacer /> */}
           <Link
             onPress={() => navigation.navigate('profile', {token, memberNo})}>
             <VStack>
@@ -815,7 +815,7 @@ const Dashboard = ({route, navigation}) => {
               </Text>
             </VStack>
           </Link>
-        </HStack>
+        </HStack> */}
       </Box>
     </NativeBaseProvider>
   );
