@@ -31,6 +31,8 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import * as Keychain from 'react-native-keychain';
+import Constants from 'expo-constants';
+import * as SecureStore from 'expo-secure-store';
 
 const SignIn = ({navigation}) => {
   const [pinNo, setPin] = useState('');
@@ -71,13 +73,18 @@ const SignIn = ({navigation}) => {
         setPin('');
         setIdno('');
         await Keychain.setGenericPassword(data.user.memberno, data.token);
+        SecureStore.setItemAsync('token', data.token);
+        SecureStore.setItemAsync('memberno', data.user.memberno);
+        console.log('token', data.token);
+        console.log('memberno', data.user.memberno);
         if (data['user'].isPasswordChanged === false) {
           setIsLoading(false);
           // const token = data.token;
           // const memberNo = data.user.memberno;
           // await Keychain.setGenericPassword(token, memberNo);
 
-          return navigation.navigate('profile');
+          // return navigation.navigate('profile');
+
           // return navigation.navigate('profile', {
           //   token: data.token,
           //   memberNo: data.user.memberno,
@@ -89,6 +96,7 @@ const SignIn = ({navigation}) => {
           // await Keychain.setGenericPassword(token, memberNo);
 
           return navigation.navigate('different');
+
           // return navigation.navigate('different', {
           //   token: data.token,
           //   memberNo: data.user.memberno,

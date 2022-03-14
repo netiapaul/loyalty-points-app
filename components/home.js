@@ -26,6 +26,8 @@ import * as Keychain from 'react-native-keychain';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Snackbar from 'react-native-snackbar';
 import {Dimensions} from 'react-native';
+import Constants from 'expo-constants';
+import * as SecureStore from 'expo-secure-store';
 
 import {
   widthPercentageToDP as wp,
@@ -50,6 +52,8 @@ const Dashboard = ({route, navigation}) => {
   const [name, setName] = useState('');
   const [token, setToken] = useState('');
   const [memberNo, setMemberNo] = useState('');
+  // const [token, setToken] = useState('');
+  // const [memberNo, setMemberNo] = useState('');
   const [points, setPoints] = useState();
   const [buy, setbuy] = useState();
   const [redeemed, setredeemed] = useState();
@@ -162,6 +166,11 @@ const Dashboard = ({route, navigation}) => {
   };
 
   useEffect(() => {
+    // (async () => {
+    //   setToken(await SecureStore.getItemAsync('token'));
+    //   setMemberNo(await SecureStore.getItemAsync('memberno'));
+    // })();
+
     (async () => {
       try {
         const credentials = await Keychain.getGenericPassword();
@@ -175,12 +184,15 @@ const Dashboard = ({route, navigation}) => {
       }
     })();
 
+    console.warn('Token', userDetails.password);
+    console.warn('MemberNo', userDetails.username);
+
     GetUSerData();
 
     // handleTransactions();
     // const dataInterval = setInterval(() => handleSubmit(), 5 * 1000);
     // return () => clearInterval(dataInterval);
-  }, []);
+  }, [token, memberNo]);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);

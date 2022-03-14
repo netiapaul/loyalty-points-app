@@ -1,4 +1,7 @@
 package com.loyaltyapp;
+
+import expo.modules.ReactActivityDelegateWrapper;
+import com.facebook.react.ReactActivityDelegate;
 import android.os.Bundle; // here
 import com.facebook.react.ReactActivity;
 // react-native-splash-screen >= 0.3.1
@@ -19,5 +22,12 @@ public class MainActivity extends ReactActivity {
     SplashScreen.show(this);  // here
     super.onCreate(savedInstanceState); // From 
 
+  }
+
+  @Override
+  protected ReactActivityDelegate createReactActivityDelegate() {
+    return new ReactActivityDelegateWrapper(this,
+      new ReactActivityDelegate(this, getMainComponentName())
+    );
   }
 }

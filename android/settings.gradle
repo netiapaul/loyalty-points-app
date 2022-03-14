@@ -9,3 +9,5 @@ include ':react-native-splash-screen' // <--- Splash Screen!
 project(':react-native-splash-screen').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-splash-screen/android') // <--- Splash Screen!
 include ':react-native-shared-preferences', ':app' // <--- React Native Shared Preferences!
 project(':react-native-shared-preferences').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-shared-preferences/android')
+apply from: new File(["node", "--print", "require.resolve('expo/package.json')"].execute(null, rootDir).text.trim(), "../scripts/autolinking.gradle")
+useExpoModules()
